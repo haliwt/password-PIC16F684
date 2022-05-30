@@ -16,7 +16,8 @@
 #define USER_10    	 	0X74
 
 
-
+unsigned char pwd1[6];
+unsigned char pwd2[6];
 
 
 
@@ -25,45 +26,7 @@ KEY_T key_t;
 
 
 
-static void CProcessDispatchRun(unsigned char sig);
-static void Get_KeyValue(unsigned char sig);
 
-/**
- * @brief 
- * 
- * @param pt 
- 
- * @param sig 
- */
-static void CProcessDispatchRun(unsigned char sig)
-{
-  
-	switch(run_t.state_){ //state ? 
-	
-		   case is_Idle :
-	
-		   case is_Start:
-	
-				Get_KeyValue(sig);
-				   
-			   
-			   
-		   break;
-	
-	
-		   case is_Doing:
-	
-		   break;
-	
-		   case is_Exit:
-	
-	
-		   break;
-	   
-	
-	
-	   }
-}
 
 /*************************************************************
 	*
@@ -73,237 +36,6 @@ static void CProcessDispatchRun(unsigned char sig)
 	*Retrun Ref:NO
 	*
 **************************************************************/
-static void Get_KeyValue(unsigned char sig)
-{
-      switch (sig) { //signal
-
-      case KEY_0 : //KEY_0 
-
-      break;
-
-      case KEY_1:
-	  	 switch(run_t.cmdCtr_){
-
-		 case 1: //the first times input password key
-		 	  eeprom_buf[0] = EEPROM_Read_Byte(0x00); //address :0x00 ~0x7F (128bytes)
-			
-			
-			if(eeprom_buf[0]==0){ //administrator of password 
-
-                  run_t.password_low_bits = 0x02;   // 9876543210 = 
-             }
-			else{
-
-				eeprom_buf[1] = EEPROM_Read_Byte(0x01); //address :0x00 ~0x7F (128bytes)
-				
-			    if(eeprom_buf[1] == 0x01){
-
-					 run_t.password_low_bits = 0x02;   // 9876543210 = 	
-				}
-				else{
-                    return ;
-
-				}
-
-
-			}
-
-		 break;
-
-		 case 2: //the second times input password key
-
-
-		        eeprom_buf[2] = EEPROM_Read_Byte(0x02); //address :0x00 ~0x7F (128bytes)
-				
-			    if(eeprom_buf[2] == 0x01){
-
-					 run_t.password_low_bits = 0x02;   // 9876543210 = 	
-				}
-				else{
-                    return ;
-
-				}
-		 break;
-				
-		 case 3: //the third times input password key 
-			  eeprom_buf[2] = EEPROM_Read_Byte(0x02); //address :0x00 ~0x7F (128bytes)
-				
-			    if(eeprom_buf[2] == 0x01){
-
-					 run_t.password_low_bits = 0x02;   // 9876543210 = 	
-				}
-				else{
-                    return ;
-
-				}
-		 break;
-
-		 case 4: //the fourth times input password key
-
-		 break;
-
-		 case 5: //the fiveth times input password key
-
-		 break;
-
-		 case 6://the sixth times input password key 
-
-		 break;
-
-		 default :
-                
-                return ;              
-		 break;
-	  	
-	  	}
-
-    
-
-	  //"KEY_2"
-
-	  case KEY_2:
-
-		switch (run_t.cmdCtr_){
-		
-	  	case 1:
-		 	
-			  eeprom_buf[1] = EEPROM_Read_Byte(0x01); //address :0x00 ~0x7F (128bytes)
-				
-			    if(eeprom_buf[1] == 0x02){
-
-					 run_t.password_low_bits = 0x04;   // 98->76543210 = 	
-				}
-				else{
-                    return ;
-
-				}
-
-
-		
-
-		 break;
-
-		 case 2:
-
-		           eeprom_buf[0] = EEPROM_Read_Byte(0x00); //address :0x00 ~0x7F (128bytes)
-					 
-					 
-					 if(eeprom_buf[0]==0){
-		 
-						   run_t.password_low_bits = 0x04;	 // 9876543210 = 
-					  }
-					 else{
-		 
-						 eeprom_buf[2] = EEPROM_Read_Byte(0x02); //address :0x00 ~0x7F (128bytes)
-						 
-						 if(eeprom_buf[2] == 0x02){
-		 
-							  run_t.password_low_bits = 0x04;	// 9876543210 =  
-						 }
-						 else{
-							 return ;
-		 
-						 }
-		 
-		 
-					 }
-		 break;
-				
-		 case 3:
-			  eeprom_buf[2] = EEPROM_Read_Byte(0x02); //address :0x00 ~0x7F (128bytes)
-				
-			    if(eeprom_buf[2] == 0x02){
-
-					 run_t.password_low_bits = 0x04;   // 98 -> 76543210 = 	
-				}
-				else{
-                    return ;
-
-				}
-		 break;
-
-		 case 4:
-
-		 break;
-
-		 case 5:
-
-		 break;
-
-		 case 6:
-
-		 break;
-		}
-
-      break;
-
-	  //"KEY_3"
-
-	  case KEY_3:
-
-      break;
-
-	  case KEY_4:
-
-      break;
-
-	  
-	  case KEY_5:
-	  
-		break;
-	  
-	  case KEY_6:
-	  
-		break;
-	  
-	  case KEY_7:
-	  
-		break;
-	  
-	  case KEY_8:
-	  
-		break;
-	  
-	  case KEY_9:
-	  
-		break;
-	  
-	  case KEY_10: //"*"  -> 1. administrator password first sysbol . 2-> cancel 
-	      
-		if(run_t.cmdCtr_ ==1){ //the first input key of number 
- 			run_t.cmdCtr_ ++;
-		   eeprom_buf[0] = EEPROM_Read_Byte(0x00); //address :0x00 ~0x7F (128bytes)
-		   if(eeprom_buf[0]==0){
-		         run_t.head = 0; //default administrator password 
-		   	}
-		   else{
-
-			 run_t.head = eeprom_buf[0] ;
-		   }
-				   
-		
-		}
-		else{ //clear input Key numbers 
-
-              run_t.password_low_bits = 0x00; 
-			  run_t.cmdCtr_ = 0;
-
-		}
-	  
-     break;
-	  
-	  case KEY_11: //"#"
-	  
-		break;
-	  
-			
-	 
-      }
-
-
-
-}
-
 
 /****************************************************************************
 *
@@ -313,16 +45,135 @@ static void Get_KeyValue(unsigned char sig)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-void CProcessCmdRun(void)
+
+/****************************************************************************
+*
+*Function Name:void CProcessCmdRun(void)
+*Function : run is main 
+*Input Ref: NO
+*Retrun Ref:NO
+*
+****************************************************************************/
+void Password_Modify(void)
 {
-    uint8_t  sig;
-   if(run_t.cmdCtr_ ==0){
-         run_t.state_= is_Idle;
-   }
+   
+   static unsigned char userNumbers =0 ;
    I2C_Simple_Read_Device(OUTPUT0_REG,&key_t.KeyValue);
    while ( key_t.KeyValue != 0) {
         BACKLIGHT_ON(); //LED ON 8s 
-       run_t.cmdCtr_ ++ ;
+	   
+       if(key_t.KeyValue != 0x02 && key_t.KeyValue != 0x400 ){
+
+			if(run_t.overFlag == 0){
+				if(run_t.number ==0){
+					pwd1[run_t.cmdCtr_] = key_t.KeyValue;
+				}
+				else{
+					pwd2[run_t.cmdCtr_] = key_t.KeyValue;
+				}
+				run_t.cmdCtr_++;
+				if(run_t.cmdCtr_ == 6 ){  // input password is 4 ~ 6bytes
+						run_t.overFlag =1;
+				}
+            }
+	        
+			if(key_t.KeyValue == 0x02){ // "*" is clear 
+				
+				run_t.overFlag =0;
+				run_t.cmdCtr_=0;
+			}
+
+			if(key_t.KeyValue == 0x400){ // "#" over 
+			   if(run_t.cmdCtr_ > 3 && run_t.cmdCtr_ < 7){
+				   run_t.cmdCtr_ = 0;
+				  run_t.overFlag =0;
+                  run_t.number ++ ;
+				  if(run_t.number ==2) run_t.overFlag =1;
+				}
+				else{
+                    run_t.overFlag =1;
+				}
+			
+				break;
+			}
+
+	   }
+	   if(run_t.number == 2){
+           if(strcmp(pwd1,pwd2)==0)
+		   {
+			   OK_LED_ON();
+			   ERR_LED_OFF();
+			   run_t.cmdCtr_=0;
+			  run_t.overFlag =0;
+              run_t.number=0;
+			  userNumbers ++;
+
+			  if(userNumbers < 11){
+                   switch(run_t.userId){
+					   case 1 :
+					    run_t.userId = USER_1;     
+                       break;
+					   case 2: 
+					    run_t.userId = USER_2; 
+					   break;
+					    case 3 :
+					    run_t.userId = USER_3;     
+                       break;
+					   case 4: 
+					    run_t.userId = USER_4; 
+					   break;
+
+					   case 5 :
+					    run_t.userId = USER_5;     
+                       break;
+					   case 6: 
+					    run_t.userId = USER_6; 
+					   break;
+					    case 7 :
+					    run_t.userId = USER_7;     
+                       break;
+					   case 8: 
+					    run_t.userId = USER_8; 
+					   break;
+					    case 9 :
+					    run_t.userId = USER_9;     
+                       break;
+					   case 10: 
+					    run_t.userId = USER_10; 
+					   break;
+				  }
+				    EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
+					EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
+					EEPROM_Write_Byte(run_t.userId + 0x03,pwd1[2]);
+					EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
+					EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
+					EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
+				  
+
+			  }
+			  else
+			  {
+				 userNumbers = 0;
+			  }
+
+		   }
+		   else
+		   {
+			   ERR_LED_ON();
+			   OK_LED_OFF();
+			  run_t.overFlag =0;
+              run_t.number=0;
+		   }
+
+		
+
+	}
+   }
+
+}
+/*********************************************/
+#if 0
+   {
        switch (key_t.KeyValue ){
 	   	
        case 0x01: sig = KEY_6;   break; //KEY6 =6
@@ -356,8 +207,9 @@ void CProcessCmdRun(void)
       
    }
 
+#endif 
 
 
-}
+
 
 

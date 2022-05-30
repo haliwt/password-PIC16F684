@@ -16,14 +16,14 @@
  */
 void main(void) 
 {
-   EEEPROM_Password_Init();
+   
    SC12B_Init_Function();
-
+    TMR1_Initialize();
    INTERRUPT_GlobalInterruptEnable();
    INTERRUPT_PeripheralInterruptEnable() ;
    while(1)
    {
-      CProcessCmdRun();
+      Password_Modify();
        
    }
     

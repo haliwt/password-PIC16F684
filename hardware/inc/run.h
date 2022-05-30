@@ -20,16 +20,17 @@ enum State{
 typedef struct __RUN_T{
     enum State state_;          //the scalar state variable
     unsigned char cmdCtr_;   //event order cunter
-    unsigned char first_seq;
+    unsigned char overFlag;
     unsigned char password_low_bits;
     unsigned char password_high_bits;
     unsigned char head;
-    unsigned char tail;
+    unsigned char userId;
+    unsigned char number;
 }RUN_T;
 
 
 RUN_T run_t;
 
-
+void Password_Modify(void);
 void CProcessCmdRun(void);
 #endif 

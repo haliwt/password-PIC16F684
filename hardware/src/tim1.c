@@ -1,7 +1,6 @@
 #include "../inc/tim1.h"
 #include"../../main.h"
 
-static void TMR1_CallBack(void);
 
 /**
   Section: Global Variables Definitions
@@ -69,18 +68,9 @@ void TMR1_ISR(void)
 
     // ticker function call;
     // ticker is 1 -> Callback function gets called everytime this ISR executes
-    TMR1_CallBack();
+   
 }
 
-static void TMR1_CallBack(void)
-{
-    static int jt;
-     static unsigned char zt,wt,it,n;
-	 jt++;
-  
-  
-
-}
 
 
 

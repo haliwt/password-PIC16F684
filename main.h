@@ -9,12 +9,13 @@
 #define	MAIN_H
 #include <stdio.h>
 #include <stdlib.h>
+#include  <string.h>
 #include <xc.h>
 
 #include "hardware/inc/buzzer.h"
 #include "hardware/inc/key.h"
 #include "hardware/inc/led.h"
-#include "hardware/inc/tim0.h"
+//#include "hardware/inc/tim0.h"
 #include "hardware/inc/tim1.h"
 #include "hardware/inc/interrupt.h"
 #include "hardware/inc/run.h"

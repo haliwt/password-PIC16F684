@@ -37,13 +37,6 @@ unsigned char EEPROM_Read_Byte(unsigned char addr)
 
 void EEEPROM_Password_Init(void)
 {
-     static unsigned eedata;
-     eedata = EEPROM_Read_Byte(0x00);
-     if(eedata == 0){
-            EEPROM_Write_Byte(0x01,0x01);
-            EEPROM_Write_Byte(0x01,0x02);
-            EEPROM_Write_Byte(0x01,0x03);
-            EEPROM_Write_Byte(0x01,0x04);
-     }
+   
 
 }
