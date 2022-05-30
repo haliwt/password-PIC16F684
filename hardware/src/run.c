@@ -20,35 +20,25 @@ unsigned char pwd1[6];
 unsigned char pwd2[6];
 
 
+static unsigned char CompareValue(void);
 
 unsigned char eeprom_buf[7];
 KEY_T key_t;
 
-
-
-
-
-/*************************************************************
-	*
-	*Function Name:static void Get_KeyValue(unsigned char sig)
-	*Function : key of value
-	*Input Ref: NO
-	*Retrun Ref:NO
-	*
-**************************************************************/
+static unsigned char CompareValue(void)
+{
+	unsigned char i ;
+	for(i=0;i<6;i++){
+		if(pwd1[i] != pwd2[i]){
+			return 0;
+		}
+	}
+	return 1;
+}
 
 /****************************************************************************
 *
-*Function Name:void CProcessCmdRun(void)
-*Function : run is main 
-*Input Ref: NO
-*Retrun Ref:NO
-*
-****************************************************************************/
-
-/****************************************************************************
-*
-*Function Name:void CProcessCmdRun(void)
+*Function Name:void Password_Modify(void)
 *Function : run is main 
 *Input Ref: NO
 *Retrun Ref:NO
@@ -78,7 +68,10 @@ void Password_Modify(void)
             }
 	        
 			if(key_t.KeyValue == 0x02){ // "*" is clear 
-				
+			    pwd1[5]=0;
+				pwd2[5]=0;
+				pwd1[4]=0;
+				pwd2[4]=0;
 				run_t.overFlag =0;
 				run_t.cmdCtr_=0;
 			}
@@ -99,8 +92,8 @@ void Password_Modify(void)
 
 	   }
 	   if(run_t.number == 2){
-           if(strcmp(pwd1,pwd2)==0)
-		   {
+         if(CompareValue() ==1)//if(strcmp(pwd1,pwd2)==0)
+		 {
 			   OK_LED_ON();
 			   ERR_LED_OFF();
 			   run_t.cmdCtr_=0;
@@ -169,6 +162,19 @@ void Password_Modify(void)
 
 	}
    }
+
+}
+/****************************************************************************
+*
+*Function Name:void CProcessCmdRun(void)
+*Function : run is main 
+*Input Ref: NO
+*Retrun Ref:NO
+*
+****************************************************************************/
+void CProcessCmdRun(void)
+{
+
 
 }
 /*********************************************/

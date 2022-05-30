@@ -9,7 +9,7 @@
 #define	MAIN_H
 #include <stdio.h>
 #include <stdlib.h>
-#include  <string.h>
+//#include  <string.h>
 #include <xc.h>
 
 #include "hardware/inc/buzzer.h"
