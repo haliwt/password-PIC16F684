@@ -9,7 +9,7 @@ enum Signal{
 };
 
 enum State{
-      is_Idle,is_Start,is_KeyRelease,is_Doing,is_Exit
+      is_Idle,is_Start,is_Doing,is_Exit
 
 };
 
@@ -21,7 +21,6 @@ typedef struct __RUN_T{
     enum State state_;          //the scalar state variable
     unsigned char cmdCtr_;   //event order cunter
     unsigned char first_seq;
-    unsigned char eeprom_buf[6];
     unsigned char password_low_bits;
     unsigned char password_high_bits;
     unsigned char head;
