@@ -29,22 +29,22 @@
 #define RTM2                2    // 5 pcs sample of period time is active, 3 pcs sample period adjust invalid
 #define RTM3                3    // 6 pcs sample of period time is active, 4 pcs sample period adjust invalid
 
-#define KVF_STOP_CORREC     (1u<<2)   //key be pressed is active ,touch don't calibration
-#define KVF_50S_CORREC     (1u<<2)   //key be pressed is active ,50s  calibration
-#define HOLD                (1u<<3)     //to base line ,don't calibration
-#define NOTHOLD             (0u<<3)     // to base line ,continue calibration
+#define KVF_STOP_CORREC     (1<<2)   //key be pressed is active ,touch don't calibration
+#define KVF_50S_CORREC     (1<<2)   //key be pressed is active ,50s  calibration
+#define HOLD                (1<<3)     //to base line ,don't calibration
+#define NOTHOLD             (0<<3)     // to base line ,continue calibration
 
-#define SLPCYC_LGT          (0u<<5)   //infinity
-#define SLPCYC_0R5T         (1u<<5)   //sleep after sample interval 60ms
-#define SLPCYC_0R5T         (2u<<5)   //sleep after sample interval 180ms
-#define SLPCYC_0R5T         (3u<<5)   //sleep after sample interval 300ms
-#define SLPCYC_0R5T         (4u<<5)   //sleep after sample interval 420ms
-#define SLPCYC_0R5T         (5u<<5)   //sleep after sample interval 540ms
-#define SLPCYC_0R5T         (6u<<5)   //sleep after sample interval 660ms
-#define SLPCYC_0R5T         (7u<<5)   //sleep after sample interval 780ms
+#define SLPCYC_LGT          (0<<5)   //infinity
+#define SLPCYC_0R5T         (1<<5)   //sleep after sample interval 60ms
+#define SLPCYC_0R5T         (2<<5)   //sleep after sample interval 180ms
+#define SLPCYC_0R5T         (3<<5)   //sleep after sample interval 300ms
+#define SLPCYC_0R5T         (4<<5)   //sleep after sample interval 420ms
+#define SLPCYC_0R5T         (5<<5)   //sleep after sample interval 540ms
+#define SLPCYC_0R5T         (6<<5)   //sleep after sample interval 660ms
+#define SLPCYC_0R5T         (7<<5)   //sleep after sample interval 780ms
 
-#define FAST_TO_SLEEP       (1u<<4)  //fast input sleep
-#define SLOW_TO_SLEEP       (0u<<4)  //75s input sleep
+#define FAST_TO_SLEEP       (1<<4)  //fast input sleep
+#define SLOW_TO_SLEEP       (0<<4)  //75s input sleep
 
 
 static void I2C_Start(void);

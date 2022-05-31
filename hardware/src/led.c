@@ -21,5 +21,36 @@ static void LED_Init(void)
     TRISAbits.TRISA2 = 0;  //I/O as output 
     TRISCbits.TRISC4 = 0;
 
+    //RESET KEY 
+    TRISAbits.TRISA3 = 1;   //input Key 
+
 }
+
+unsigned char Scan_Key(void)
+{
+
+    unsigned int k1=0 ;
+    unsigned char  value ,cnt;
+   if(RESET_KEY  ==0 ){
+        cnt=0;
+        k1++;   
+    }
+ 
+    if(RESET_KEY  == 1 ){
+        cnt++;
+        if(cnt<30) return 0;
+        
+        cnt=0;
+        if(k1 >180 && k1< 200){
+            value = 0x01;
+        }
+        else if(k1>300){
+            value = 0x81;
+        }
+      
+    }
+    return 0;
+}
+
+
 

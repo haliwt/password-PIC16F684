@@ -9,14 +9,7 @@
 //#define SAMP1_REG             0x0B 
 
 
-typedef struct _KEY_T{
 
-    unsigned int KeyValue;
-
-
-}KEY_T;
-
-extern KEY_T key_t;
 
 
 

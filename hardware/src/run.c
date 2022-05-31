@@ -19,12 +19,69 @@
 unsigned char pwd1[6];
 unsigned char pwd2[6];
 
+unsigned char getKeyTran;
 
 static unsigned char CompareValue(void);
 
-unsigned char eeprom_buf[7];
-KEY_T key_t;
+void InputKey_Tlo_Number(void);
 
+
+
+
+
+/****************************************************************************
+*
+*Function Name:void Password_Modify(void)
+*Function : run is main 
+*Input Ref: NO
+*Retrun Ref:NO
+*
+****************************************************************************/
+void InputKey_Tlo_Number(void)
+{
+      
+
+	 #if 0
+	   	
+       case 0x01: getKeyTran =6;   break; //KEY6 =6
+       
+       case 0x02: getKeyTran = 10;   break; //KEY0 = *
+       
+       case 0x04: getKeyTran =7;   break; //KEY7 =7
+
+       case 0x08: getKeyTran = 1;   break; //KEY1 =1
+
+       case 0x10: getKeyTran =8;   break; // KEY8=8
+
+       case 0x20: getKeyTran =2;   break; //KEY2 = 2
+
+       case 0x40: getKeyTran =9;   break; //KEY9 = 9
+
+       case 0x80: getKeyTran =3;   break; //KEY =3
+	   #endif 
+
+       if(run_t.KeyValue == 0x100 )
+	         getKeyTran =0;  //break;  //KEY= 0
+       else if(run_t.KeyValue == 0x200)
+            getKeyTran =4;   // break;  //KEY4= 4
+       else if(run_t.KeyValue == 0x800)
+             getKeyTran =5;  //break;  //KEY5 =5
+
+     
+ }
+     
+      
+   
+
+
+/****************************************************************************
+*
+*Function Name:void Password_Modify(void)
+*Function : run is main 
+*Input Ref: NO
+*Retrun Ref:NO
+*
+****************************************************************************/
 static unsigned char CompareValue(void)
 {
 	unsigned char i ;
@@ -47,19 +104,60 @@ static unsigned char CompareValue(void)
 void Password_Modify(void)
 {
    
-   static unsigned char userNumbers =0 ;
-   I2C_Simple_Read_Device(OUTPUT0_REG,&key_t.KeyValue);
-   while ( key_t.KeyValue != 0) {
+   static unsigned char userNumbers =0 ,i;
+   I2C_Simple_Read_Device(OUTPUT0_REG,&run_t.KeyValue);
+   while ( run_t.KeyValue != 0) {
         BACKLIGHT_ON(); //LED ON 8s 
 	   
-       if(key_t.KeyValue != 0x02 && key_t.KeyValue != 0x400 ){
+       
+	   if(run_t.KeyValue ==0x02) //"*"
+	   {
+            run_t.adminiId =1;
+	   }
+	   if(run_t.adminiId==1){
 
+		     i++;
+		    if(run_t.KeyValue ==0x08 && i==1) //KEY= "1"
+			{
+				run_t.cmdCtr_ = 0;
+			}
+			else if(run_t.KeyValue ==0x20 && i==2) //KEY = "2"
+			{
+				run_t.cmdCtr_ = 0;
+			}
+			else if(run_t.KeyValue ==0x80 && i==3) //KEY = "3"
+			{
+				run_t.cmdCtr_ = 0;
+			}
+			else if(run_t.KeyValue == 0x200 && i==4) //KEY = "4"
+			{
+				 run_t.cmdCtr_ = 1;
+				 i=0;
+				 run_t.adminiId =0;
+			}
+       }
+
+       if(run_t.cmdCtr_ == 1 && run_t.resetKey == 0x01){
+
+	       if(run_t.KeyValue != 0x02 && run_t.KeyValue != 0x400  ){
+             i=0;
+			 run_t.adminiId =0;
 			if(run_t.overFlag == 0){
 				if(run_t.number ==0){
-					pwd1[run_t.cmdCtr_] = key_t.KeyValue;
+					if(run_t.KeyValue > 0x80){
+						InputKey_Tlo_Number();
+						 pwd1[run_t.cmdCtr_]= getKeyTran;
+					}
+					else
+					     pwd1[run_t.cmdCtr_] = run_t.KeyValue;
 				}
 				else{
-					pwd2[run_t.cmdCtr_] = key_t.KeyValue;
+					if(run_t.KeyValue > 0x80){
+						InputKey_Tlo_Number();
+						 pwd2[run_t.cmdCtr_]= getKeyTran;
+					}
+					else
+					     pwd2[run_t.cmdCtr_] = run_t.KeyValue;
 				}
 				run_t.cmdCtr_++;
 				if(run_t.cmdCtr_ == 6 ){  // input password is 4 ~ 6bytes
@@ -67,7 +165,7 @@ void Password_Modify(void)
 				}
             }
 	        
-			if(key_t.KeyValue == 0x02){ // "*" is clear 
+			if(run_t.KeyValue == 0x02){ // "*" is clear 
 			    pwd1[5]=0;
 				pwd2[5]=0;
 				pwd1[4]=0;
@@ -76,7 +174,7 @@ void Password_Modify(void)
 				run_t.cmdCtr_=0;
 			}
 
-			if(key_t.KeyValue == 0x400){ // "#" over 
+			if(run_t.KeyValue == 0x400){ // "#" over 
 			   if(run_t.cmdCtr_ > 3 && run_t.cmdCtr_ < 7){
 				   run_t.cmdCtr_ = 0;
 				  run_t.overFlag =0;
@@ -100,9 +198,9 @@ void Password_Modify(void)
 			  run_t.overFlag =0;
               run_t.number=0;
 			  userNumbers ++;
-
+              
 			  if(userNumbers < 11){
-                   switch(run_t.userId){
+                   switch(userNumbers){
 					   case 1 :
 					    run_t.userId = USER_1;     
                        break;
@@ -160,6 +258,7 @@ void Password_Modify(void)
 
 		
 
+	  }
 	}
    }
 
@@ -174,7 +273,7 @@ void Password_Modify(void)
 ****************************************************************************/
 void CProcessCmdRun(void)
 {
-
+         
 
 }
 /*********************************************/

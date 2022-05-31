@@ -11,16 +11,16 @@
 /******************************************************************************************************
 *
 *Functin Name: void TIMER1_Init(void)
-*Funciton : TIMER0 and TIMER1 is 1ms 
+*Funciton : TIMER0 and TIMER1 is 10ms 
 *           prescaler = 4 
 *           Timer0 overflow = 256 * prescaler * (__XTAL_FREQ / 4)= 256 * 4 * 1us = 1024us = 1.024ms
 *           TIMER0 0f initial value  =(256 - (4MHz/4us)/4 * 0.001s) = (256 - 250)= 6
 *
 *           TMR1H:TMR1L = [65536-[(__XTAL-FREQ/4)/prescaler] * Timer0 overflow(s)]
-*			Tim is need timer ,explame 1000us -unit us
+*			Tim is need timer ,explame 10000us 10ms -unit us
 *           Freq = system clock frequency is = 4MHz 
-*           prescale = 1,2,4,8,prscale=1
-*           TMR1H:TMR1L = 65536-[(Tim*Freq)/(4*precals)] =65536-((1000 * 4)/(4*1))-1=64535
+*           prescale = 1,2,4,8,prscale=8
+*           TMR1H:TMR1L = 65536-[(Tim*Freq)/(4*precals)] =65536-((10000 * 4)/(4*8))=64286
             prscale = 8 
 *           TMR1H:TMR1L = 65536-[(Tim*Freq)/(4*precals)] =65536-((1000 * 4)/(4*8))=65535-125 =65410
 *
@@ -30,11 +30,11 @@ void TMR1_Initialize(void)
 {
     //Set the Timer to the options selected in the GUI
 
-    //TMR1H : TMR1L = 65410; 
-    TMR1H = 0xff;
+    //TMR1H : TMR1L = 64286; 
+    TMR1H = 0xFB;
 
     //TMR1L 48; 
-    TMR1L = 0x82;
+    TMR1L = 0x1E;
 
     // Clearing IF flag before enabling the interrupt.
     PIR1bits.TMR1IF = 0;
@@ -49,26 +49,34 @@ void TMR1_Initialize(void)
    
 
     // T1CKPS 1:8; nT1SYNC synchronize; internal TMR1CS FOSC/4; TMR1ON enabled; 
-    T1CON = 0b00110101; //0x04;
+    T1CON = 0b00110100; //0x04;
 }
 
 
-
+/**
+ * @brief  TMR1 is 10ms
+ * 
+ */
 void TMR1_ISR(void)
 {
-
+    unsigned char t;
     // Clear the TMR1 interrupt flag
     PIR1bits.TMR1IF = 0;
-    //TMR1_WriteTimer(65410);
-     //TMR1H : TMR1L = 65410; 
-    TMR1H = 0xff;
+   
+     //TMR1H : TMR1L = 64286;  
+    TMR1H = 0xFB;
 
     //TMR1L 48; 
-    TMR1L = 0x82;
+    TMR1L = 0x1E;
 
     // ticker function call;
     // ticker is 1 -> Callback function gets called everytime this ISR executes
-   
+   t++;
+   if(t==100){
+      t=0;
+      run_t.timer_base ++;
+
+   }
 }
 
 

@@ -19,12 +19,15 @@ void main(void)
    
    SC12B_Init_Function();
     TMR1_Initialize();
+    ADC_Init();
+    System_Init();
    INTERRUPT_GlobalInterruptEnable();
    INTERRUPT_PeripheralInterruptEnable() ;
    while(1)
    {
       Password_Modify();
-       
+      ADC_ReadVoltage();
+      run_t.resetKey =  Scan_Key();
    }
     
 }

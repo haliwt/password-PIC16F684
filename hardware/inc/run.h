@@ -4,28 +4,17 @@
 
 
 
-enum Signal{
-     KEY_0,KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8,KEY_9,KEY_10,KEY_11
-};
-
-enum State{
-      is_Idle,is_Start,is_Doing,is_Exit
-
-};
-
-
-
-
 
 typedef struct __RUN_T{
-    enum State state_;          //the scalar state variable
     unsigned char cmdCtr_;   //event order cunter
     unsigned char overFlag;
-    unsigned char password_low_bits;
-    unsigned char password_high_bits;
-    unsigned char head;
+    unsigned char adminiId;
+    unsigned char resetKey;
+    unsigned char getKeyTran;
     unsigned char userId;
     unsigned char number;
+    unsigned char timer_base;
+    unsigned int KeyValue;
 }RUN_T;
 
 
