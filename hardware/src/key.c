@@ -62,7 +62,8 @@ static unsigned char I2C_Receive8bit(void);
 void SC12B_Init_Function(void)
 {
    
-    CMCON  = 0x07;          //关闭比较器功能 ->PORTA 
+   // CMCON  = 0x07;          //关闭比较器功能 ->PORTA 
+    CMCON0 = 0x07 ; //PIC16F684
     ANSELbits.ANS5 = 0;
     ANSELbits.ANS6=0;     //
 

@@ -9,6 +9,7 @@
 void BUZZER_Init(void);
 
 
+void BUZZER_KeySound(void);
 
 void PlayMusi_Buzzer(void);
 

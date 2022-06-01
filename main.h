@@ -25,7 +25,7 @@
 #include "hardware/inc/motor.h"
 
 
-#define _XTAL_FREQ         4000000
+#define _XTAL_FREQ         4000000  //PIC16F684 default 
 
 typedef  unsigned char   uint8_t ;
 

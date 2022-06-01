@@ -8,8 +8,9 @@
 #include "main.h"
 //__CONFIG(0x01B4);  
 //#pragma config CONFIG = 0x01B4 
-#pragma config FOSC = INTRCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, BOREN = ON, CP = OFF, CPD = OFF
-
+//#pragma config FOSC = INTRCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, BOREN = ON, CP = OFF, CPD = OFF   //PIC16F676 
+//PIC16F684 
+#pragma config FOSC = INTOSCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, CP = OFF, CPD = OFF, BOREN = ON, IESO = OFF, FCMEN = ON
 
 /*
  * 
@@ -25,9 +26,35 @@ void main(void)
    INTERRUPT_PeripheralInterruptEnable() ;
    while(1)
    {
-      Password_Modify();
-      ADC_ReadVoltage();
-      run_t.resetKey =  Scan_Key();
+   
+      
+        CProcessCmdRun();
+      
+      
+      if(run_t.timer_base ==250){ //5s 
+         run_t.timer_base = 0;
+         ADC_ReadVoltage();
+      }
+
+      if(run_t.cmdCtr_ == 1 && run_t.resetKey == 0x01){ //setup new user password for 10 numbers
+
+         if(run_t.timer_led ==1){
+			     OK_LED_OFF();
+           }
+           else{
+			     OK_LED_ON();
+           }
+		}
+
+      if(run_t.eePasswordOver ==1){
+
+         if(run_t.timer_led ==1){
+			     ERR_LED_OFF();
+           }
+           else{
+			     ERR_LED_ON();
+           }
+      }
    }
     
 }

@@ -11,7 +11,8 @@ void System_Init(void)
 
 static void LED_Init(void)
 {
-    CMCON = 0x07;
+    //CMCON = 0x07;
+    CMCON0 = 0x07; //PIC16F684
     ANSELbits.ANS0 = 0;
     ANSELbits.ANS1 = 0;
     ANSELbits.ANS2 =0 ; //I/O as digital 

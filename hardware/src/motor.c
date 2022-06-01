@@ -11,8 +11,8 @@ static void MotorStart_CCW_Step(void);
  */
 void Motor_Init(void)
 {
-	CMCON = 0x07;
-    
+	//CMCON = 0x07;
+    CMCON0 = 0x07; //PIC16F684
     ANSELbits.ANS3 = 0;
     
     TRISAbits.TRISA5 = 0;

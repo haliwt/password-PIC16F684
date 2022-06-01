@@ -21,7 +21,7 @@ unsigned int tempo = 300;   //cadence
 
 
 
-uint8_t  SONG_TONE[]={Do,Re,Mi,Fa,Sol,La,Si}; 
+uint8_t   SONG_TONE[]={Do,Re,Mi,Fa,Sol,La,Si}; 
 
 
 uint8_t  SONG_LONG[]={1,1,1,1,1,1,1};
@@ -30,6 +30,22 @@ uint8_t  SONG_LONG[]={1,1,1,1,1,1,1};
 void BUZZER_Init(void)
 {
      TRISCbits.TRISC5 =0 ; //I/O as output 
+}
+/*******************************************
+*
+*Function Name: void BUZZER_KeySound(void)
+*Function: Key be pressed carry out sound
+*
+*
+*******************************************/
+void BUZZER_KeySound(void)
+{
+
+      BUZZER_PIN_ON();
+	  __delay_us(250);
+	  BUZZER_PIN_OFF();
+	  __delay_us(250);
+
 }
 
 /**

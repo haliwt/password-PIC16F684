@@ -49,7 +49,7 @@ void TMR1_Initialize(void)
    
 
     // T1CKPS 1:8; nT1SYNC synchronize; internal TMR1CS FOSC/4; TMR1ON enabled; 
-    T1CON = 0b00110100; //0x04;
+    T1CON = 0b00110101; //0x04;
 }
 
 
@@ -59,7 +59,7 @@ void TMR1_Initialize(void)
  */
 void TMR1_ISR(void)
 {
-    unsigned char t;
+    static unsigned char t,t1;
     // Clear the TMR1 interrupt flag
     PIR1bits.TMR1IF = 0;
    
@@ -72,9 +72,19 @@ void TMR1_ISR(void)
     // ticker function call;
     // ticker is 1 -> Callback function gets called everytime this ISR executes
    t++;
-   if(t==100){
+   if(t==200){
       t=0;
+      t1++;
+      if(t1==3){
+          run_t.timer_led=1;
+          t1=0;
+      }
+      else{
+         run_t.timer_led=0;
+         
+      }
       run_t.timer_base ++;
+      run_t.timer_Core ++ ;
 
    }
 }
