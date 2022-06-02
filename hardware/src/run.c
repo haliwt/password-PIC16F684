@@ -20,7 +20,7 @@ unsigned char pwd1[MAX_SIZE];
 unsigned char pwd2[MAX_SIZE];
 
 unsigned char getKeyTran;
-unsigned char top =0;
+unsigned char Top =0;
 
 
 static void CProcessDispatch(unsigned char sig);
@@ -33,6 +33,9 @@ static void ReadPassword_EEPROM_SaveData(void);
 static void Push(unsigned char *pt,unsigned char data);
 static void Pop(void);
 
+static void TheFirst_Administrator_Login(void);
+static void NewPassword_Administrator_Login(void);
+
 
 /**
  * @brief 
@@ -40,18 +43,18 @@ static void Pop(void);
  */
 static void Push(unsigned char *pt,unsigned char data)
 {
-	if(top == MAX_SIZE){
+	if( Top == MAX_SIZE){
 		return ;
 	}
 	*(pt) = data;
-	top++;
+	Top++;
 }
 static void Pop(void)
 {
 	// if(top== -1){
 	// 	return ;
 	// }
-	top = 0 ;//top -- ;
+	Top = 0 ;//top -- ;
 }
 
 /****************************************************************************
@@ -110,7 +113,10 @@ void InputKey_To_Number(void)
 static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 {
 	unsigned char i ;
-	for(i=0;i<6;i++){
+	if(Top == 0){
+		return 0;
+	}
+    for(i=0;i<MAX_SIZE;i++){
 		if(*(pt1+i) != *(pt2+i)){
 			return 0;
 		}
@@ -129,345 +135,367 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 void Password_Modify(void)
 {
    
-   static unsigned char userNumbers =0 ,currkey=0xff;
+ 
    unsigned char eev,i;
-  // I2C_Simple_Read_Device(OUTPUT0_REG,&run_t.KeyValue);
-   while ( run_t.KeyValue != 0) {
-         BACKLIGHT_ON(); //LED ON 8s 
-         if(run_t.keyTime != currkey){
-		 	  currkey = run_t.keyTime;
-	          BUZZER_KeySound();
-         }
-	   if(run_t.resetKey == 0x01){ //be pressed key shot times 
-	     	
-	     //adjust the first add user password and be changed this administrator password
-		if(run_t.KeyValue ==0x02 && run_t.OpenPasswrod ==0) //"*" -> the first be used to 
-		{
-			    run_t.firstInPassword = EEPROM_Read_Byte(0x00);
-				if(run_t.firstInPassword == 1){
-					for(i=0;i<6;i++){
- 						pwd1[i]=0;
-					}
-					run_t.adminiId =0;
-					return ;
-				}
-				else{
-					run_t.adminiId =1;
-				}
-		}
-		else{
-			 if(run_t.firstInPassword !=2){ //administrator password . every one read administrator 
-					
-					run_t.firstInPassword = EEPROM_Read_Byte(0x00);
-					if(run_t.firstInPassword == 1){
-						
-						Readpwd[0] = EEPROM_Read_Byte(ADMINI + 0X01);
-						Readpwd[1] = EEPROM_Read_Byte(ADMINI + 0X02);
-						Readpwd[2] = EEPROM_Read_Byte(ADMINI + 0X03);
-						Readpwd[3] = EEPROM_Read_Byte(ADMINI + 0X04);
-						Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
-						Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
-					}
-					else{
-						return ;
-					}
-				}
-		}
+    
+
+        //adjust the first login in be usd to password "*1234#"
 	
-        if(run_t.adminiId==1 && run_t.KeyValue != 0x02){ //administrator password 
+          run_t.firstInPassword = EEPROM_Read_Byte(ADMINI);
+		
 
-				i++;
-				if(run_t.KeyValue ==0x08 && i==1) //KEY= "1"
+		switch(run_t.firstInPassword){
+
+			case 0: //the first login administrator password "*1234#"
+			  
+					TheFirst_Administrator_Login();
+			break;
+
+			case 1: //has been woten new administrator password  "xxxxxx"
+					NewPassword_Administrator_Login();
+			break;
+
+			default:
+
+			   run_t.keyTime++;
+
+			   return ;
+
+			break;
+
+        }
+}
+
+/**
+ * @brief 
+ * 
+ */
+
+
+static void TheFirst_Administrator_Login(void)
+{
+		  static unsigned char adminiFirst;
+
+         switch(run_t.adminiId){
+			
+			case 0:
+				if(run_t.KeyValue ==0x02 ) //"*" -> the first be used to 
 				{
-					run_t.cmdCtr_ = 0;
+					//the first administrator be used to password "*1234#"
+					run_t.adminiId =1;
+						
 				}
-				else if(run_t.KeyValue ==0x20 && i==2) //KEY = "2"
+				
+            break;
+
+			case 1:
+			 if(run_t.adminiId==1 && run_t.KeyValue != 0x02){ //administrator password 
+				if(run_t.KeyValue ==0x08) //KEY= "1"
 				{
-					run_t.cmdCtr_ = 0;
+					adminiFirst++;
 				}
-				else if(run_t.KeyValue ==0x80 && i==3) //KEY = "3"
+				else if(run_t.KeyValue ==0x20 && adminiFirst ==1) //KEY = "2"
 				{
-					run_t.cmdCtr_ = 0;
+					adminiFirst++;
 				}
-				else if(run_t.KeyValue == 0x200 && i==4) //KEY = "4"
+				else if(run_t.KeyValue ==0x80 && adminiFirst==2) //KEY = "3"
 				{
-					run_t.cmdCtr_ = 0;
+					adminiFirst++;
 				}
-				else if(run_t.KeyValue == 0x400 && i==5) //KEY = "#"
+				else if(run_t.KeyValue == 0x200 && adminiFirst==3) //KEY = "4"
 				{
-					run_t.OpenPasswrod = 1;
-					i=0;
-					run_t.adminiId =0;
+					adminiFirst++;
+				}
+
+				if(run_t.KeyValue == 0x400 && adminiFirst==4) //KEY = "#"
+				{
+					
+				    run_t.adminiId =2;
+					adminiFirst=0;
+				//	run_t.firstInPassword= 1;
+				    run_t.keyTime++;
 					OK_LED_ON();
-				    return ;
+
+					return ;
+					
+				  
 
 				}
-				else{
+				else{ //ERROR of key input 
+					ERR_LED_ON();
 					run_t.adminiId = 0;
-					i=0;
+					adminiFirst=0;
+					run_t.keyTime++;
 				}
 		    }
+			if(run_t.KeyValue == 0x02){ // "*" be clear input numbers
 
-	   
+                    run_t.adminiId = 0;
+					adminiFirst=0;
+                    run_t.keyTime++;
+			}
+
+
+			break;
+
+			case 2:
+
+			     if(run_t.adminiId ==2){
+
+				    run_t.firstInPassword= 1;
+
+				 }
+
+			break;
+
+			default:
+            
+			break;
+            
+			//run_t.keyTime++;
+		 }
+}
+
+/**
+ * @brief 
+ * 
+ */
+
+static void NewPassword_Administrator_Login(void)
+{
+      static  unsigned char eepromReadAdmin,eev;
+
+	  switch(eepromReadAdmin){
+
+        case 0: 
         
-	    if(run_t.KeyValue != 0x02 || run_t.KeyValue != 0x400 ){
-             i=0;
-			 run_t.adminiId =0;
+		if(run_t.firstInPassword !=2){
+			Readpwd[0] = EEPROM_Read_Byte(ADMINI + 0X01);
+			Readpwd[1] = EEPROM_Read_Byte(ADMINI + 0X02);
+			Readpwd[2] = EEPROM_Read_Byte(ADMINI + 0X03);
+			Readpwd[3] = EEPROM_Read_Byte(ADMINI + 0X04);
+			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
+			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
+		}
+
+		eepromReadAdmin =1;
+	   
+	   break; 
+
+	   case 1:
+
+	    if(run_t.KeyValue != 0x02 || run_t.KeyValue != 0x400 ){ //"*" || "#"
+          
 			if(run_t.overFlag == 0){ //limit password numbers lenght maximum 6
 				if(run_t.number ==0){ //the first times input password 
 					if(run_t.KeyValue > 0x80){
 						InputKey_To_Number();
-						 pwd1[run_t.cmdCtr_]= getKeyTran;
+						 Push(&pwd1[Top],getKeyTran);
 					}
 					else //
-					     pwd1[run_t.cmdCtr_] = run_t.KeyValue;
+					     Push(&pwd1[Top],run_t.KeyValue); //pwd1[run_t.cmdCtr_] = run_t.KeyValue;
 				}
 				else{
 					if(run_t.KeyValue > 0x80){
 						InputKey_To_Number();
-						 pwd2[run_t.cmdCtr_]= getKeyTran;
+					    Push(&pwd2[Top],getKeyTran);	   // pwd2[run_t.cmdCtr_]= getKeyTran;
 					}
 					else
-					     pwd2[run_t.cmdCtr_] = run_t.KeyValue;
+					    Push(&pwd2[Top],run_t.KeyValue); //pwd2[run_t.cmdCtr_] = run_t.KeyValue;
 				}
-				run_t.cmdCtr_++;
-				if(run_t.cmdCtr_ == 6 ){  // input password is 4 ~ 6bytes
+			
+				if(Top == MAX_SIZE ){  // input password is 4 ~ 6bytes
 						run_t.overFlag =1;
+						if(run_t.adminiId==0)
+						   eepromReadAdmin =2;
+						else if(run_t.adminiId==1)
+						   eepromReadAdmin = 3;
 				}
             }
 		} 
 
-		if(run_t.KeyValue == 0x02){ // "*" is clear 
-			 for(i=0;i<6;i++){
-			 	if(run_t.number ==0)
- 					     pwd1[i]=0;
-				else if(run_t.number ==1)
-					   pwd2[i]=0;
-				}
-				run_t.overFlag =0;
-				run_t.cmdCtr_=0;
+		if(run_t.KeyValue == 0x02){ //"*" be clear input number
+                Pop();
+				run_t.keyTime++;
+                return ;
 		}
 
-		if(run_t.KeyValue == 0x400){ // "#" over 
-			   if(run_t.cmdCtr_ > 3 && run_t.cmdCtr_ < 7){
-				   run_t.cmdCtr_ = 0;
-				  run_t.overFlag =0;
-                  run_t.number ++ ;
-				  if(run_t.number ==2) run_t.overFlag =1;
-				}
-				else{
-                    run_t.overFlag =1;
-				}
-			
+		if(run_t.KeyValue == 0x400){ //"#" key accomplish input over task
+		     if(Top > 3 && Top < 7){ //has 4 number passwords
+                        run_t.overFlag =1;
+					if(run_t.adminiId==0)
+						   eepromReadAdmin =2;
+					else if(run_t.adminiId==1)
+						   eepromReadAdmin = 3;
+
+			}
+			else{
+			     ERR_LED_ON();
+			     run_t.keyTime++;
+                return ;
+			}	 
 		}
-		//check administrator password is correct ,after permit access new USER password 
-        if(run_t.number ==1 && run_t.firstInPassword==1){
-            if(CompareValue(Readpwd,pwd1) ==1)//if(strcmp(pwd1,pwd2)==0)
+
+        break; 
+
+
+		case 2:
+
+        if(run_t.KeyValue == 0x400){ //"#" key accomplish input over task
+			if(CompareValue(Readpwd,pwd1) ==1)//if(strcmp(pwd1,pwd2)==0)
 			{
-                  run_t.firstInPassword =2;
-				  run_t.adminiId=1;
-				  run_t.number = 0; 
-				  OK_LED_ON();
-			      
+					run_t.adminiId=1;
+					run_t.number = 0;
+					eepromReadAdmin =1; //
+					Pop();
+					OK_LED_ON();
+					
 
 			}
 			else{
 
-				 ERR_LED_ON();
-				 run_t.number = 0;
-				 run_t.adminiId=0;
-				 return ; 
+					ERR_LED_ON();
+					run_t.number = 0;
+					run_t.adminiId=0;
+					run_t.keyTime++;
+					return ; 
 
 			}
 		}
-	   //adjust 
-	   if(run_t.number == 2){
-         if(CompareValue(pwd1,pwd2) ==1)//if(strcmp(pwd1,pwd2)==0)
-		 {
-			   OK_LED_ON();
-			   ERR_LED_OFF();
-			   run_t.cmdCtr_=0;
-			  run_t.overFlag =0;
-              run_t.number=0;
-			 // Motor_CCW_Run();//open passwordlock 
-              
-			  if(userNumbers < 11){
-                   switch(userNumbers){
+
+	
+		if(run_t.KeyValue == 0x02){ //"*" be clear input number
+                Pop();
+				run_t.keyTime++;
+                return ;
+		}
+
+		break;
+
+		case 3:
+         if(run_t.KeyValue == 0x400){ //"#" key accomplish input over task
+			if(CompareValue(pwd1,pwd2) ==1)//if(strcmp(pwd1,pwd2)==0)
+			{
+					eepromReadAdmin =4; //
+					run_t.adminiId=1;
+					run_t.number = 0; 
+					OK_LED_ON();
+					
+
+			}
+			else{
+
+					ERR_LED_ON();
+					run_t.number = 0;
+					run_t.adminiId=0;
+					run_t.keyTime++;
+					return ; 
+
+			}
+		 }
+		 if(run_t.KeyValue == 0x02){ //"*" be clear input number
+                Pop();
+				run_t.keyTime++;
+                return ;
+		}
+
+		break;
+
+
+		case 4: //be saved new password 
+			   switch(run_t.cmdCtr_){
 					  
 					   case 0:
-					    eev = EEPROM_Read_Byte(0x00);
-						if(eev ==1){
-							userNumbers=1; //don't cover before write data
-						}
-						else{
+					
 							run_t.userId= ADMINI;
 							
-						}
 					   break;
 
 					   case 1 :
-					    eev = EEPROM_Read_Byte(USER_1);
-						if(eev ==1){
-							userNumbers=2; //don't cover before write data
-						}
-						else
-						{
-							run_t.userId = USER_1;
-							
-						}   
-					  break;
+					        run_t.userId = USER_1;
+						break;
 					  
 					   case 2: 
-					    eev = EEPROM_Read_Byte(USER_2);
-						if(eev ==1){
-							userNumbers=3; //don't cover before write data
-						}
-						else
-						{
 							run_t.userId = USER_2; 
-							
-						}
-					   break;
+						break;
 					   
 					   case 3 :
-					    eev = EEPROM_Read_Byte(USER_3);
-						if(eev ==1){
-							userNumbers=4; //don't cover before write data
-						}
-						else
-						{
-							run_t.userId = USER_3; 
+					     run_t.userId = USER_3; 
 							
-						}    
-                       break;
+						break;
 					   
 					   case 4: 
-					    eev = EEPROM_Read_Byte(USER_4);
-						if(eev ==1){
-							userNumbers=5; //don't cover before write data
-						}
-						else
-						{
-					      run_t.userId = USER_4; 
-						
-						} 
-					   break;
+				           run_t.userId = USER_4; 
+						break;
 
 					   case 5 :
-					    eev = EEPROM_Read_Byte(USER_5);
-						if(eev ==1){
-							userNumbers=6; //don't cover before write data
-						}
-						else
-						{
 					       run_t.userId = USER_5;  
-						
-						}   
-                       break;
+						break;
 					   
 					   case 6: 
-					    eev = EEPROM_Read_Byte(USER_6);
-						if(eev ==1){
-							userNumbers=7; //don't cover before write data
-						}
-						else
-						{
-					       run_t.userId = USER_6; 
+					        run_t.userId = USER_6; 
 						
-						}
-					   break;
-					   
-					    case 7 :
-						eev = EEPROM_Read_Byte(USER_7);
-						if(eev ==1){
-							userNumbers=8; //don't cover before write data
-						}
-						else
-						{
+					    break;
+					   case 7 :
+					
 					        run_t.userId = USER_7; 
 						
-						}    
-                       break;
+					    break;
 					   
 					   case 8: 
-					     eev = EEPROM_Read_Byte(USER_8);
-						if(eev ==1){
-							userNumbers=9; //don't cover before write data
-						}
-						else
-						{
-							run_t.userId = USER_8; 
-							
-						}
-					   break;
+					
+						  run_t.userId = USER_8; 
+						break;
 					   
 					   case 9 :
-					    eev = EEPROM_Read_Byte(USER_9);
-						if(eev ==1){
-							userNumbers=10; //don't cover before write data
-						}
-						else
-						{
-							run_t.userId = USER_9; 
+				
+						run_t.userId = USER_9; 
 							
-						}    
-                       break;
+						break;
 					  
 					   case 10:
-					    eev = EEPROM_Read_Byte(USER_10);
-						if(eev ==1){
-							userNumbers=11; //don't cover before write data
-						}
-						else
-						{ 
-							run_t.userId = USER_10; 
-							
-						} 
-					   break;
+					
+						run_t.userId = USER_10; 
+						break;
 
 					   case 11:
 							ERR_LED_ON();
-							run_t.eePasswordOver =1;
+							run_t.cmdCtr_ = 0;
+							run_t.keyTime++;
 							return ;
 					   break;
-					 
 
 
-				}
-				userNumbers ++;
-					run_t.firstInPassword =0;
-					EEPROM_Write_Byte(run_t.userId , 0x01);
-					EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
-					EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
-					EEPROM_Write_Byte(run_t.userId + 0x03,pwd1[2]);
-					EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
-					EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
-					EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
+					eev = EEPROM_Read_Byte(run_t.userId);
+					if(eev==0){
+						EEPROM_Write_Byte(run_t.userId , 0x01);
+						EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
+						EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
+						EEPROM_Write_Byte(run_t.userId + 0x03,pwd1[2]);
+						EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
+						EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
+						EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
+					}
+					else{
+						run_t.cmdCtr_++;
+					}
 				  
+				}
+			  
+			 break;
 
-			  }
-			  else
-			  {
-				 userNumbers = 0;
-			  }
-
-		   }
-		   else
-		   {
-			   ERR_LED_ON();
-			   OK_LED_OFF();
-			  run_t.overFlag =0;
-              run_t.number=0;
-		   }
-
-		
-
-	   }
-	 }//Be pressed value 
-	}
-
-
+		}
+		if(run_t.cmdCtr_ >11 ){
+        
+        	run_t.cmdCtr_=0;
+        }
+		run_t.keyTime++;
 }
+/**
+ * @brief 
+ * 
+ */
+
 /****************************************************************************
 *
 *Function Name:void Input_Password(void)
@@ -478,58 +506,45 @@ void Password_Modify(void)
 ****************************************************************************/
 void Input_Password(void)
 {
-
-	   unsigned char getKeyTran,i;
-      
-
-       if(run_t.KeyValue != 0x02 || run_t.KeyValue != 0x400 ){ //"*"  and "#"
-		       if(run_t.cmdCtr_ < 6){ //limit password numbers lenght maximum 6
-				  if(run_t.number ==0){ //the first times input password 
+     
+	 unsigned char getKeyTran ,i;
+   
+     if(run_t.KeyValue != 0x02 || run_t.KeyValue != 0x400 ){ //"*"  and "#"
+		       if(Top < 6){ //limit password numbers lenght maximum 6
+				 //the first times input password 
 					  if(run_t.KeyValue > 0x80){
 						   InputKey_To_Number();
-						   pwd1[run_t.cmdCtr_]= run_t.getKeyTran;
+						   Push(&pwd1[Top],getKeyTran);
 					  }
 					  else //
-						   pwd1[run_t.cmdCtr_] = run_t.KeyValue;
-				  }
-				  run_t.cmdCtr_++;
+						    Push(&pwd1[Top],run_t.KeyValue);//pwd1[topnumber] = run_t.KeyValue;
+				 }
 				 
-			  }
-		 } 
-
-
-		if(run_t.KeyValue == 0x02){ // "*" is clear 
-			 for(i=0;i<6;i++){
-			 	   pwd1[i]=0;
-			 	}
-				run_t.cmdCtr_=0;
+				 
+	   }
+      if(run_t.KeyValue == 0x02){ // "*" is clear 
+          Pop();
+				
 		}
         //
 		if(run_t.KeyValue == 0x400){ // "#" over 
-			 if(run_t.cmdCtr_ > 3 && run_t.cmdCtr_ < 7){
-				   run_t.cmdCtr_ = 0;
-
-				ReadPassword_EEPROM_SaveData();
-
-
-              
-			 }
+			 if(Top > 3 && Top < 7){
+                 Top=0;
+                 ReadPassword_EEPROM_SaveData();
+ 			 }
 			 else{
                   ERR_LED_ON();
-				 for(i=0;i<6;i++){
-			 	   pwd1[i]=0;
-			 	 }
+				  Pop();
 				
 			}
 		     
-			 
-      }
+		}
 }
 
 static void ReadPassword_EEPROM_SaveData(void)
 {
   
-	   unsigned char eevalue ,i,ReadAddress;
+	  static  unsigned char eevalue ,ReadAddress;
 	      switch(run_t.eepromAddress){
 
 			  case 0:
@@ -581,10 +596,8 @@ static void ReadPassword_EEPROM_SaveData(void)
 
 			  case 11:
                  ERR_LED_ON();
-				 for(i=0;i<6;i++){
-			 	   Readpwd[i]=0;
-				 }
 				 run_t.eepromAddress=0;
+				  run_t.cmdCtr_++;
                 return ;
 			 break;
 
@@ -626,12 +639,17 @@ static void ReadPassword_EEPROM_SaveData(void)
 ****************************************************************************/
 void CProcessCmdRun(void)
 {
-   
+   static unsigned char currkey=0xff;
    unsigned char sig;
    run_t.resetKey =  Scan_Key();
    
    I2C_Simple_Read_Device(OUTPUT0_REG,&run_t.KeyValue);
    while ( run_t.KeyValue != 0) {
+	    BACKLIGHT_ON(); //LED ON 8s 
+        if(run_t.keyTime != currkey){
+		 	currkey = run_t.keyTime;
+	          BUZZER_KeySound();
+        }
        switch (run_t.resetKey) {
        case 0x00: run_t.state_ = INPUTKEY; sig = TOUCH_KEY_SIG; break;  //Input password 
        case 0x01: run_t.state_= MODIFYPSWD;sig = IN_NUMBER_SIG;  break;  //modify password
