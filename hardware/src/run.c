@@ -1,7 +1,7 @@
 #include "../inc/run.h"
 #include "../../main.h"
 
-
+#define MAX_SIZE    6
 
 #define ADMINI     		0X00
 #define USER_1     		0X11  
@@ -15,12 +15,12 @@
 #define USER_9     		0X69
 #define USER_10    	 	0X74
 
-unsigned char Readpwd[6];
-unsigned char Inputpwd[6];
-unsigned char pwd1[6];
-unsigned char pwd2[6];
+unsigned char Readpwd[MAX_SIZE];
+unsigned char pwd1[MAX_SIZE];
+unsigned char pwd2[MAX_SIZE];
 
 unsigned char getKeyTran;
+unsigned char top =0;
 
 
 static void CProcessDispatch(unsigned char sig);
@@ -30,6 +30,29 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 void InputKey_To_Number(void);
 
 static void ReadPassword_EEPROM_SaveData(void);
+static void Push(unsigned char *pt,unsigned char data);
+static void Pop(void);
+
+
+/**
+ * @brief 
+ * 
+ */
+static void Push(unsigned char *pt,unsigned char data)
+{
+	if(top == MAX_SIZE){
+		return ;
+	}
+	*(pt) = data;
+	top++;
+}
+static void Pop(void)
+{
+	// if(top== -1){
+	// 	return ;
+	// }
+	top = 0 ;//top -- ;
+}
 
 /****************************************************************************
 *
@@ -176,7 +199,6 @@ void Password_Modify(void)
 					i=0;
 					run_t.adminiId =0;
 					OK_LED_ON();
-				//	Motor_CCW_Run(); //open password lock
 				    return ;
 
 				}
@@ -245,7 +267,7 @@ void Password_Modify(void)
                   run_t.firstInPassword =2;
 				  run_t.adminiId=1;
 				  run_t.number = 0; 
-				   OK_LED_ON();
+				  OK_LED_ON();
 			      
 
 			}
@@ -511,135 +533,51 @@ static void ReadPassword_EEPROM_SaveData(void)
 	      switch(run_t.eepromAddress){
 
 			  case 0:
-                   eevalue = EEPROM_Read_Byte(ADMINI);
-					if(eevalue ==1){
-						ReadAddress = ADMINI;
-					}
-					else{
-						run_t.eepromAddress =1;
-					}
+                   ReadAddress = ADMINI;
 			  break;
-			  
-			 case 1:
-
-			    eevalue = EEPROM_Read_Byte(USER_1);
-			    if(eevalue ==1){
-                   ReadAddress = USER_1;
-                 }
-				 else{
-				 	run_t.eepromAddress=2;
-                    
-				 }
-                      
-			  break;
+			  case 1:
+                  ReadAddress = USER_1;
+               
+            break;
 
 			  case 2:
-			  	eevalue = EEPROM_Read_Byte(USER_2);
-			    if(eevalue ==1){
-                   ReadAddress = USER_2;
-                 }
-				 else{
-				 	run_t.eepromAddress=3;
-                    
-				 }
+			      ReadAddress = USER_2;
+            break;
 
-			  break;
+			case 3:
+			      ReadAddress = USER_3;
+            break;
 
-			  case 3:
-			  	eevalue = EEPROM_Read_Byte(USER_3);
-			    if(eevalue ==1){
-                   ReadAddress = USER_3;
-                 }
-				 else{
-				 	run_t.eepromAddress=4;
-                    
-				 }
+			case 4:
+			      ReadAddress = USER_4;
+            break;
 
-			  break;
+			case 5:
+			     ReadAddress = USER_5;
+             break;
 
-			  case 4:
-			  	eevalue = EEPROM_Read_Byte(USER_4);
-			    if(eevalue ==1){
-                   ReadAddress = USER_4;
-                 }
-				 else{
-				 	run_t.eepromAddress=5;
-                    
-				 }
-
-			  break;
-
-			  case 5:
-			   	eevalue = EEPROM_Read_Byte(USER_5);
-			    if(eevalue ==1){
-                   ReadAddress = USER_5;
-                 }
-				 else{
-				 	run_t.eepromAddress=6;
-                    
-				 }
-
-			  break;
-
-			  case 6:
-			  	eevalue = EEPROM_Read_Byte(USER_6);
-			    if(eevalue ==1){
-                   ReadAddress = USER_6;
-                 }
-				 else{
-				 	run_t.eepromAddress=7;
-                    
-				 }
-
-			  break;
-
-			  case 7:
-			  	eevalue = EEPROM_Read_Byte(USER_7);
-			    if(eevalue ==1){
-                   ReadAddress = USER_7;
-                 }
-				 else{
-				 	run_t.eepromAddress=8;
-                    
-				 }
-
-			  break;
+			case 6:
+			      ReadAddress = USER_6;
+             break;
+             
+			 case 7:
+			     ReadAddress = USER_7;
+               break;
 
 			  case 8:
-			  	eevalue = EEPROM_Read_Byte(USER_8);
-			    if(eevalue ==1){
-                   ReadAddress = USER_8;
-                 }
-				 else{
-				 	run_t.eepromAddress=9;
-                    
-				 }
-
-			  break;
+			  
+                ReadAddress = USER_8;
+              break;
 
 			  case 9:
-			  	eevalue = EEPROM_Read_Byte(USER_9);
-			    if(eevalue ==1){
+			  
                    ReadAddress = USER_9;
-                 }
-				 else{
-				 	run_t.eepromAddress=10;
-                    
-				 }
-
-			  break;
+            break;
 
 			  case 10:
-			  	eevalue = EEPROM_Read_Byte(USER_10);
-			    if(eevalue ==1){
+			  
                    ReadAddress = USER_10;
-                 }
-				 else{
-				 	run_t.eepromAddress=10;
-                    
-				 }
-
-			  break;
+                break;
 
 			  case 11:
                  ERR_LED_ON();
@@ -652,25 +590,31 @@ static void ReadPassword_EEPROM_SaveData(void)
 
         }
 				
-			
-			
-			Readpwd[0] = EEPROM_Read_Byte(ReadAddress + 0X01);
-			Readpwd[1] = EEPROM_Read_Byte(ReadAddress + 0X02);
-			Readpwd[2] = EEPROM_Read_Byte(ReadAddress + 0X03);
-			Readpwd[3] = EEPROM_Read_Byte(ReadAddress + 0X04);
-			Readpwd[4] = EEPROM_Read_Byte(ReadAddress + 0X05);
-			Readpwd[5] = EEPROM_Read_Byte(ReadAddress + 0X06);
+		eevalue = EEPROM_Read_Byte(ReadAddress);
+		if(eevalue ==1){
 
-	     if(CompareValue(Readpwd,pwd1) ==1)//if(strcmp(pwd1,pwd2)==0)
-		 {
-			OK_LED_ON();
-			Motor_CCW_Run();//open passwordlock 
-			return ;
+				Readpwd[0] = EEPROM_Read_Byte(ReadAddress + 0X01);
+				Readpwd[1] = EEPROM_Read_Byte(ReadAddress + 0X02);
+				Readpwd[2] = EEPROM_Read_Byte(ReadAddress + 0X03);
+				Readpwd[3] = EEPROM_Read_Byte(ReadAddress + 0X04);
+				Readpwd[4] = EEPROM_Read_Byte(ReadAddress + 0X05);
+				Readpwd[5] = EEPROM_Read_Byte(ReadAddress + 0X06);
 
+				if(CompareValue(Readpwd,pwd1) ==1)//if(strcmp(pwd1,pwd2)==0)
+				{
+					OK_LED_ON();
+					Motor_CCW_Run();//open passwordlock 
+					return ;
+
+				}
+				else{
+					run_t.eepromAddress++ ;	
+				}
 		}
 		else{
-			run_t.eepromAddress++ ;	
+            run_t.eepromAddress++ ;	
 		}
+		
 }
 /****************************************************************************
 *
@@ -699,7 +643,6 @@ void CProcessCmdRun(void)
 
 }
 
-
 static void CProcessDispatch(unsigned char sig)
 {
 	switch(run_t.state_){
@@ -709,7 +652,7 @@ static void CProcessDispatch(unsigned char sig)
 
 			   case  TOUCH_KEY_SIG:
 
-                       Input_Password();
+                    Input_Password();
 			   break;
 
 			   case ZERO_SIG:

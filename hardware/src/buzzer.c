@@ -4,15 +4,15 @@
 
 #define Re 294
 
-#define Mi 330
+// #define Mi 330
 
-#define Fa 349
+// #define Fa 349
 
-#define Sol 392
+// #define Sol 392
 
-#define La 440
+// #define La 440
 
-#define Si 494
+// #define Si 494
 
 
 static void PlayTone(unsigned char *ptone, unsigned int *duration);
@@ -21,10 +21,10 @@ unsigned int tempo = 300;   //cadence
 
 
 
-uint8_t   SONG_TONE[]={Do,Re,Mi,Fa,Sol,La,Si}; 
+uint8_t   SONG_TONE[]={Do,Re}; 
 
 
-uint8_t  SONG_LONG[]={1,1,1,1,1,1,1};
+uint8_t  SONG_LONG[]={1,1};
 
 
 void BUZZER_Init(void)

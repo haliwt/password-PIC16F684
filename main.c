@@ -27,16 +27,13 @@ void main(void)
    while(1)
    {
    
-      
-        CProcessCmdRun();
-      
-      
+       CProcessCmdRun();
       if(run_t.timer_base ==250){ //5s 
          run_t.timer_base = 0;
          ADC_ReadVoltage();
       }
-
-      if(run_t.cmdCtr_ == 1 && run_t.resetKey == 0x01){ //setup new user password for 10 numbers
+      //Modify password state 
+      if(run_t.OpenPasswrod == 1 ||  run_t.firstInPassword ==2){ //setup new user password for 10 numbers
 
          if(run_t.timer_led ==1){
 			     OK_LED_OFF();
