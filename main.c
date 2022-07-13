@@ -19,8 +19,8 @@ uint8_t SC_Data[2];
 void main(void) 
 {
    
-   unsigned int keyValue,setupkey;
-   static unsigned char setInit = 0xff;
+   unsigned int keyValue;
+ 
 
    SC12B_Init_Function();
     TMR1_Initialize();
@@ -36,7 +36,7 @@ void main(void)
 	  	  run_t.timer_20ms=0;
 	      I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2);
 		 
-	      keyValue = (SC_Data[0]<<8) + SC_Data[1];
+	      keyValue =(unsigned int) (SC_Data[0]<<8) + SC_Data[1];
 
 		  RunCheck_Mode(keyValue);
       }
@@ -48,14 +48,25 @@ void main(void)
          ADC_ReadVoltage();
 	     run_t.passsword_unlock =0;
       }
-      //Modify password state 
+     // Modify password state 
      if(run_t.timer_60ms==1){
 	   run_t.timer_60ms=0;
        Modidy_NewPassword_Function();
 
-     }
+    }
 
-     
+	 if(run_t.passsword_unlock ==0 || run_t.passsword_error==1){
+
+	       if(run_t.timer_led==1){
+			        ERR_LED_ON()  ;	
+				}
+				else{
+                    ERR_LED_OFF();
+				}
+
+		if(run_t.passsword_error==1)run_t.changePassword =0;
+
+     }
    }
     
 }

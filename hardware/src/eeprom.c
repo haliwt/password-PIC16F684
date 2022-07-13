@@ -1,4 +1,4 @@
-#include "../inc/EEPROM.h"
+#include "../inc/eeprom.h"
 #include "../../main.h"
 
 /**

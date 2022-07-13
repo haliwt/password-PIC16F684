@@ -67,6 +67,7 @@ static void Administrator_Password_Init(void)
 			run_t.passsword_unlock=1;
 			run_t.admini_confirm =1;
 			run_t.resetKey++;
+			run_t.inputNumber++;
 			return ;
 
 	   }
@@ -87,6 +88,7 @@ static void Administrator_Password_Init(void)
 				run_t.passsword_unlock=1;
 				run_t.admini_confirm =1;
 				run_t.resetKey++;
+				run_t.inputNumber++;
 				return ;
 
 	        }
@@ -95,6 +97,7 @@ static void Administrator_Password_Init(void)
 	 run_t.passsword_unlock=0;
 	 run_t.admini_confirm =0;
 	 run_t.resetKey=0;
+	 run_t.inputNumber=0;
 
 }
 	
@@ -439,6 +442,7 @@ void RunCheck_Mode(unsigned int dat)
 	    run_t.InputPasswordNumber_counter =0 ;
 		run_t.passswordsMatch = 0;
 		run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
+		run_t.changePassword=0;
 	break;
 
 	 case KEY_6://0x80: //CIN0  //09H -> D7~D4  , 08H -> D7~D0 -> CIN0 -> D7, CIN1->D6
@@ -667,7 +671,7 @@ void RunCommand_Unlock(void)
 {
     static uint8_t tempCounter,Counter,i;
 
-	if(run_t.passswordsMatch ==1){ //be pressed "#" is over confirm 
+	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
 
       run_t.passswordsMatch =0;
 
@@ -684,20 +688,9 @@ void RunCommand_Unlock(void)
 		   pwd1[2]= VirtualPwd[tempCounter-3];
 		   pwd1[1]= VirtualPwd[tempCounter-4];
 		   pwd1[0]= VirtualPwd[tempCounter-5];
-		   
-           ReadPassword_EEPROM_SaveData();
-		   if(run_t.passsword_unlock ==1){
-		   	     run_t.passsword_error=0;
-		   	     return ;
-		   	}
-		   VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
-		   i++;
-		   if(i>run_t.InputPasswordNumber_counter){
-             i=0;
-			 run_t.passsword_unlock =0;
-		     run_t.InputPasswordNumber_counter=0;
-            }
-		   
+		   run_t.passswordsMatch=1;
+          
+		  
 	  }
 	  else if(run_t.InputPasswordNumber_counter > 3 && run_t.InputPasswordNumber_counter <7){ //normal password
              if(run_t.InputPasswordNumber_counter ==4){
@@ -710,21 +703,26 @@ void RunCommand_Unlock(void)
                   pwd1[6]=0;
 			 }
 
-			ReadPassword_EEPROM_SaveData();
+			//ReadPassword_EEPROM_SaveData();
 
 	  }
-	 
-
-	 if(run_t.passsword_unlock ==0){
-
-	       if(run_t.timer_led==1){
-			        ERR_LED_ON()  ;	
-				}
-				else{
-                    ERR_LED_OFF();
-				}
-
-     }
+	  
+	 ReadPassword_EEPROM_SaveData();
+	 if(run_t.InputPasswordNumber_counter >6){
+       VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
+		   i++;
+		   if(i>run_t.InputPasswordNumber_counter){
+             i=0;
+			 run_t.passsword_unlock =0;
+		     run_t.InputPasswordNumber_counter=0;
+			 run_t.passswordsMatch=0;
+			 return ;
+			 
+            }
+		   
+    }
+     
+	
 
   }
 
@@ -742,25 +740,28 @@ void RunCommand_Unlock(void)
 void Modidy_NewPassword_Function(void)
 {
      unsigned char setupkey;
-	 static unsigned char setInit =0xff;
+	 static unsigned char setInit =0xff,inputnumber=0xff;
 
 	 if(run_t.admini_confirm ==1){ //setup new user password for 10 numbers
 
 	     setupkey = Scan_Key();
-		 if(setupkey==0) return ;
+		 
 
-         if(setupkey ==0x81){
+         if(setupkey ==0x81 || run_t.changePassword ==1){
 
-           if(setInit != run_t.resetKey){
+           run_t.changePassword=1;
+		   if(setInit != run_t.resetKey){
 		   	   setInit = run_t.resetKey;
 			   BUZZER_KeySound();
            	}
 		    Administrator_Password_Init();
 		    if(run_t.passsword_unlock == 1){
 				
-		  
-				BUZZER_KeySound();
-				BUZZER_KeySound();
+		        if(inputnumber != run_t.inputNumber){
+					inputnumber = run_t.inputNumber;
+					BUZZER_KeySound();
+					BUZZER_KeySound();
+		    	}
 				if(run_t.keyTime ==2){
 	                 if(CompareValue(pwd2,pwd3) ==1){//if(strcmp(pwd1,pwd2)==0)
 						
@@ -768,36 +769,25 @@ void Modidy_NewPassword_Function(void)
 							
 							SavePassword_To_EEPROM();
 				            run_t.admini_confirm =0;
+							run_t.changePassword =0;
 							return ;
 
 				 
 				       }
 					   else{
-
+                           run_t.changePassword =0;
 					       run_t.passsword_error=1;
 
 					   }
 			     } 
 		    }
 			
-			if(run_t.passsword_error==1){
-
-				//run_t.admini_confirm =0;
-				if(run_t.timer_led==1){
-			        ERR_LED_ON()  ;	
-				}
-				else{
-                    ERR_LED_OFF();
-				}
-
-			 }
+			
 
 			}
 			     
-          }
-        
-}
-
+    }
+ }
 
 
 

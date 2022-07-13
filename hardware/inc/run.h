@@ -19,7 +19,9 @@ typedef struct __RUN_T{
 
     unsigned char adminiId;
 	unsigned char admini_confirm;
+	unsigned char changePassword;
     unsigned char resetKey;
+	unsigned char inputNumber;
     unsigned char getKeyTran;
     unsigned char userId;
     unsigned char number;     
@@ -38,6 +40,7 @@ typedef struct __RUN_T{
 	unsigned char passswordsMatch;
 	unsigned char passsword_unlock;
 	unsigned char passsword_error;
+	
     unsigned int KeyValue;
 	
 }RUN_T;
