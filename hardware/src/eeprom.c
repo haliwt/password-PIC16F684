@@ -35,8 +35,3 @@ unsigned char EEPROM_Read_Byte(unsigned char addr)
 }
 
 
-void EEEPROM_Password_Init(void)
-{
-   
-
-}

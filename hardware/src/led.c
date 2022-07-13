@@ -30,27 +30,55 @@ static void LED_Init(void)
 unsigned char Scan_Key(void)
 {
 
-    unsigned int k1=0 ;
-    unsigned char  value ,cnt;
+   static unsigned int k1=0 ;
+    unsigned char  cnt;
+
+
+	if(RESET_KEY==0){
+        if(k1<181)
+			k1++;
+
+	}
+	else{
+      k1=0;
+	}
+
+
+	if(k1==180){ //be pressed key continue
+
+       cnt=0x81;
+	   return cnt;
+
+	}
+	return 0;
+
+#if 0
    if(RESET_KEY  ==0 ){
         cnt=0;
         k1++;   
     }
  
-    if(RESET_KEY  == 1 ){
+    if(RESET_KEY  == 1 ){ //key be release
         cnt++;
         if(cnt<30) return 0;
         
         cnt=0;
-        if(k1 >180 && k1< 200){
-            value = 0x01;
+        if(k1 >180 && k1< 182){
+            value = 0x01; //sort times be pressed key
         }
-        else if(k1>300){
+        else if(k1>300){ //long times be pressed key
             value = 0x81;
+		
         }
+		else
+			value =0;
+		
+		k1=0;
+		return value;
       
     }
     return 0;
+#endif 
 }
 
 

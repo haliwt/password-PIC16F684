@@ -16,8 +16,9 @@ enum State {                     /* enumeration for CParser states */
 typedef struct __RUN_T{
 	enum State state_;
     unsigned char cmdCtr_;   //event order cunter
-    unsigned char overFlag;  //limit password numbers maximum 6 
+
     unsigned char adminiId;
+	unsigned char admini_confirm;
     unsigned char resetKey;
     unsigned char getKeyTran;
     unsigned char userId;
@@ -25,11 +26,18 @@ typedef struct __RUN_T{
     unsigned char timer_base;
     unsigned char timer_Core;
     unsigned char timer_led;
+	unsigned char timer_20ms;
+	unsigned char timer_60ms;
     unsigned char eePasswordOver; //eeprom be save 10 USER numbers
     unsigned char OpenPasswrod ;
     unsigned char firstInPassword;
 	unsigned char keyTime;       //keyTime;
 	unsigned char eepromAddress;
+	unsigned char BackLight;
+	unsigned char InputPasswordNumber_counter;
+	unsigned char passswordsMatch;
+	unsigned char passsword_unlock;
+	unsigned char passsword_error;
     unsigned int KeyValue;
 	
 }RUN_T;
@@ -37,7 +45,15 @@ typedef struct __RUN_T{
 
 RUN_T run_t;
 
+
+
 void Password_Modify(void);
-void Input_Password(void);
 void CProcessCmdRun(void);
+
+void RunCheck_Mode(unsigned int dat);
+void RunCommand_Unlock(void);
+
+void Modidy_NewPassword_Function(void);
+
+
 #endif 
