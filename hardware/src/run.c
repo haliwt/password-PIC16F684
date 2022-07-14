@@ -416,10 +416,6 @@ void RunCheck_Mode(unsigned int dat)
 
 	switch(dat){
 
-	if(dat !=0){
-
-		BUZZER_KeySound();//
-	}
 	
 
 	case SPECIAL_1 ://0x40: //CIN1->'*'
@@ -653,16 +649,7 @@ void RunCheck_Mode(unsigned int dat)
 	}
 
 
-    if(run_t.BackLight ==1){
-		BACKLIGHT_ON() ;
-
-		//BUZZER_KeySound();//
-	}
-	else{
-
-       BACKLIGHT_OFF() ;
-	   //BUZZER_PIN_OFF() ;
-	}
+   
 
 
 }

@@ -31,7 +31,7 @@ void main(void)
    INTERRUPT_PeripheralInterruptEnable() ;
    while(1)
    {
-      BUZZER_KeySound();
+    //  BUZZER_KeySound();
 
     // BUZZER_KeySound();
      // if(run_t.timer_20ms==1){
@@ -44,7 +44,19 @@ void main(void)
 
 				  RunCheck_Mode(keyValue);
            }
-	
+
+
+			if(run_t.BackLight ==1){
+				BACKLIGHT_ON() ;
+
+				BUZZER_KeySound();
+			}
+			else{
+
+				BACKLIGHT_OFF() ;
+				BUZZER_PIN_OFF() ;
+		   }
+
 //	      if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
 //		 
 //	     // keyValue =(SC_Data[0]<<8) + SC_Data[1];
