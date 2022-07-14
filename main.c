@@ -24,6 +24,7 @@ void main(void)
 
    SC12B_Init_Function();
     TMR1_Initialize();
+	Motor_Init();
 	
     ADC_Init();
     System_Init();
@@ -37,14 +38,14 @@ void main(void)
      // if(run_t.timer_20ms==1){
 	  	//  run_t.timer_20ms=0;
 
-          if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2) == DONE)
-           {
-                  keyValue =(SC_Data[0]<<8) + SC_Data[1];
-			    // keyValue = SC_Data[0];
-
-				  RunCheck_Mode(keyValue);
-           }
-
+//          if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2) == DONE)
+//           {
+//                  keyValue =(SC_Data[0]<<8) + SC_Data[1];
+//			    // keyValue = SC_Data[0];
+//
+//				  RunCheck_Mode(keyValue);
+//           }
+            Motor_CW_Run();
 
 			if(run_t.BackLight ==1){
 				BACKLIGHT_ON() ;
@@ -57,16 +58,16 @@ void main(void)
 				BUZZER_PIN_OFF() ;
 		   }
 
-//	      if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
-//		 
-//	     // keyValue =(SC_Data[0]<<8) + SC_Data[1];
-//	     keyValue = SC_Data[0];
-//
-//		  RunCheck_Mode(keyValue);
-//          }
-//     /// }
+	    if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
+		 
+	      keyValue =(SC_Data[0]<<8) + SC_Data[1];
+	         //keyValue = SC_Data[0];
 
-	//  RunCommand_Unlock();
+		  RunCheck_Mode(keyValue);
+          }
+     
+
+	     RunCommand_Unlock();
 	   
 //      if(run_t.timer_base ==250){ //5s ->battery be checking 
 //         run_t.timer_base = 0;

@@ -25,19 +25,30 @@ void Motor_Init(void)
     MOTOR_CCW_OFF(); //brake
 }
 
-/**
- * @brief 
- * 
- */
-void Motor_CW_Run(void)
+/**********************************************************
+ *
+ * Function Name: void Motor_CCW_Run(void) 
+ * Function : Open lock 
+ * Input Ref: NO
+ * Return Ref:NO
+ *
+ *********************************************************/
+void Motor_CCW_Run(void) 
 {
 	MotorStart_CW_Step();
 	MOTOR_CW_RUN();	
 	MOTOR_CCW_OFF();
 	
 }
-
-void Motor_CCW_Run(void)
+/**********************************************************
+ *
+ * Function Name: void Motor_CW_Run(void)
+ * Function : shut off  lock 
+ * Input Ref: NO
+ * Return Ref:NO
+ *
+ *********************************************************/
+void Motor_CW_Run(void)
 {
 	MotorStart_CCW_Step();
     MOTOR_CCW_RUN();
