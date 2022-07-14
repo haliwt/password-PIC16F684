@@ -45,18 +45,9 @@ void main(void)
 //
 //				  RunCheck_Mode(keyValue);
 //           }
-            Motor_CW_Run();
+          //  Motor_CCW_Run();
 
-			if(run_t.BackLight ==1){
-				BACKLIGHT_ON() ;
-
-				BUZZER_KeySound();
-			}
-			else{
-
-				BACKLIGHT_OFF() ;
-				BUZZER_PIN_OFF() ;
-		   }
+			
 
 	    if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
 		 
@@ -65,34 +56,54 @@ void main(void)
 
 		  RunCheck_Mode(keyValue);
           }
-     
+        
 
 	     RunCommand_Unlock();
+		 if(run_t.BackLight ==1){
+
+		       BACKLIGHT_ON() ;
+
+		 }
+		 else{
+
+              BACKLIGHT_OFF() ;
+		 }
+
+	  if(run_t.buzzer_flag ==1){
+			
+
+				BUZZER_KeySound();
+			}
+			else{
+
+				
+				BUZZER_PIN_OFF() ;
+          }
 	   
-//      if(run_t.timer_base ==250){ //5s ->battery be checking 
-//         run_t.timer_base = 0;
-//         ADC_ReadVoltage();
-//	     run_t.passsword_unlock =0;
-//      }
-//     // Modify password state 
-//     if(run_t.timer_60ms==1){
-//	   run_t.timer_60ms=0;
-//       Modidy_NewPassword_Function();
-//
-//    }
-//
-//	 if(run_t.passsword_unlock ==0 || run_t.passsword_error==1){
-//
-//	       if(run_t.timer_led==1){
-//			        ERR_LED_ON()  ;	
-//				}
-//				else{
-//                    ERR_LED_OFF();
-//				}
-//
-//		if(run_t.passsword_error==1)run_t.changePassword =0;
-//
-//     }
+      if(run_t.timer_base ==250){ //5s ->battery be checking 
+         run_t.timer_base = 0;
+         ADC_ReadVoltage();
+	     run_t.passsword_unlock =0;
+      }
+     // Modify password state 
+     if(run_t.timer_60ms==1){
+	   run_t.timer_60ms=0;
+       Modidy_NewPassword_Function();
+
+    }
+
+	 if(run_t.passsword_unlock ==0 || run_t.passsword_error==1){
+
+	       if(run_t.timer_led==1){
+			        ERR_LED_ON()  ;	
+				}
+				else{
+                    ERR_LED_OFF();
+				}
+
+		if(run_t.passsword_error==1)run_t.changePassword =0;
+
+     }
    }
     
 }

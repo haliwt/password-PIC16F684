@@ -420,7 +420,10 @@ void RunCheck_Mode(unsigned int dat)
 
 	case SPECIAL_1 ://0x40: //CIN1->'*'
 		
-		run_t.BackLight =1;//BACKLIGHT_ON()  ; 
+	// run_t.BackLight =1;//BACKLIGHT_ON()  ; 
+	 run_t.buzzer_flag =1;
+
+	
 		for(i=0;i<MAX_SIZE;i++){
 				pwd1[i]=0;
 
@@ -448,7 +451,8 @@ void RunCheck_Mode(unsigned int dat)
 	break;
 
 	 case KEY_6://0x80: //CIN0  //09H -> D7~D4  , 08H -> D7~D0 -> CIN0 -> D7, CIN1->D6
-          run_t.BackLight =1;//BACKLIGHT_ON() ;  
+         // run_t.BackLight =1;//BACKLIGHT_ON() ;  
+          run_t.buzzer_flag =1;
           VirtualPwd[run_t.InputPasswordNumber_counter]=6;
           pwd1[run_t.InputPasswordNumber_counter]=6;
 	    
@@ -466,7 +470,8 @@ void RunCheck_Mode(unsigned int dat)
 	 
 
 	 case KEY_7://0x20: //CIN2
-	    run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+	   // run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+	    run_t.buzzer_flag =1;
 	    VirtualPwd[run_t.InputPasswordNumber_counter]=7;
 		pwd1[run_t.InputPasswordNumber_counter]=7;
 	  
@@ -480,9 +485,10 @@ void RunCheck_Mode(unsigned int dat)
 	    run_t.InputPasswordNumber_counter ++ ;
 	 break;
 
-	  case KEY_1: //0x10: //CIN3
+	  case KEY_1: //0x1000: //CIN3
 
-	    run_t.BackLight =1;// BACKLIGHT_ON()  ;	 
+	    //run_t.BackLight =1;// BACKLIGHT_ON()  ;
+	    run_t.buzzer_flag =1;
 	    VirtualPwd[run_t.InputPasswordNumber_counter]=1;
 	    pwd1[run_t.InputPasswordNumber_counter]=1;
 	   
@@ -500,7 +506,8 @@ void RunCheck_Mode(unsigned int dat)
 
 	 case   KEY_8://0x08: //CIN4
 
-	 run_t.BackLight =1;//BACKLIGHT_ON()  ;	 
+	// run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+	 run_t.buzzer_flag =1;
 	 VirtualPwd[run_t.InputPasswordNumber_counter]=8;
 	   pwd1[run_t.InputPasswordNumber_counter]=8;
 	  
@@ -515,9 +522,10 @@ void RunCheck_Mode(unsigned int dat)
       run_t.InputPasswordNumber_counter ++ ;
 	 break;
 
-	 case KEY_2://0x04: //CIN5
+	 case KEY_2://0x400: //CIN5
 
-	 run_t.BackLight =1;//BACKLIGHT_ON()  ;	 
+	// run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+	 run_t.buzzer_flag =1;
 	 VirtualPwd[run_t.InputPasswordNumber_counter]=2;
 	 pwd1[run_t.InputPasswordNumber_counter]=2;
 	   
@@ -536,7 +544,8 @@ void RunCheck_Mode(unsigned int dat)
 
 	 case KEY_9://0x02: //CIN6
 
-		run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+		//run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+		run_t.buzzer_flag =1;
 		VirtualPwd[run_t.InputPasswordNumber_counter]=9;
 		pwd1[run_t.InputPasswordNumber_counter]=9;
 
@@ -551,9 +560,10 @@ void RunCheck_Mode(unsigned int dat)
 
 	 break;
 
-	 case KEY_3://0x01: //CIN7
+	 case KEY_3://0x100: //CIN7
 
-		run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+		//run_t.BackLight =1;//BACKLIGHT_ON()  ;
+		run_t.buzzer_flag =1;
 		VirtualPwd[run_t.InputPasswordNumber_counter]=3;
 		pwd1[run_t.InputPasswordNumber_counter]=3;
 
@@ -570,7 +580,8 @@ void RunCheck_Mode(unsigned int dat)
 	 break;
 
 	 case KEY_0://0x800: //CIN8
-		run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+		//run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+		run_t.buzzer_flag =1;
 		VirtualPwd[run_t.InputPasswordNumber_counter]=0;
 		pwd1[run_t.InputPasswordNumber_counter]=0;
 
@@ -587,7 +598,8 @@ void RunCheck_Mode(unsigned int dat)
 
 	 case KEY_4://0x400: //CIN9
 
-	 run_t.BackLight =1;//BACKLIGHT_ON()  ;
+	// run_t.BackLight =1;//BACKLIGHT_ON()  ;
+	 run_t.buzzer_flag =1;
 	 
 	 VirtualPwd[run_t.InputPasswordNumber_counter]=4;
 	 pwd1[run_t.InputPasswordNumber_counter]=4;
@@ -604,8 +616,9 @@ void RunCheck_Mode(unsigned int dat)
        run_t.InputPasswordNumber_counter ++ ;
 	 break;
 
-	case KEY_5://0x100: //CIN11
-	 run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+	case KEY_5://0x10: //CIN11
+	// run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+	 run_t.buzzer_flag =1;
 	 VirtualPwd[run_t.InputPasswordNumber_counter]=5;
 	 pwd1[run_t.InputPasswordNumber_counter]=5;
 	
@@ -627,7 +640,8 @@ void RunCheck_Mode(unsigned int dat)
 
 	 case SPECIAL_2://0x200: //CIN10 '#'
 
-	 	run_t.BackLight =1;//BACKLIGHT_ON()  ;	 
+	 	run_t.BackLight =1;//BACKLIGHT_ON()  ;
+	 	run_t.buzzer_flag =1;
 	    run_t.passswordsMatch = 1;
 	    if(run_t.admini_confirm==1){
               run_t.keyTime++;
@@ -641,6 +655,7 @@ void RunCheck_Mode(unsigned int dat)
 	 default:
 	 	
 	  run_t.BackLight =0;
+	  run_t.buzzer_flag =0;
 	  
 
 	 break;

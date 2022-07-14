@@ -36,6 +36,7 @@ typedef struct __RUN_T{
 	unsigned char keyTime;       //keyTime;
 	unsigned char eepromAddress;
 	unsigned char BackLight;
+	unsigned char buzzer_flag;
 	unsigned char InputPasswordNumber_counter;
 	unsigned char passswordsMatch;
 	unsigned char passsword_unlock;

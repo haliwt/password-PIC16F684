@@ -31,7 +31,7 @@ void BUZZER_KeySound(void)
 {
       unsigned int m;
 	
-     for(m=0;m<100;m++){
+     for(m=0;m<10;m++){
           BEEP=!BEEP;
           //__delay_us(10);//delayUS(99);
           __delay_ms(1);
