@@ -2,6 +2,8 @@
 #define __BUZZER_H_
 #include "../../main.h"
 
+
+#define  BEEP                  RC5
 #define BUZZER_PIN()           PORTCbits.RC5
 #define  BUZZER_PIN_ON()       (PORTCbits.RC5 = 0)
 #define  BUZZER_PIN_OFF()       (PORTCbits.RC5= 1)

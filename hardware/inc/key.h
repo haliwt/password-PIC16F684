@@ -5,13 +5,16 @@
 
 
 //IIC SDA RC1 IO  direction setup
-#define SDA_IO_Input()            		do { TRISCbits.TRISC1 = 1; } while(0)
-#define SDA_IO_Output()           		do { TRISCbits.TRISC1 = 0; } while(0)
+//#define SDA_IO_Input()            		do { TRISCbits.TRISC1 = 1; } while(0)
+///#define SDA_IO_Output()           		do { TRISCbits.TRISC1 = 0; } while(0)
+#define SDA_OUT_OR_IN          		    TRISCbits.TRISC1
+#define SCL_OUT_OR_IN           		TRISCbits.TRISC2
+
 
 //IIC SCL RC2 IO direction setup
 
-#define SCL_IO_Input()  				  	do { TRISCbits.TRISC2 = 1; } while(0)
-#define SCL_IO_Output()   				    do { TRISCbits.TRISC2 = 0; } while(0)
+//#define SCL_IO_Input()  				  	do { TRISCbits.TRISC2 = 1; } while(0)
+//#define SCL_IO_Output()   				    do { TRISCbits.TRISC2 = 0; } while(0)
 
 
 //IO ouput 
@@ -22,8 +25,11 @@
 #define I2C_SCL_SetLow()                  do{PORTCbits.RC2 =0;}while(0)
 
 // IO input 
-#define I2C_SDA()    PORTCbits.RC1
-#define I2C_SCL()    PORTCbits.RC2
+#define SDA    RC1//PORTCbits.RC1
+#define SCL    RC2//PORTCbits.RC2
+
+#define SDA_IN          PORTCbits.RC1 
+
 
 #define IO_OUT          0         								//定义 IO口输出方向值
 #define IO_IN           1        		              //定义 IO口输入方向值
@@ -86,8 +92,8 @@ typedef enum
 
 typedef enum 
 {
-   SPECIAL_1 =0x40,KEY_1=0x10, KEY_2=0x04, KEY_3=0x01, KEY_4=0x400, KEY_5=0x100,
-   KEY_6= 0x80, KEY_7=0x20, KEY_8=0x08, KEY_9=0x02, KEY_0=0x800, SPECIAL_2=0x200
+   SPECIAL_1 =0x4000,KEY_1=0x1000, KEY_2=0x400, KEY_3=0x100, KEY_4=0x40, KEY_5=0x10,
+   KEY_6= 0x8000, KEY_7=0x2000, KEY_8=0x800, KEY_9=0x200, KEY_0=0x80, SPECIAL_2=0x20
 
 }TouchKey_Numbers;
 

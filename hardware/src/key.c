@@ -27,38 +27,53 @@ void SC12B_Init_Function(void)
     ANSELbits.ANS5 = 0;
     ANSELbits.ANS6=0;     //
 
-    TRISCbits.TRISC1 = 0;
-    TRISCbits.TRISC2= 0;
+  //  TRISCbits.TRISC1 = 0;
+  //  TRISCbits.TRISC2= 0;
 
 }
 /**
  * @brief 
  * 
  */
+
+/*****************************************************************************
+									* I2C 时钟延时函数 
+									* 要保证波特率在100K以内最好
+									如果太快，可以把以下函数Delay内的变量稍微加大
+******************************************************************************/
+void I2C_Delay(void)
+{
+		unsigned char a;
+		for(a = 5; a>0; a--){
+
+            asm("NOP");
+
+			};//a =5
+}
+
 static void I2C_Start(void)
 {
-   SDA_IO_Output();
-   SCL_IO_Output();
-
-   I2C_SDA() = 1;
-   I2C_SCL() =1;
-   __delay_us(1);
-   I2C_SDA() =0;
-   __delay_us(1);
-   I2C_SCL() =0;
-   __delay_us(1);
+        SDA_OUT_OR_IN = IO_OUT;
+		SCL_OUT_OR_IN = IO_OUT;
+		SDA = IO_HIGH;
+		SCL = IO_HIGH;
+		I2C_Delay();
+		SDA = IO_LOW;
+		I2C_Delay();
+		SCL = IO_LOW;
+		I2C_Delay();
 
 }
 
 static void I2C_Stop(void)
 {
-    I2C_SCL() =0;
-    SDA_IO_Output();
-    I2C_SDA() = 0;
-    __delay_us(1);
-    I2C_SCL() =1;
-    __delay_us(1);
-    I2C_SDA() =1;
+        SCL = IO_LOW;
+		SDA_OUT_OR_IN = IO_OUT;
+		SDA = IO_LOW;
+		I2C_Delay();
+		SCL = IO_HIGH;
+		I2C_Delay();
+		SDA = IO_HIGH;
 }
 /**
  * @brief  IIC send byte and get answer signal
@@ -66,40 +81,11 @@ static void I2C_Stop(void)
  */
 
 
-/**
- * @brief read one byte ,and send answer order
- * 
- */
-void I2C_Respond(unsigned char acksig)
-{
-   SDA_IO_Output();
-   I2C_SDA() =0;
-   I2C_SCL() =0;
-   I2C_SDA() = acksig;
-   __delay_us(1);
-   I2C_SCL() =1;
-   __delay_us(1);
-   I2C_SCL() =0;
 
-}
 /**
  * @brief 
  * 
  */
-unsigned char I2C_Receive8bit(void)
-{
-    uint8_t i,buffer;
-    SDA_IO_Input();
-    I2C_SCL() = 0;
-    for(i=0;i<8;i++){
-        __delay_us(1);
-        I2C_SCL()= 1;
-        buffer =(buffer<<1) | I2C_SDA();
-        __delay_us(1);
-        I2C_SCL() =0;
-    }
-    return buffer;
-}
 
 
 
@@ -153,20 +139,20 @@ uint8_t Send_OneByte_Ack(uint8_t dat)
         else{
            I2C_SDA_SetLow();
         }
-         __delay_us(1);//Delay_I2C(1);
+         __delay_us(5);//Delay_I2C(1);
         I2C_SCL_SetHigh();
-         __delay_us(1);//Delay_I2C(1);
+         __delay_us(5);//Delay_I2C(1);
         I2C_SCL_SetLow();
         
         dat<<=1;   //MSB the first ahead ,LSB the last end
     }
     I2C_SCL_SetLow();
     
-     __delay_us(3);//Delay_I2C(3);
+     __delay_us(5);//Delay_I2C(3);
   SDA_IO_Input()   ;//I2C_SDA_IO_IN();
-     __delay_us(3);//Delay_I2C(3);
+     __delay_us(5);//Delay_I2C(3);
     I2C_SCL_SetHigh();
-     __delay_us(1);//Delay_I2C(1);
+     __delay_us(5);//Delay_I2C(1);
     i=250;
     while(i--){
         
@@ -191,42 +177,45 @@ uint8_t Send_OneByte_Ack(uint8_t dat)
 ******************************************************************************/
 unsigned char SendByteAndGetNACK(unsigned char dataToSend)
 {
-		unsigned char i,temp;
-		SDA_IO_Output();//SDA_OUT_OR_IN = IO_OUT;
+		unsigned char i;
+		SDA_OUT_OR_IN = IO_OUT;
 		for (i = 0; i < 8; i++) {
-			I2C_SCL_SetLow();//SCL = IO_LOW;
-			 __delay_ms(5);//I2C_Delay();
-			//SDA = (dataToSend>>7) &0x01;
-          temp = (dataToSend >>7)&0x01;
-        if(temp & 0x01){
-           I2C_SDA_SetHigh();
-        }
-        else{
-           I2C_SDA_SetLow();
-        }
-			 __delay_ms(5);//I2C_Delay();
-			I2C_SCL_SetHigh();//SCL = IO_HIGH;
-			 __delay_ms(5);//I2C_Delay();
+			SCL = IO_LOW;
+			I2C_Delay();
+			SDA = (dataToSend>>7) &0x01;
+			I2C_Delay();
+			SCL = IO_HIGH;
+			I2C_Delay();
 			dataToSend <<= 1;
 		}
-		I2C_SCL_SetLow();//SCL = IO_LOW;
-		 SDA_IO_Input();           //SDA_OUT_OR_IN = IO_IN;
-		 __delay_ms(5);//I2C_Delay();
-		I2C_SCL_SetHigh();//I2C_SCL = IO_HIGH;
-	   __delay_ms(5);//I2C_Delay();
+		SCL = IO_LOW;
+		SDA_OUT_OR_IN = IO_IN;
+		I2C_Delay();
+		SCL = IO_HIGH;
+	  I2C_Delay();
 		i= 250;
 		while(i--)
 		{
-			//if(!SDA_IN){ SCL = IO_LOW; return 0;}
-			 if(I2C_SDA()==0){
-              I2C_SCL_SetLow();
-              return 0;
-        	  }
-        
-			
+			if(!SDA_IN){ SCL = IO_LOW; return 0;}
 		}
-		I2C_SCL_SetLow();//SCL = IO_LOW;
+		SCL = IO_LOW;
 		return (1);
+}
+
+
+/*****************************************************************************
+						* 读取一个字节信号，并下发应答命令.
+******************************************************************************/
+void I2C_Respond(unsigned char ACKSignal)
+{
+		SDA_OUT_OR_IN = IO_OUT;
+		SDA = IO_LOW;
+		SCL = IO_LOW;
+		SDA = ACKSignal;
+		I2C_Delay();
+		SCL = IO_HIGH;
+		I2C_Delay();
+		SCL = IO_LOW;
 }
 
 /*****************************************************************************
@@ -235,16 +224,15 @@ unsigned char SendByteAndGetNACK(unsigned char dataToSend)
 unsigned char I2C_Receive8Bit(void)
 {
 		unsigned char i,buffer = 0;
-		 SDA_IO_Input()  ;         //SDA_OUT_OR_IN = IO_IN;
-		I2C_SCL_SetLow();//SCL = IO_LOW;
+		SDA_OUT_OR_IN = IO_IN;
+		SCL = IO_LOW;
 		for (i = 0; i < 8; i++)
 		{
-			 __delay_ms(5);//I2C_Delay();
-			I2C_SCL_SetHigh();//SCL = IO_HIGH;
-			//buffer = (buffer<<1)|SDA_IN;
-			buffer = (buffer<<1)| I2C_SDA();
-			 __delay_ms(5);//I2C_Delay();
-			I2C_SCL_SetLow();//SCL = IO_LOW;
+			I2C_Delay();
+			SCL = IO_HIGH;
+			buffer = (buffer<<1)|SDA_IN;
+			I2C_Delay();
+			SCL = IO_LOW;
 		}		
 		return (buffer);
 }
@@ -256,38 +244,6 @@ unsigned char I2C_Receive8Bit(void)
  * Input Ref: deviceAddr  ->device address ,reg -register address,dat16 -> read of address value
  * 
 */
-uint8_t I2C_Read_Device(uint8_t deviceAddr,uint8_t reg,unsigned int *dat16)
-{
-    uint8_t buf1,buf2;
-    
-    I2C_Start();
-    if(SendByte_GetNACK(deviceAddr <<1) & ~0x01){
-        I2C_Stop();
-        return 0;
-    }
-     if(SendByte_GetNACK(reg)){
-        I2C_Stop();
-        return 0;
-    }
-    I2C_Stop();
-    I2C_Start();
-     I2C_Start();
-    if(SendByte_GetNACK(deviceAddr <<1) & ~0x01){
-        I2C_Stop();
-        return 0;
-    }
-
-    buf1 = I2C_Receive8bit();
-    I2C_Respond(0);
-
-    buf2 = I2C_Receive8bit();
-    I2C_Respond(1);
-
-    I2C_Stop();
-    *dat16=(unsigned int)buf1<<8 | buf2;
-
-    return 1;
-}
 
 
 /*****************************************************************************
@@ -296,16 +252,16 @@ deviceAddr 设置器件地址 REG 设置寄存器地址 DAT8 写入数据内容�
 ******************************************************************************/
 Complete_Status I2C_Write_To_Device(unsigned char deviceAddr,unsigned char REG,unsigned char*DAT8)
 {
-			I2C_Start();
-			if (Send_OneByte_Ack((deviceAddr<<1) & ~0x01)) {
+				I2C_Start();
+			if (SendByteAndGetNACK((deviceAddr<<1) & ~0x01)) {
 					I2C_Stop();
 				return UNDONE;
 			}
-			if (Send_OneByte_Ack(REG)) {
+			if (SendByteAndGetNACK(REG)) {
 					I2C_Stop();
 					return UNDONE;
 			}
-			if (Send_OneByte_Ack(*DAT8)) {
+			if (SendByteAndGetNACK(*DAT8)) {
 					I2C_Stop();
 					return UNDONE;
 			}
@@ -348,31 +304,7 @@ void ICman_Init_SET(unsigned char SC_ADDR)
 *Return Ref: 0--fail  1 - success
 *
 *********************************************************************************************/
-uint8_t I2C_SimpleRead_From_Device(uint8_t *dat8)
-{
-    uint8_t buf1;
-    
-   I2C_Start();
-   if(Send_OneByte_Ack(SC12B_ADDR << 1)| 0x01){
-            
-          I2C_Stop();
-          return 0;
-   }
-   
-   buf1 = I2C_Receive8Bit(); //reg address = 0x08
-   I2C_Respond(0); //acknowledge
-   
-    I2C_Receive8Bit(); //reg address = 0x09
-   I2C_Respond(1); //don't ack
-   
-   I2C_Stop();
-   
-   //*dat16 = ((uint16_t)buf1) <<8 | buf2; //
-    *dat8 = buf1;
-   
-   return 1;
-   
-}
+
 /*********************************************************************************************
 *
 *Function Name: uint8_t I2C_Read_From_Device(uint8_t reg, uint16_t *dat16)
@@ -393,7 +325,7 @@ Complete_Status I2C_Simple_Read_From_Device(unsigned char deviceAddr,unsigned ch
 			unsigned char *p;
 			p = target;
 			I2C_Start();
-			if (Send_OneByte_Ack((deviceAddr<<1) | 0x01)) {
+			if (SendByteAndGetNACK((deviceAddr<<1) | 0x01)) {
 					I2C_Stop();
 					return UNDONE;
 			}
@@ -415,21 +347,21 @@ deviceAddr 设置器件地址, REG 设置寄存器地址, target 读取地址对
 **************************************************************************************************************************************/
 Complete_Status I2C_Read_From_Device(unsigned char deviceAddr,unsigned char REG,unsigned char* target,unsigned char len)
 {
-	  unsigned char i;
+	   unsigned char i;
 		unsigned char *p;
 	  p = target;
 		I2C_Start();
-		if (Send_OneByte_Ack((deviceAddr<<1) & ~0x01)) {
+		if (SendByteAndGetNACK((deviceAddr<<1) & ~0x01)) {
 				I2C_Stop();
 				return UNDONE;
 		}
-		if (Send_OneByte_Ack(REG)) {
+		if (SendByteAndGetNACK(REG)) {
 			I2C_Stop();
 			return UNDONE;
 		}
 		I2C_Stop();
 		I2C_Start();
-		if (Send_OneByte_Ack((deviceAddr<<1) | 0x01)) {
+		if (SendByteAndGetNACK((deviceAddr<<1) | 0x01)) {
 			I2C_Stop();
 			return UNDONE;
 		}
