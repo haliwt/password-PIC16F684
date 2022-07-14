@@ -71,7 +71,8 @@ void TMR1_ISR(void)
 
     // ticker function call;
     // ticker is 1 -> Callback function gets called everytime this ISR executes
-   t++;
+#if 0
+    t++;
    if(t==2){
    	 t=0;
 	 t3++;
@@ -102,6 +103,7 @@ void TMR1_ISR(void)
 
 	   }
    }
+#endif 
 }
 
 

@@ -30,22 +30,17 @@ void main(void)
     System_Init();
    INTERRUPT_GlobalInterruptEnable();
    INTERRUPT_PeripheralInterruptEnable() ;
+   run_t.changePassword=0;
+   run_t.InputPasswordNumber_counter=0;
+   run_t.eepromAddress=0;
    while(1)
    {
-    //  BUZZER_KeySound();
 
-    // BUZZER_KeySound();
-     // if(run_t.timer_20ms==1){
-	  	//  run_t.timer_20ms=0;
-
-//          if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2) == DONE)
-//           {
-//                  keyValue =(SC_Data[0]<<8) + SC_Data[1];
-//			    // keyValue = SC_Data[0];
-//
-//				  RunCheck_Mode(keyValue);
-//           }
-          //  Motor_CCW_Run();
+//      keyValue =CompareValue(pwd1,adminPwd);
+//	  if(keyValue ==1)run_t.BackLight=1;
+//	  else
+//	  	run_t.BackLight=0;
+	    
 
 			
 
@@ -79,18 +74,18 @@ void main(void)
 				
 				BUZZER_PIN_OFF() ;
           }
-	   
-      if(run_t.timer_base ==250){ //5s ->battery be checking 
-         run_t.timer_base = 0;
-         ADC_ReadVoltage();
-	     run_t.passsword_unlock =0;
-      }
-     // Modify password state 
-     if(run_t.timer_60ms==1){
-	   run_t.timer_60ms=0;
-       Modidy_NewPassword_Function();
-
-    }
+//	   
+//      if(run_t.timer_base ==250){ //5s ->battery be checking 
+//         run_t.timer_base = 0;
+//         ADC_ReadVoltage();
+//	     run_t.passsword_unlock =0;
+//      }
+//     // Modify password state 
+//     if(run_t.timer_60ms==1){
+//	   run_t.timer_60ms=0;
+//       Modidy_NewPassword_Function();
+//
+//    }
 
 	 if(run_t.passsword_unlock ==0 || run_t.passsword_error==1){
 
