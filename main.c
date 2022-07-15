@@ -31,7 +31,7 @@ void main(void)
    INTERRUPT_GlobalInterruptEnable();
    INTERRUPT_PeripheralInterruptEnable() ;
    run_t.changePassword=0;
-   run_t.InputPasswordNumber_counter=0;
+   run_t.Numbers_counter=0;
    run_t.eepromAddress=0;
    while(1)
    {
@@ -87,18 +87,18 @@ void main(void)
 //
 //    }
 
-	 if(run_t.passsword_unlock ==0 || run_t.passsword_error==1){
-
-	       if(run_t.timer_led==1){
-			        ERR_LED_ON()  ;	
-				}
-				else{
-                    ERR_LED_OFF();
-				}
-
-		if(run_t.passsword_error==1)run_t.changePassword =0;
-
-     }
+//	 if(run_t.passsword_unlock ==0 || run_t.passsword_error==1){
+//
+//	       if(run_t.timer_led==1){
+//			        ERR_LED_ON()  ;	
+//				}
+//				else{
+//                    ERR_LED_OFF();
+//				}
+//
+//		if(run_t.passsword_error==1)run_t.changePassword =0;
+//
+//     }
    }
     
 }

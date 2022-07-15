@@ -24,6 +24,7 @@ unsigned char Readpwd[MAX_SIZE];
 unsigned char pwd1[MAX_SIZE];
 unsigned char pwd2[MAX_SIZE]={0};
 unsigned char pwd3[MAX_SIZE]={0};
+unsigned char pwd_key_2[1];
 
 
 unsigned char VirtualPwd[MAX_VIRT];
@@ -42,6 +43,7 @@ static void ReadPassword_EEPROM_SaveData(void);
 
 static void NewPassword_Administrator_Login(void);
 static void Administrator_Password_Init(void);
+static void Specific_Numbers(void);
 
 
 
@@ -58,52 +60,50 @@ static void Administrator_Password_Init(void)
 {
     unsigned char adminiId;
 	adminiId= EEPROM_Read_Byte(ADMINI); //
-	if(adminiId ==0xff && run_t.eepromAddress==0){ //don't new password be write to EEPROM
-	 //  run_t.BackLight =1;
-	   if(pwd1[0]==1)run_t.BackLight =1;
+	if(adminiId ==0xff || adminiId ==0){ //don't new password be write to EEPROM
+	   //run_t.BackLight =1;
+	   if(pwd1[1]==2 && pwd1[0]==1)run_t.BackLight =1;
+
+	   // if(run_t.Numbers_counter ==2)run_t.BackLight =1;
       if(CompareValue(pwd1,adminPwd) ==1){// default password    is "1 2 3 4"
 				
-			run_t.BackLight =1;
+			//run_t.BackLight =1;
 
-			OK_LED_ON();
+		//	OK_LED_ON();
 		
 			Motor_CCW_Run();//open passwordlock 
-	
+	        __delay_ms(300);
 			run_t.passsword_unlock=1;
 			run_t.admini_confirm =1;
 			run_t.resetKey++;
 			run_t.inputNumber++;
 			run_t.eepromAddress=0;
-			run_t.InputPasswordNumber_counter=0;
+			run_t.Numbers_counter=0;
 			return ;
 
-	   }
-	   else{
-	   	  
+	  }
+	  else{
 
-          //run_t.eepromAddress++;
-	   }
-	 }
-	 else{
-			//run_t.eepromAddress++ ;	
-			Readpwd[0] = EEPROM_Read_Byte(ADMINI + 0X01);
-			Readpwd[1] = EEPROM_Read_Byte(ADMINI + 0X02);
-			Readpwd[2] = EEPROM_Read_Byte(ADMINI + 0X03);
-			Readpwd[3] = EEPROM_Read_Byte(ADMINI + 0X04);
-			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
-			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
-
-			 if(CompareValue(Readpwd,pwd1) ==1){//if(strcmp(pwd1,pwd2)==0)
-				
-				OK_LED_ON();
-				Motor_CCW_Run();//open passwordlock 
-				run_t.passsword_unlock=1;
-				run_t.admini_confirm =1;
-				run_t.resetKey++;
-				run_t.inputNumber++;
-				return ;
-
-	        }
+	  //run_t.BackLight =1;
+//			//run_t.eepromAddress++ ;	
+//			Readpwd[0] = EEPROM_Read_Byte(ADMINI + 0X01);
+//			Readpwd[1] = EEPROM_Read_Byte(ADMINI + 0X02);
+//			Readpwd[2] = EEPROM_Read_Byte(ADMINI + 0X03);
+//			Readpwd[3] = EEPROM_Read_Byte(ADMINI + 0X04);
+//			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
+//			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
+//
+//			 if(CompareValue(Readpwd,pwd1) ==1){//if(strcmp(pwd1,pwd2)==0)
+//				
+//				OK_LED_ON();
+//				Motor_CCW_Run();//open passwordlock 
+//				run_t.passsword_unlock=1;
+//				run_t.admini_confirm =1;
+//				run_t.resetKey++;
+//				run_t.inputNumber++;
+//				return ;
+//
+//	        }
 	 }
 	 run_t.passsword_unlock=0;
 	 run_t.admini_confirm =0;
@@ -112,7 +112,7 @@ static void Administrator_Password_Init(void)
 
 }
 	
-	   
+}	   
 
 /****************************************************************************
 *
@@ -125,7 +125,7 @@ static void Administrator_Password_Init(void)
 unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 {
 	unsigned char i ;
-   for(i=0;i<1;i++){
+   for(i=0;i<2;i++){
 		if(*(pt1+i) != *(pt2+i)){
 			return 0;
 		}
@@ -428,6 +428,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 void RunCheck_Mode(unsigned int dat)
 {
    unsigned char i;
+   //static unsigned char one =0xff,two=0xff,sec_2= 0xff,key_1,key_2;
 
 	switch(dat){
 
@@ -451,15 +452,15 @@ void RunCheck_Mode(unsigned int dat)
 	        }
 		}
 
-		if(run_t.InputPasswordNumber_counter > 6 ){
+		if(run_t.Numbers_counter > 6 ){
 
-		     for(i=0;i<=run_t.InputPasswordNumber_counter;i++){
+		     for(i=0;i<=run_t.Numbers_counter;i++){
 			 	
 		       VirtualPwd[i]=0;
         }
 		
 		
-	    run_t.InputPasswordNumber_counter =0 ;
+	    run_t.Numbers_counter =0 ;
 		run_t.passswordsMatch = 0;
 		run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
 		run_t.changePassword=0;
@@ -468,19 +469,21 @@ void RunCheck_Mode(unsigned int dat)
 	 case KEY_6://0x80: //CIN0  //09H -> D7~D4  , 08H -> D7~D0 -> CIN0 -> D7, CIN1->D6
          // run_t.BackLight =1;//BACKLIGHT_ON() ;  
           run_t.buzzer_flag =1;
-		  run_t.InputPasswordNumber_counter ++ ;
-		  if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
+		//  run_t.Numbers_counter ++ ;
+		 /// if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
 		  
-          VirtualPwd[run_t.InputPasswordNumber_counter]=6;
-          pwd1[run_t.InputPasswordNumber_counter]=6;
+          VirtualPwd[run_t.Numbers_counter]=6;
+          pwd1[run_t.Numbers_counter]=6;
 	    
-          run_t.passswordsMatch = 0;
+          
 		if(run_t.keyTime==1){
-			  pwd2[run_t.InputPasswordNumber_counter]=6;
+			  pwd2[run_t.Numbers_counter]=6;
 	   }
 	  if(run_t.keyTime==2){
-	      pwd3[run_t.InputPasswordNumber_counter]=6;
+	      pwd3[run_t.Numbers_counter]=6;
 	    }
+	  run_t.passswordsMatch = 0;
+	   run_t.Numbers_counter ++ ;
 
 	   
 	 break;
@@ -490,63 +493,70 @@ void RunCheck_Mode(unsigned int dat)
 	 case KEY_7://0x20: //CIN2
 	   // run_t.BackLight =1;//BACKLIGHT_ON()  ;	
 	    run_t.buzzer_flag =1;
-	    run_t.InputPasswordNumber_counter ++ ;
-	    if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
+	    //run_t.Numbers_counter ++ ;
+	    //if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
 	  
-	    VirtualPwd[run_t.InputPasswordNumber_counter]=7;
-		pwd1[run_t.InputPasswordNumber_counter]=7;
+	    VirtualPwd[run_t.Numbers_counter]=7;
+		pwd1[run_t.Numbers_counter]=7;
 	  
 	  if(run_t.keyTime==1){
-			  pwd2[run_t.InputPasswordNumber_counter]=7;
+			  pwd2[run_t.Numbers_counter]=7;
 	   }
 	  if(run_t.keyTime==2){
-	      pwd3[run_t.InputPasswordNumber_counter]=7;
+	      pwd3[run_t.Numbers_counter]=7;
 	   }
-
+      run_t.Numbers_counter ++ ;
+	  run_t.passswordsMatch = 0;
 	   
 	 break;
 
 	  case KEY_1: //0x1000: //CIN3
+	
 
 	    //run_t.BackLight =1;// BACKLIGHT_ON()  ;
 	    run_t.buzzer_flag =1;
-		 run_t.InputPasswordNumber_counter ++ ;
-		 if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
+		 //run_t.Numbers_counter ++ ;
+		 ///if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
 
-		 
-	    VirtualPwd[run_t.InputPasswordNumber_counter]=1;
-	    pwd1[run_t.InputPasswordNumber_counter]=1;
+		Specific_Numbers();
+	    VirtualPwd[run_t.Numbers_counter]=1; //i=0
+	    pwd1[run_t.Numbers_counter]=1;
 	   
 		run_t.passswordsMatch = 0;
 	 if(run_t.keyTime==1){
-			  pwd2[run_t.InputPasswordNumber_counter]=1;
+			  pwd2[run_t.Numbers_counter]=1;
 	   }
 	  if(run_t.keyTime==2){
-	      pwd3[run_t.InputPasswordNumber_counter]=1;
+	      pwd3[run_t.Numbers_counter]=1;
 	    }
 
 	  run_t.passswordsMatch = 0;
+	 run_t.Numbers_counter ++ ; //i=1;
+	  
 
 	 break;
 
 	 case   KEY_8://0x08: //CIN4
 
 	// run_t.BackLight =1;//BACKLIGHT_ON()  ;	
+	
 	 run_t.buzzer_flag =1;
-	 run_t.InputPasswordNumber_counter ++ ;
-	 if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
+	 //run_t.Numbers_counter ++ ;
+	 ///if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
 	 
-	 VirtualPwd[run_t.InputPasswordNumber_counter]=8;
-	   pwd1[run_t.InputPasswordNumber_counter]=8;
+	 VirtualPwd[run_t.Numbers_counter]=8;
+	   pwd1[run_t.Numbers_counter]=8;
 	  
 		run_t.passswordsMatch = 0;
 	if(run_t.keyTime==1){
-			  pwd2[run_t.InputPasswordNumber_counter]=8;
+			  pwd2[run_t.Numbers_counter]=8;
 	 }
 	if(run_t.keyTime==2){
-	      pwd3[run_t.InputPasswordNumber_counter]=8;
+	      pwd3[run_t.Numbers_counter]=8;
 	 }
 	 run_t.passswordsMatch = 0;
+
+	 run_t.Numbers_counter ++ ;
 
      
 	 break;
@@ -554,22 +564,26 @@ void RunCheck_Mode(unsigned int dat)
 	 case KEY_2://0x400: //CIN5
 
 	// run_t.BackLight =1;//BACKLIGHT_ON()  ;	
-	 run_t.buzzer_flag =1;
-	 run_t.InputPasswordNumber_counter ++ ;
 
-	  if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
-	 VirtualPwd[run_t.InputPasswordNumber_counter-1]=2;
-	 pwd1[run_t.InputPasswordNumber_counter-1]=2;
-	   
-	 if(run_t.keyTime==1){
-			  pwd2[run_t.InputPasswordNumber_counter]=2;
-	   }
-	  if(run_t.keyTime==2){
-	      pwd3[run_t.InputPasswordNumber_counter]=2;
-	  }
+		 run_t.buzzer_flag =1;
+		// run_t.Numbers_counter ++ ;
 
-	  
-	   run_t.passswordsMatch = 0;
+			Specific_Numbers();
+		 VirtualPwd[run_t.Numbers_counter]=2;
+		 pwd1[run_t.Numbers_counter]=2;
+		 pwd_key_2[0]=2;
+		   
+		 if(run_t.keyTime==1){
+				  pwd2[run_t.Numbers_counter]=2;
+		   }
+		  if(run_t.keyTime==2){
+		      pwd3[run_t.Numbers_counter]=2;
+		  }
+
+		  
+		   run_t.passswordsMatch = 0;
+		  run_t.Numbers_counter ++ ; //i==2
+	
 
 	 break;
 
@@ -578,18 +592,19 @@ void RunCheck_Mode(unsigned int dat)
 
 		//run_t.BackLight =1;//BACKLIGHT_ON()  ;	
 		run_t.buzzer_flag =1;
-		run_t.InputPasswordNumber_counter ++ ;
-	    if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
-		VirtualPwd[run_t.InputPasswordNumber_counter]=9;
-		pwd1[run_t.InputPasswordNumber_counter]=9;
+		//run_t.Numbers_counter ++ ;
+	    ///if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
+		VirtualPwd[run_t.Numbers_counter]=9;
+		pwd1[run_t.Numbers_counter]=9;
 
 		if(run_t.keyTime==1){
-			pwd2[run_t.InputPasswordNumber_counter]=9;
+			pwd2[run_t.Numbers_counter]=9;
 		}
 		if(run_t.keyTime==2){
-			pwd3[run_t.InputPasswordNumber_counter]=9;
+			pwd3[run_t.Numbers_counter]=9;
 		}
-		
+
+		run_t.Numbers_counter ++ ;
 		run_t.passswordsMatch = 0;
 
 	 break;
@@ -598,20 +613,21 @@ void RunCheck_Mode(unsigned int dat)
 
 		//run_t.BackLight =1;//BACKLIGHT_ON()  ;
 		run_t.buzzer_flag =1;
-		run_t.InputPasswordNumber_counter ++ ;
-	    if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
+		//run_t.Numbers_counter ++ ;
+	    ///if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
 		
-		VirtualPwd[run_t.InputPasswordNumber_counter]=3;
-		pwd1[run_t.InputPasswordNumber_counter]=3;
+		VirtualPwd[run_t.Numbers_counter]=3;
+		pwd1[run_t.Numbers_counter++]=3;
 
 		
 		if(run_t.keyTime==1){
-			pwd2[run_t.InputPasswordNumber_counter]=3;
+			pwd2[run_t.Numbers_counter]=3;
 		}
 		if(run_t.keyTime==2){
-			pwd3[run_t.InputPasswordNumber_counter]=3;
+			pwd3[run_t.Numbers_counter]=3;
 		}
 
+      // run_t.Numbers_counter ++ ;
 		run_t.passswordsMatch = 0;
 
 	 break;
@@ -619,19 +635,20 @@ void RunCheck_Mode(unsigned int dat)
 	 case KEY_0://0x800: //CIN8
 		//run_t.BackLight =1;//BACKLIGHT_ON()  ;	
 		run_t.buzzer_flag =1;
-		run_t.InputPasswordNumber_counter ++ ;
-	    if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
-		VirtualPwd[run_t.InputPasswordNumber_counter]=0;
-		pwd1[run_t.InputPasswordNumber_counter]=0;
+		//run_t.Numbers_counter ++ ;
+	   /// if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
+		VirtualPwd[run_t.Numbers_counter]=0;
+		pwd1[run_t.Numbers_counter++]=0;
 
 	
 		if(run_t.keyTime==1){
-			pwd2[run_t.InputPasswordNumber_counter]=0;
+			pwd2[run_t.Numbers_counter]=0;
 		}
 		if(run_t.keyTime==2){
-			pwd3[run_t.InputPasswordNumber_counter]=0;
+			pwd3[run_t.Numbers_counter]=0;
 		}
        run_t.passswordsMatch = 0;
+	 //  run_t.Numbers_counter ++ ;
 		
 	 break;
 
@@ -639,45 +656,45 @@ void RunCheck_Mode(unsigned int dat)
 
 	// run_t.BackLight =1;//BACKLIGHT_ON()  ;
 	 run_t.buzzer_flag =1;
-	  run_t.InputPasswordNumber_counter ++ ;
-	  if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
+	  
+	  //if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
 	 
-	 VirtualPwd[run_t.InputPasswordNumber_counter]=4;
-	 pwd1[run_t.InputPasswordNumber_counter]=4;
+	 VirtualPwd[run_t.Numbers_counter]=4;
+	 pwd1[run_t.Numbers_counter++]=4;
 	 
 
 	   
 	 if(run_t.keyTime==1){
-			  pwd2[run_t.InputPasswordNumber_counter]=4;
+			  pwd2[run_t.Numbers_counter]=4;
 	   }
 	  if(run_t.keyTime==2){
-	      pwd3[run_t.InputPasswordNumber_counter]=4;
+	      pwd3[run_t.Numbers_counter]=4;
 	    }
 
-     
+    // run_t.Numbers_counter ++ ;
 	   run_t.passswordsMatch = 0;
 	 break;
 
 	case KEY_5://0x10: //CIN11
 	// run_t.BackLight =1;//BACKLIGHT_ON()  ;	
 	 run_t.buzzer_flag =1;
-	 run_t.InputPasswordNumber_counter ++ ;
-	    if(run_t.InputPasswordNumber_counter == 1)run_t.InputPasswordNumber_counter=0;
-	 VirtualPwd[run_t.InputPasswordNumber_counter]=5;
-	 pwd1[run_t.InputPasswordNumber_counter]=5;
+	 //run_t.Numbers_counter ++ ;
+	  //  if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
+	 VirtualPwd[run_t.Numbers_counter]=5;
+	 pwd1[run_t.Numbers_counter++]=5;
 	
 	
 	  if(run_t.keyTime==1){
-          pwd2[run_t.InputPasswordNumber_counter]=5;
+          pwd2[run_t.Numbers_counter]=5;
 
 	  }
 	  if(run_t.keyTime==2){
 
-	      pwd3[run_t.InputPasswordNumber_counter]=5;
+	      pwd3[run_t.Numbers_counter]=5;
 
 
 	  }
-     
+      //run_t.Numbers_counter ++ ;
 	   run_t.passswordsMatch = 0;
 
 	 break;
@@ -687,11 +704,11 @@ void RunCheck_Mode(unsigned int dat)
 	 	//run_t.BackLight =1;//BACKLIGHT_ON()  ;
 	 	run_t.buzzer_flag =1;
 	    run_t.passswordsMatch = 1;
-	    if(run_t.admini_confirm==1){
-              run_t.keyTime++;
-			  if(run_t.keyTime >2)run_t.keyTime=0;
-             run_t.InputPasswordNumber_counter=0;
-		}
+//	    if(run_t.admini_confirm==1){
+//              run_t.keyTime++;
+//			  if(run_t.keyTime >2)run_t.keyTime=0;
+//             run_t.Numbers_counter=0;
+//		}
 		
 
 	 break;
@@ -729,42 +746,45 @@ void RunCommand_Unlock(void)
 	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
 
       run_t.passswordsMatch =0;
+	   if(pwd1[0]==1  && pwd1[1]==2)run_t.BackLight =1;
+	  if(run_t.Numbers_counter==2)run_t.BackLight =1;
+	   
 	 // run_t.BackLight =1;
-
-      //virtual password  run_t.InputPasswordNumber_counter > 4 &&  run_t.InputPasswordNumber_counter < 20
-      if(run_t.InputPasswordNumber_counter > 6  && run_t.InputPasswordNumber_counter < 21){
-
-           tempCounter = run_t.InputPasswordNumber_counter;
-
-	      
-		  // VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
-	       pwd1[5]= VirtualPwd[tempCounter];
-		   pwd1[4]= VirtualPwd[tempCounter-1];
-		   pwd1[3]= VirtualPwd[tempCounter-2];
-		   pwd1[2]= VirtualPwd[tempCounter-3];
-		   pwd1[1]= VirtualPwd[tempCounter-4];
-		   pwd1[0]= VirtualPwd[tempCounter-5];
-		   run_t.passswordsMatch=1;
-          
-		  
-	  }
-	
-	  
-	 ReadPassword_EEPROM_SaveData();
-	 if(run_t.InputPasswordNumber_counter >6){
-       VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
-		   i++;
-		   if(i>run_t.InputPasswordNumber_counter){
-             i=0;
-			 run_t.passsword_unlock =0;
-		     run_t.InputPasswordNumber_counter=0;
-			 run_t.passswordsMatch=0;
-			 return ;
-			 
-            }
-		   
-    }
-     
+//
+//      //virtual password  run_t.Numbers_counter > 4 &&  run_t.Numbers_counter < 20
+//      if(run_t.Numbers_counter > 6  && run_t.Numbers_counter < 21){
+//
+//           tempCounter = run_t.Numbers_counter;
+//
+//	      
+//		  // VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
+//	       pwd1[5]= VirtualPwd[tempCounter];
+//		   pwd1[4]= VirtualPwd[tempCounter-1];
+//		   pwd1[3]= VirtualPwd[tempCounter-2];
+//		   pwd1[2]= VirtualPwd[tempCounter-3];
+//		   pwd1[1]= VirtualPwd[tempCounter-4];
+//		   pwd1[0]= VirtualPwd[tempCounter-5];
+//		   run_t.passswordsMatch=1;
+//          
+//		  
+//	  }
+//	
+//	  
+//	 ReadPassword_EEPROM_SaveData();
+//	 if(run_t.Numbers_counter >6){
+//       VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
+//		   i++;
+//		   if(i>run_t.Numbers_counter){
+//             i=0;
+//			 run_t.passsword_unlock =0;
+//		     run_t.Numbers_counter=0;
+//			 run_t.passswordsMatch=0;
+//			 return ;
+//			 
+//            }
+//		   
+//    }
+//     
 	
 
   }
@@ -831,6 +851,38 @@ void Modidy_NewPassword_Function(void)
 			     
     }
  }
+/****************************************************************************
+*
+*Function Name:void RunCheck_Mode(unsigned int dat)
+*Function : run is main 
+*Input Ref: NO
+*Retrun Ref:NO
+*
+****************************************************************************/
+static void Specific_Numbers(void)
+{
+	switch(run_t.Numbers_counter){
+
+	   case 0:
+			 run_t.Numbers_counter=0;
+	        
+	  break;
+
+	   case 1:
+	         run_t.Numbers_counter=1;
+
+	   break;
+
+	   case 2:
+	         run_t.Numbers_counter=2;
+
+	   break;
+
+
+	}
+		  
+
+}
 
 
 

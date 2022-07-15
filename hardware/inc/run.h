@@ -39,10 +39,13 @@ typedef struct __RUN_T{
 	unsigned char eepromAddress;
 	unsigned char BackLight;
 	unsigned char buzzer_flag;
-	unsigned char InputPasswordNumber_counter;
+	unsigned char Numbers_counter;
 	unsigned char passswordsMatch;
 	unsigned char passsword_unlock;
 	unsigned char passsword_error;
+
+//	unsigned char key_2;
+//	unsigned char key_1;
 	
     unsigned int KeyValue;
 	
