@@ -43,7 +43,7 @@ static void ReadPassword_EEPROM_SaveData(void);
 
 static void NewPassword_Administrator_Login(void);
 static void Administrator_Password_Init(void);
-static void Specific_Numbers(void);
+
 
 
 
@@ -62,7 +62,7 @@ static void Administrator_Password_Init(void)
 	adminiId= EEPROM_Read_Byte(ADMINI); //
 	if(adminiId ==0xff || adminiId ==0){ //don't new password be write to EEPROM
 	   //run_t.BackLight =1;
-	   if(pwd1[1]==2 && pwd1[0]==1)run_t.BackLight =1;
+	 
 
 	   // if(run_t.Numbers_counter ==2)run_t.BackLight =1;
       if(CompareValue(pwd1,tempArr) ==1){// default password    is "1 2 3 4"
@@ -81,6 +81,7 @@ static void Administrator_Password_Init(void)
 			run_t.Numbers_counter=0;
 			return ;
 
+	  }
 	  }
 	  else{
 
@@ -112,7 +113,7 @@ static void Administrator_Password_Init(void)
 
 }
 	
-}	   
+   
 
 /****************************************************************************
 *
@@ -125,7 +126,7 @@ static void Administrator_Password_Init(void)
 unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 {
 	unsigned char i ;
-   for(i=0;i<2;i++){
+   for(i=1;i<5;i++){
 		if(*(pt1+i) != *(pt2+i)){
 			return 0;
 		}
@@ -505,14 +506,9 @@ void RunCheck_Mode(unsigned int dat)
 	 break;
 
 	  case KEY_1: //0x1000: //CIN3
-	
-
-
-	    run_t.buzzer_flag =1;
+	     run_t.buzzer_flag =1;
 		 run_t.Numbers_counter ++ ;
 		
-
-		Specific_Numbers();
 	    VirtualPwd[11]=1; //i=0
 	    pwd1[1]=1;
 	   
@@ -637,7 +633,7 @@ void RunCheck_Mode(unsigned int dat)
 	// run_t.BackLight =1;//BACKLIGHT_ON()  ;
 	 run_t.buzzer_flag =1;
 	  
-	  //if(run_t.Numbers_counter == 1)run_t.Numbers_counter=0;
+	
 	 
 	 VirtualPwd[run_t.Numbers_counter]=4;
 	 pwd1[run_t.Numbers_counter++]=4;
@@ -663,7 +659,7 @@ void RunCheck_Mode(unsigned int dat)
 	
 	
 	  if(run_t.keyTime==1){
-          pwd2[run_t.Numbers_counter]=5;
+          pwd2[5]=5;
 
 	  }
 	run_t.passswordsMatch = 0;
@@ -675,11 +671,7 @@ void RunCheck_Mode(unsigned int dat)
 	 	//run_t.BackLight =1;//BACKLIGHT_ON()  ;
 	 	run_t.buzzer_flag =1;
 	    run_t.passswordsMatch = 1;
-//	    if(run_t.admini_confirm==1){
-//              run_t.keyTime++;
-//			  if(run_t.keyTime >2)run_t.keyTime=0;
-//             run_t.Numbers_counter=0;
-//		}
+
 		
 
 	 break;
@@ -717,8 +709,10 @@ void RunCommand_Unlock(void)
 	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
 
       run_t.passswordsMatch =0;
-	   if(pwd1[0]==1  && pwd1[1]==2)run_t.BackLight =1;
-	  if(run_t.Numbers_counter==2)run_t.BackLight =1;
+	  // if(pwd1[0]==1  && pwd1[1]==2)run_t.BackLight =1;
+	  ///if(run_t.Numbers_counter==2)run_t.BackLight =1;
+
+	   Administrator_Password_Init();
 	   
 	 // run_t.BackLight =1;
 //
@@ -814,30 +808,6 @@ void Modidy_NewPassword_Function(void)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-static void Specific_Numbers(void)
-{
-	switch(run_t.Numbers_counter){
-
-	   case 0:
-			 run_t.Numbers_counter=0;
-	        
-	  break;
-
-	   case 1:
-	         run_t.Numbers_counter=1;
-
-	   break;
-
-	   case 2:
-	         run_t.Numbers_counter=2;
-
-	   break;
-
-
-	}
-		  
-
-}
 
 
 

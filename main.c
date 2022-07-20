@@ -28,23 +28,16 @@ void main(void)
 	
     ADC_Init();
     System_Init();
-   INTERRUPT_GlobalInterruptEnable();
-   INTERRUPT_PeripheralInterruptEnable() ;
+  // INTERRUPT_GlobalInterruptEnable();
+  // INTERRUPT_PeripheralInterruptEnable() ;
    run_t.changePassword=0;
    run_t.Numbers_counter=0;
    run_t.eepromAddress=0;
    while(1)
    {
 
-//      keyValue =CompareValue(pwd1,adminPwd);
-//	  if(keyValue ==1)run_t.BackLight=1;
-//	  else
-//	  	run_t.BackLight=0;
-	    
 
-			
-
-	    if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
+	  if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
 		 
 	      keyValue =(SC_Data[0]<<8) + SC_Data[1];
 	         //keyValue = SC_Data[0];
