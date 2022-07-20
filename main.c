@@ -23,7 +23,7 @@ void main(void)
  
 
    SC12B_Init_Function();
-    TMR1_Initialize();
+    //TMR1_Initialize();
 	Motor_Init();
 	
     ADC_Init();

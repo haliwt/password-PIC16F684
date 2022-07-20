@@ -16,12 +16,11 @@
 #include "hardware/inc/key.h"
 #include "hardware/inc/led.h"
 //#include "hardware/inc/tim0.h"
-#include "hardware/inc/tim1.h"
+//#include "hardware/inc/tim1.h"
 #include "hardware/inc/interrupt.h"
 #include "hardware/inc/run.h"
 #include "hardware/inc/ADC.h"
 #include "hardware/inc/eeprom.h"
-#include "hardware/inc/led.h"
 #include "hardware/inc/motor.h"
 
 

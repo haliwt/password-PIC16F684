@@ -2,7 +2,7 @@
 #define __RUN_H_
 #include "../../main.h"
 
-#define MAX_SIZE 6
+#define MAX_SIZE        11
 
 
 enum Signal {                   /* enumeration for CParser signals */
@@ -55,7 +55,7 @@ typedef struct __RUN_T{
 RUN_T run_t;
 
 extern unsigned char pwd1[MAX_SIZE];
-extern unsigned char adminPwd[MAX_SIZE];
+
 
 
 
