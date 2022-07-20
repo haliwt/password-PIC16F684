@@ -19,8 +19,8 @@ unsigned char SC_Data[2];
 void main(void) 
 {
    
-   unsigned int keyValue;
- 
+   
+    unsigned int KeyValue;
 
    SC12B_Init_Function();
     //TMR1_Initialize();
@@ -36,13 +36,13 @@ void main(void)
    while(1)
    {
 
-
+      
 	  if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
 		 
-	      keyValue =(SC_Data[0]<<8) + SC_Data[1];
+	      KeyValue =(SC_Data[0]<<8) + SC_Data[1];
 	         //keyValue = SC_Data[0];
 
-		  RunCheck_Mode(keyValue);
+		  RunCheck_Mode(KeyValue);
           }
         
 
@@ -57,16 +57,7 @@ void main(void)
               BACKLIGHT_OFF() ;
 		 }
 
-	  if(run_t.buzzer_flag ==1){
-			
-
-				BUZZER_KeySound();
-			}
-			else{
-
-				
-				BUZZER_PIN_OFF() ;
-          }
+	    Buzzer_Sound();
 //	   
 //      if(run_t.timer_base ==250){ //5s ->battery be checking 
 //         run_t.timer_base = 0;
