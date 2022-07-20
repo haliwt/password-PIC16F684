@@ -3,16 +3,6 @@
 #define uchar  unsigned	char
 #define uint   unsigned int
 
-void delayUS(uchar i)//US级延时子函数
-{		
-     while(--i);
-}
-
-void delayMS(uchar a)//MS级延时子函数
-{		
-     do
-     {delayUS(199);}while(--a);
-}
 
 
 
@@ -31,7 +21,7 @@ void BUZZER_KeySound(void)
 {
       unsigned int m;
 	
-     for(m=0;m<10;m++){
+     for(m=0;m<30;m++){
           BEEP=!BEEP;
           __delay_us(500);//delayUS(99);
          // __delay_ms(1);

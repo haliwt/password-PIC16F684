@@ -373,29 +373,10 @@ void RunCheck_Mode(unsigned int dat)
        if(k0 != n0){
 
 	      k0 = n0;
-	
+	   
 	     run_t.buzzer_flag =1;
 
-	   
-		for(i=0;i<MAX_SIZE;i++){
-				pwd1[i]=0;
-
-		    if(run_t.keyTime==1 ){
-	  	      
-			   pwd2[i]=0;
-	        }
-	      
-		}
-
-		if(run_t.Numbers_counter > 6 ){
-
-		     for(i=0;i<=run_t.Numbers_counter;i++){
-			 	
-		       VirtualPwd[i]=0;
-        }
-		
-		}
-	    run_t.Numbers_counter =0 ;
+	     run_t.Numbers_counter =0 ;
 		run_t.passswordsMatch = 0;
 		run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
 		run_t.changePassword=0;
@@ -408,6 +389,7 @@ void RunCheck_Mode(unsigned int dat)
 
           if(k6 != n6){
 		  	  k6 =n6;
+			
 			  run_t.buzzer_flag =1;
 			  run_t.Numbers_counter ++ ;
 		
@@ -432,6 +414,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	    if(k7 != n7){
 			k7 = n7;
+		
 		    run_t.buzzer_flag =1;
 		    run_t.Numbers_counter ++ ;
 		 
@@ -453,6 +436,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	     if(k1 != n1){
 		 	k1=n1;
+		
 			run_t.buzzer_flag =1;
 			run_t.Numbers_counter ++ ;
 
@@ -475,6 +459,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	  if(k8 !=n8){
           k8 = n8;
+		
 	      run_t.buzzer_flag =1;
 		 run_t.Numbers_counter ++ ;
 		
@@ -498,6 +483,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	    if(k2 != n2){
            k1= n2;
+	
 		 run_t.buzzer_flag =1;
 		 run_t.Numbers_counter ++ ;
 
@@ -523,6 +509,7 @@ void RunCheck_Mode(unsigned int dat)
 
 		if(k9 !=n9){
 			k9 = n9;
+		
 		run_t.buzzer_flag =1;
 		run_t.Numbers_counter ++ ;
 	  
@@ -544,6 +531,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	    if(k3 != n3){
 			k3= n3;
+		
 		run_t.buzzer_flag =1;
 		run_t.Numbers_counter ++ ;
 	
@@ -567,6 +555,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	    if(k10 != n10){
 			k10 = n10;
+		
 		run_t.buzzer_flag =1;
 		run_t.Numbers_counter ++ ;
 	
@@ -587,6 +576,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	   if(k4 != n4){
 	   	  k4 = n4;
+		
 		 run_t.buzzer_flag =1;
 		  run_t.Numbers_counter ++ ;
 		
@@ -606,6 +596,7 @@ void RunCheck_Mode(unsigned int dat)
 	case KEY_5://0x10: //CIN11
 	  if(k5 != n5){
 	  	  k5 = n5;
+		
 			 run_t.buzzer_flag =1;
 			 run_t.Numbers_counter ++ ;
 			
@@ -785,7 +776,7 @@ void Buzzer_Sound(void)
 
    if(i==1){
    	 i=0;
-      __delay_ms(200);
+      __delay_ms(300);
 				  n0++;
 				  n1++;
 				  n2++;
