@@ -61,27 +61,40 @@ static void Administrator_Password_Init(void)
     unsigned char adminiId;
 	adminiId= EEPROM_Read_Byte(ADMINI); //
 	if(adminiId ==0xff || adminiId ==0){ //don't new password be write to EEPROM
-	   //run_t.BackLight =1;
+	  if(pwd1[1]==1) run_t.BackLight =1;
 	 
 
 	   // if(run_t.Numbers_counter ==2)run_t.BackLight =1;
-      if(CompareValue(pwd1,tempArr) ==1){// default password    is "1 2 3 4"
+      //if(CompareValue(pwd1,tempArr) ==1){// default password    is "1 2 3 4"
+          if(pwd1[1] ==1){
+			  if(pwd1[2]==2){
+                  if(pwd1[3]==3){
+                     if(pwd1[4]==4){
+							Motor_CCW_Run();//open passwordlock 
+					      //  __delay_ms(300);
+							run_t.passsword_unlock=1;
+							run_t.admini_confirm =1;
+							run_t.resetKey++;
+							run_t.inputNumber++;
+							run_t.eepromAddress=0;
+							run_t.Numbers_counter=0;
+							return ;
+
+
+					 }
+
+				  }
+			  }
+
+
+		  }
 				
 			//run_t.BackLight =1;
 
 		//	OK_LED_ON();
 		
-			Motor_CCW_Run();//open passwordlock 
-	        __delay_ms(300);
-			run_t.passsword_unlock=1;
-			run_t.admini_confirm =1;
-			run_t.resetKey++;
-			run_t.inputNumber++;
-			run_t.eepromAddress=0;
-			run_t.Numbers_counter=0;
-			return ;
+		
 
-	  }
 	  }
 	  else{
 
@@ -497,7 +510,7 @@ void RunCheck_Mode(unsigned int dat)
 		pwd1[7]=7;
 	  
 	  if(run_t.keyTime==1){
-			  pwd2[77]=7;
+			  pwd2[7]=7;
 	   }
 	 
 
@@ -558,7 +571,7 @@ void RunCheck_Mode(unsigned int dat)
 		
 		   
 		 if(run_t.keyTime==1){
-				  pwd2[run_t.Numbers_counter]=2;
+				 pwd2[2]=2;
 		   }
 
 		
@@ -630,22 +643,22 @@ void RunCheck_Mode(unsigned int dat)
 
 	 case KEY_4://0x400: //CIN9
 
-	// run_t.BackLight =1;//BACKLIGHT_ON()  ;
+	
 	 run_t.buzzer_flag =1;
-	  
+	  run_t.Numbers_counter ++ ;
 	
 	 
-	 VirtualPwd[run_t.Numbers_counter]=4;
-	 pwd1[run_t.Numbers_counter++]=4;
+	 VirtualPwd[4]=4;
+	 pwd1[4]=4;
 	 
 
 	   
 	 if(run_t.keyTime==1){
-			  pwd2[run_t.Numbers_counter]=4;
+			  pwd2[4]=4;
 	   }
 	 
 
-    // run_t.Numbers_counter ++ ;
+ 
 	   run_t.passswordsMatch = 0;
 	 break;
 
@@ -668,7 +681,7 @@ void RunCheck_Mode(unsigned int dat)
 
 	 case SPECIAL_2://0x200: //CIN10 '#'
 
-	 	//run_t.BackLight =1;//BACKLIGHT_ON()  ;
+	
 	 	run_t.buzzer_flag =1;
 	    run_t.passswordsMatch = 1;
 
