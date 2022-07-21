@@ -63,7 +63,7 @@ static void Administrator_Password_Init(void)
 {
     unsigned char adminiId;
 	adminiId= EEPROM_Read_Byte(ADMINI); //
-	if(adminiId ==0xff || adminiId ==0){ //don't new password be write to EEPROM
+	if(adminiId !=1){ //don't new password be write to EEPROM
 	  
 	 
 
@@ -73,12 +73,16 @@ static void Administrator_Password_Init(void)
 			  if(pwd1[2]==2){
                   if(pwd1[3]==3){
                      if(pwd1[4]==4){
+					 	    run_t.BackLight =1;
+					 	    Buzzer_LongSound();
 							Motor_CCW_Run();//open passwordlock 
 					        __delay_ms(500);
 							run_t.passsword_unlock=1;
 							run_t.eepromAddress=0;
 							run_t.Numbers_counter=0;
-							 run_t.BackLight =1;
+							run_t.passswordsMatch = 0;
+							
+							
 							return ;
 
 
@@ -93,6 +97,7 @@ static void Administrator_Password_Init(void)
 		  
 		run_t.passsword_unlock=0;	
 		run_t.eepromAddress=0;
+		run_t.passswordsMatch = 0;
 		run_t.Numbers_counter=0;
 
 		return;
@@ -373,7 +378,7 @@ void RunCheck_Mode(unsigned int dat)
        if(k0 != n0){
 
 	      k0 = n0;
-	   
+	     pwd1[0]=0;
 	     run_t.buzzer_flag =1;
 
 	     run_t.Numbers_counter =0 ;
@@ -656,10 +661,17 @@ void RunCommand_Unlock(void)
 	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
 
       run_t.passswordsMatch =0;
-	  // if(pwd1[0]==1  && pwd1[1]==2)run_t.BackLight =1;
+	  if(pwd1[1]==1  && pwd1[2]==2 && pwd1[3]==3 && pwd1[4]==4){run_t.BackLight =1;
+	//  if(pwd1[3]==3 && pwd1[4]==4)run_t.BackLight =1;
+			Buzzer_LongSound();
+	  	}
+	  run_t.Numbers_counter = 0;
+
+      run_t.passswordsMatch =0;
+	}
 	  ///if(run_t.Numbers_counter==2)run_t.BackLight =1;
 
-	   Administrator_Password_Init();
+	 //  Administrator_Password_Init();
 	   
 	 // run_t.BackLight =1;
 //
@@ -699,9 +711,9 @@ void RunCommand_Unlock(void)
 //     
 	
 
-  }
+  
 
-
+   
 }
 
 /****************************************************************************
@@ -775,7 +787,7 @@ void Buzzer_Sound(void)
 	
 
    if(i==1){
-   	 i=0;
+   	
       __delay_ms(300);
 				  n0++;
 				  n1++;
@@ -789,6 +801,8 @@ void Buzzer_Sound(void)
 				  n9++;
 				  n10++;
 				  n11++;
+
+	 i=0;
 
 
    }

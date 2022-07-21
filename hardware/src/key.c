@@ -44,7 +44,7 @@ void SC12B_Init_Function(void)
 void I2C_Delay(void)
 {
 		unsigned char a;
-		for(a = 5; a>0; a--){
+		for(a = 20; a>0; a--){
 
             asm("NOP");
 

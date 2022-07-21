@@ -9,6 +9,8 @@
 void BUZZER_Init(void)
 {
      TRISCbits.TRISC5 =0 ; //I/O as output 
+
+	 PORTCbits.RC5=0;
 }
 /*******************************************
 *
@@ -34,4 +36,19 @@ void BUZZER_KeySound(void)
 //     }
 
 }
+
+void Buzzer_LongSound(void)
+{
+    unsigned int m;
+	
+     for(m=0;m<50;m++){
+          BEEP=!BEEP;
+          __delay_us(800);//delayUS(99);
+         // __delay_ms(1);
+     }
+
+
+
+}
+
 

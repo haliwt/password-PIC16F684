@@ -21,9 +21,14 @@ static void LED_Init(void)
     TRISAbits.TRISA1 =0 ;
     TRISAbits.TRISA2 = 0;  //I/O as output 
     TRISCbits.TRISC4 = 0;
-
-    //RESET KEY 
-    TRISAbits.TRISA3 = 1;   //input Key 
+    //RESET KEY gpio input PORT
+    TRISAbits.TRISA3 = 1;   //I/O as input
+    
+    //Setup GPIO output defult value 
+    PORTAbits.RA0=1;
+	PORTAbits.RA1=1;
+	PORTAbits.RA2=0;  //back light
+	PORTCbits.RC4=1;
 
 }
 
@@ -46,7 +51,7 @@ unsigned char Scan_Key(void)
 
 	if(k1==180){ //be pressed key continue
 
-       cnt=0x81;
+       cnt=0x01;
 	   return cnt;
 
 	}

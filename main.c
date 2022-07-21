@@ -19,8 +19,8 @@ unsigned char SC_Data[2];
 void main(void) 
 {
    
-   
-    unsigned int KeyValue;
+    unsigned char resetKey;
+    unsigned int KeyValue,k,adc;
 
    SC12B_Init_Function();
     //TMR1_Initialize();
@@ -36,19 +36,36 @@ void main(void)
    while(1)
    {
 
-      
-	  if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
-		 
-	      KeyValue =(SC_Data[0]<<8) + SC_Data[1];
-	         //keyValue = SC_Data[0];
 
-		  RunCheck_Mode(KeyValue);
-          }
         
 
+
+	 #if 1
+	   k++;
+
+	
+	
+	  
+      if( run_t.passswordsMatch ==0){
+	  if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
+		 
+	     // KeyValue =(SC_Data[0]<<8) + SC_Data[1];
+	         //keyValue = SC_Data[0];
+
+	       __delay_ms(20);
+	      if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
+               KeyValue =(SC_Data[0]<<8) + SC_Data[1];
+		      RunCheck_Mode(KeyValue);
+	      	}
+          } 
+	 
+      	}
+
 	     RunCommand_Unlock();
+	    
 		 if(run_t.BackLight ==1){
 
+			  run_t.BackLight =0;
 		       BACKLIGHT_ON() ;
 
 		 }
@@ -58,12 +75,29 @@ void main(void)
 		 }
 
 	    Buzzer_Sound();
-//	   
-//      if(run_t.timer_base ==250){ //5s ->battery be checking 
-//         run_t.timer_base = 0;
-//         ADC_ReadVoltage();
-//	     run_t.passsword_unlock =0;
-//      }
+
+
+	resetKey = Scan_Key();
+	 {
+        if(resetKey ==0x01){
+
+           ERR_LED_ON()  ;
+	       OK_LED_ON()  ;
+
+		}
+
+	 }
+	   
+      if(k >2){ //5s ->battery be checking 
+         k = 0;
+         adc= ADC_ReadVoltage();
+	     if(adc > 675)BAT_LED_ON() ;
+		 else BAT_LED_OFF() ;
+		 	 
+	     run_t.passsword_unlock =0;
+      }
+
+	 
 //     // Modify password state 
 //     if(run_t.timer_60ms==1){
 //	   run_t.timer_60ms=0;
@@ -83,6 +117,7 @@ void main(void)
 //		if(run_t.passsword_error==1)run_t.changePassword =0;
 //
 //     }
+	 #endif 
    }
     
 }
