@@ -66,6 +66,7 @@ void main(void)
 
 			 // run_t.BackLight =0;
 		       BACKLIGHT_ON() ;
+			   if(pwd1[1]==1)  ERR_LED_ON()  ;
 
 		 }
 		 else{

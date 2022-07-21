@@ -442,7 +442,7 @@ void RunCheck_Mode(unsigned int dat)
 	     if(k1 != n1){
 		 	k1=n1;
 		
-			run_t.buzzer_flag =1;
+			
 			run_t.Numbers_counter ++ ;
 			ERR_LED_ON()  ;
 
@@ -456,8 +456,9 @@ void RunCheck_Mode(unsigned int dat)
 
 
 			run_t.passswordsMatch = 0;
+			run_t.buzzer_flag =1;
 
-	     	}
+	     }
 
 	 break;
 
@@ -490,7 +491,7 @@ void RunCheck_Mode(unsigned int dat)
 	    if(k2 != n2){
            k1= n2;
 	
-		 run_t.buzzer_flag =1;
+		
 		 run_t.Numbers_counter ++ ;
 
 		  OK_LED_ON()   ;
@@ -505,6 +506,7 @@ void RunCheck_Mode(unsigned int dat)
 		
 		  
 		   run_t.passswordsMatch = 0;
+		   run_t.buzzer_flag =1;
 		 
 	    }
 
@@ -538,7 +540,7 @@ void RunCheck_Mode(unsigned int dat)
 	    if(k3 != n3){
 			k3= n3;
 		
-		run_t.buzzer_flag =1;
+		
 		run_t.Numbers_counter ++ ;
 	     BAT_LED_ON() ;     
 		
@@ -549,10 +551,8 @@ void RunCheck_Mode(unsigned int dat)
 		if(run_t.keyTime==1){
 			pwd2[3]=3;
 		}
-		
-
-   
 		run_t.passswordsMatch = 0;
+		run_t.buzzer_flag =1;
 	    }
 
 	 break;
@@ -583,7 +583,7 @@ void RunCheck_Mode(unsigned int dat)
 	   if(k4 != n4){
 	   	  k4 = n4;
 		
-		 run_t.buzzer_flag =1;
+		 
 		  run_t.Numbers_counter ++ ;
 		 OK_LED_ON()   ;
 		 ERR_LED_ON()  ;
@@ -596,6 +596,7 @@ void RunCheck_Mode(unsigned int dat)
 				  pwd2[4]=4;
 		   }
 		   run_t.passswordsMatch = 0;
+		   run_t.buzzer_flag =1;
 	   	}
 	 break;
 
@@ -775,9 +776,8 @@ void Buzzer_Sound(void)
 
 	if(run_t.buzzer_flag ==1){
 			  
-	
-				  BUZZER_KeySound();
-                  i=1;
+	     BUZZER_KeySound();
+         i=1;
 	              
 	}
 	else{
@@ -805,6 +805,7 @@ void Buzzer_Sound(void)
 				  n11++;
 
 	 i=0;
+	 run_t.buzzer_flag=0; //WT.EDIT 2022.07.21
 
 
    }
