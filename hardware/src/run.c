@@ -367,7 +367,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 void RunCheck_Mode(unsigned int dat)
 {
    unsigned char i;
-   unsigned char k0,k1=0xff,k2= 0xff,k3=0xff,k4=0xff,k5=0xff,k6=0xff,k7=0xff,k8=0xff,k9=0xff,k10=0xff,k11=0xff;
+   unsigned char k0=0xff,k1=0xff,k2= 0xff,k3=0xff,k4=0xff,k5=0xff,k6=0xff,k7=0xff,k8=0xff,k9=0xff,k10=0xff,k11=0xff;
 
 	switch(dat){
 
@@ -444,6 +444,7 @@ void RunCheck_Mode(unsigned int dat)
 		
 			run_t.buzzer_flag =1;
 			run_t.Numbers_counter ++ ;
+			ERR_LED_ON()  ;
 
 			VirtualPwd[11]=1; //i=0
 			pwd1[1]=1;
@@ -492,7 +493,7 @@ void RunCheck_Mode(unsigned int dat)
 		 run_t.buzzer_flag =1;
 		 run_t.Numbers_counter ++ ;
 
-		
+		  OK_LED_ON()   ;
 		 VirtualPwd[2]=2;
 		 pwd1[2]=2;
 		
@@ -539,7 +540,7 @@ void RunCheck_Mode(unsigned int dat)
 		
 		run_t.buzzer_flag =1;
 		run_t.Numbers_counter ++ ;
-	
+	     BAT_LED_ON() ;     
 		
 		VirtualPwd[3]=3;
 		pwd1[3]=3;
@@ -584,8 +585,8 @@ void RunCheck_Mode(unsigned int dat)
 		
 		 run_t.buzzer_flag =1;
 		  run_t.Numbers_counter ++ ;
-		
-		 
+		 OK_LED_ON()   ;
+		 ERR_LED_ON()  ;
 		 VirtualPwd[4]=4;
 		 pwd1[4]=4;
 		 
@@ -661,8 +662,9 @@ void RunCommand_Unlock(void)
 	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
 
       run_t.passswordsMatch =0;
-	  if(pwd1[1]==1  && pwd1[2]==2 && pwd1[3]==3 && pwd1[4]==4){run_t.BackLight =1;
-	//  if(pwd1[3]==3 && pwd1[4]==4)run_t.BackLight =1;
+	  if(pwd1[1]==1  && pwd1[2]==2 && pwd1[3]==3 && pwd1[4]==4){
+	  	     run_t.BackLight =1;
+
 			Buzzer_LongSound();
 	  	}
 	  run_t.Numbers_counter = 0;

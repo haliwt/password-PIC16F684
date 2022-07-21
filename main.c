@@ -19,8 +19,8 @@ unsigned char SC_Data[2];
 void main(void) 
 {
    
-    unsigned char resetKey;
-    unsigned int KeyValue,k,adc;
+    unsigned char resetKey,k;
+    unsigned int KeyValue,adc;
 
    SC12B_Init_Function();
     //TMR1_Initialize();
@@ -43,35 +43,37 @@ void main(void)
 	 #if 1
 	   k++;
 
+
 	
 	
 	  
-      if( run_t.passswordsMatch ==0){
+      if(run_t.passswordsMatch==0){
 	  if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
 		 
-	     // KeyValue =(SC_Data[0]<<8) + SC_Data[1];
+	      KeyValue =(SC_Data[0]<<8) + SC_Data[1];
+		  
 	         //keyValue = SC_Data[0];
-
-	       __delay_ms(20);
-	      if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
-               KeyValue =(SC_Data[0]<<8) + SC_Data[1];
-		      RunCheck_Mode(KeyValue);
-	      	}
-          } 
+            RunCheck_Mode(KeyValue);
+	      	
+          }
 	 
       	}
+  
 
 	     RunCommand_Unlock();
 	    
 		 if(run_t.BackLight ==1){
 
-			  run_t.BackLight =0;
+			 // run_t.BackLight =0;
 		       BACKLIGHT_ON() ;
 
 		 }
 		 else{
 
               BACKLIGHT_OFF() ;
+			  ERR_LED_OFF();
+		      OK_LED_OFF();
+			  BAT_LED_OFF();
 		 }
 
 	    Buzzer_Sound();
