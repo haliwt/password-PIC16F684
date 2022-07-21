@@ -16,8 +16,8 @@ enum State {                     /* enumeration for CParser states */
 
 
 typedef struct __RUN_T{
-	enum State state_;
-    unsigned char cmdCtr_;   //event order cunter
+	//enum State state_;
+    //unsigned char cmdCtr_;   //event order cunter
 
     unsigned char adminiId;
 
@@ -30,16 +30,16 @@ typedef struct __RUN_T{
 
 
 
-    unsigned char OpenPasswrod ;
-    unsigned char firstInPassword;
-	unsigned char keyTime;       //keyTime;
+
+
 	unsigned char eepromAddress;
 	unsigned char BackLight;
 	unsigned char buzzer_flag;
 	unsigned char Numbers_counter;
 	unsigned char passswordsMatch;
 	unsigned char passsword_unlock;
-	unsigned char passsword_error;
+	
+
 
 
 	//unsigned int KeyValue;
@@ -49,7 +49,7 @@ typedef struct __RUN_T{
 
 RUN_T run_t;
 
-extern unsigned char pwd1[MAX_SIZE];
+//extern unsigned char pwd1[MAX_SIZE];
 
 
 void RunCheck_Mode(unsigned int dat);

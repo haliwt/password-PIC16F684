@@ -22,20 +22,19 @@
 
 //#define unsigned char       uint8_t 
 
-unsigned char Readpwd[MAX_SIZE];
-unsigned char pwd1[MAX_SIZE];
-unsigned char pwd2[MAX_SIZE];
-unsigned char tempArr[MAX_SIZE]={0,1,2,3,4};
 
 
 
-unsigned char VirtualPwd[MAX_VIRT];
+//unsigned long int  passwordNumbers ;
 
 
 
 
 
-unsigned char n0,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11;
+
+
+
+unsigned char n0,n1;
 
 
 
@@ -47,6 +46,7 @@ static void ReadPassword_EEPROM_SaveData(void);
 //static void NewPassword_Administrator_Login(void);
 static void Administrator_Password_Init(void);
 
+unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
 
 
 
@@ -67,32 +67,7 @@ static void Administrator_Password_Init(void)
 	  
 	 
 
-	   // if(run_t.Numbers_counter ==2)run_t.BackLight =1;
-      //if(CompareValue(pwd1,tempArr) ==1){// default password    is "1 2 3 4"
-          if(pwd1[1] ==1){
-			  if(pwd1[2]==2){
-                  if(pwd1[3]==3){
-                     if(pwd1[4]==4){
-					 	    run_t.BackLight =1;
-					 	    Buzzer_LongSound();
-							Motor_CCW_Run();//open passwordlock 
-					        __delay_ms(500);
-							run_t.passsword_unlock=1;
-							run_t.eepromAddress=0;
-							run_t.Numbers_counter=0;
-							run_t.passswordsMatch = 0;
-							
-							
-							return ;
-
-
-					 }
-
-				  }
-			  }
-
-
-		  }
+	
 
 		  
 		run_t.passsword_unlock=0;	
@@ -170,7 +145,7 @@ unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 void SavePassword_To_EEPROM(void)
 {
 	unsigned char eevalue;
-    switch(run_t.cmdCtr_){
+    switch(run_t.userId){
 					  
 		   case 0:
 		
@@ -227,7 +202,7 @@ void SavePassword_To_EEPROM(void)
 
 		   case 11:
 				
-				run_t.cmdCtr_ = 0;
+				run_t.userId = 0;
 				//run_t.keyTime++;
 				return ;
 		   break;
@@ -235,6 +210,7 @@ void SavePassword_To_EEPROM(void)
 
 		eevalue= EEPROM_Read_Byte(run_t.userId);
 		if(eevalue==0xff){
+#if 0
 			EEPROM_Write_Byte(run_t.userId , 0x01);
 			EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
 			EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
@@ -242,9 +218,10 @@ void SavePassword_To_EEPROM(void)
 			EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
 			EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
 			EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
+#endif 
 		}
 		else{
-			run_t.cmdCtr_++;
+			run_t.userId++;
 		}
 				  
 	}
@@ -317,7 +294,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 			  case 11:
                  ERR_LED_ON();
 				 run_t.eepromAddress=0;
-				  run_t.cmdCtr_++;
+				  run_t.userId++;
                 return ;
 			 break;
 
@@ -330,14 +307,13 @@ static void ReadPassword_EEPROM_SaveData(void)
 		else{		
 			eevalue = EEPROM_Read_Byte(ReadAddress);
 			if(eevalue ==1){
-
+#if 0
 					Readpwd[0] = EEPROM_Read_Byte(ReadAddress + 0X01);
 					Readpwd[1] = EEPROM_Read_Byte(ReadAddress + 0X02);
 					Readpwd[2] = EEPROM_Read_Byte(ReadAddress + 0X03);
 					Readpwd[3] = EEPROM_Read_Byte(ReadAddress + 0X04);
 					Readpwd[4] = EEPROM_Read_Byte(ReadAddress + 0X05);
 					Readpwd[5] = EEPROM_Read_Byte(ReadAddress + 0X06);
-
 					if(CompareValue(Readpwd,pwd1) ==1)//if(strcmp(pwd1,pwd2)==0)
 					{
 						OK_LED_ON();
@@ -348,6 +324,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 					else{
 						run_t.eepromAddress++ ;	
 					}
+#endif 
 			}
 			else{
 	            run_t.eepromAddress++ ;	
@@ -366,282 +343,154 @@ static void ReadPassword_EEPROM_SaveData(void)
 ****************************************************************************/
 void RunCheck_Mode(unsigned int dat)
 {
-   unsigned char i;
-   unsigned char k0=0xff,k1=0xff,k2= 0xff,k3=0xff,k4=0xff,k5=0xff,k6=0xff,k7=0xff,k8=0xff,k9=0xff,k10=0xff,k11=0xff;
+   unsigned char temp;
+   static unsigned char	temp_1,temp_2;
+   static  unsigned int temp_3,temp_4;
+   static  unsigned long int  temp_5,temp_6;
+   unsigned char k0=0xff,k1=0xff;
+ 
+  
 
-	switch(dat){
+    if(dat !=SPECIAL_1 && dat != SPECIAL_2 && dat !=0){
 
+			
+			if(k0 != n1){
+			   k0=n1;
 	
+			 temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
+		   
+			  run_t.Numbers_counter ++ ;
+			
+			  switch(run_t.Numbers_counter){
+	
+			   case 1:
+				   temp_1= temp;
+	
+			   break;
+			   
+			   case 2:
+				   temp_2= temp_1 *10 + temp;
+			   break;
+	
+			   case 3:
+					
+					temp_3= temp_2*10 + temp;
+	
+			   break;
+	
+			   case 4: 
+					temp_4= temp_3*10 +temp;
+			   break;
+	
+			   case 5:
+					temp_5= temp_4*10 + temp;
+			   break;
+	
+			   case 6:
+					temp_6= temp_5*10 + temp;
+			   break;
+			  
+			   
+			   }
+			   
+	
+	           run_t.passswordsMatch = 0;
+			   run_t.buzzer_flag =1;
+	
+			}
+
+
+	}
+    else{
+	switch(dat){
 
 	case SPECIAL_1 ://0x40: //CIN1->'*'
 		
-       if(k0 != n0){
+       if(k1 != n1){
 
-	      k0 = n0;
-	     pwd1[0]=0;
+	      k1 = n1;
+		 //passwordNumbers=0;
 	     run_t.buzzer_flag =1;
 
 	     run_t.Numbers_counter =0 ;
 		run_t.passswordsMatch = 0;
-		run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
+		//run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
 		run_t.changePassword=0;
        	}
 		
 	break;
 
-	 case KEY_6://0x80: //CIN0  //09H -> D7~D4  , 08H -> D7~D0 -> CIN0 -> D7, CIN1->D6
-    
-
-          if(k6 != n6){
-		  	  k6 =n6;
-			
-			  run_t.buzzer_flag =1;
-			  run_t.Numbers_counter ++ ;
-		
-			  
-	          VirtualPwd[6]=6;
-	          pwd1[6]=6;
-		    
-	          
-			if(run_t.keyTime==1){
-				  pwd2[6]=6;
-		   }
-		 
-		  run_t.passswordsMatch = 0;
-
-          }
-	   
-	 break;
-
-	 
-
-	 case KEY_7://0x20: //CIN2
-
-	    if(k7 != n7){
-			k7 = n7;
-		
-		    run_t.buzzer_flag =1;
-		    run_t.Numbers_counter ++ ;
-		 
-		  
-		    VirtualPwd[7]=7;
-			pwd1[7]=7;
-		  
-		  if(run_t.keyTime==1){
-				  pwd2[7]=7;
-		   }
-		 
-
-		     run_t.passswordsMatch = 0;
-	    }
-	   
-	 break;
-
-	  case KEY_1: //0x1000: //CIN3
-
-	     if(k1 != n1){
-		 	k1=n1;
-		
-			
-			run_t.Numbers_counter ++ ;
-			ERR_LED_ON()  ;
-
-			VirtualPwd[11]=1; //i=0
-			pwd1[1]=1;
-
-			run_t.passswordsMatch = 0;
-			if(run_t.keyTime==1){
-			pwd2[1]=1;
-			}
-
-
-			run_t.passswordsMatch = 0;
-			run_t.buzzer_flag =1;
-
-	     }
-
-	 break;
-
-	 case   KEY_8://0x08: //CIN4
-
-	  if(k8 !=n8){
-          k8 = n8;
-		
-	      run_t.buzzer_flag =1;
-		 run_t.Numbers_counter ++ ;
-		
-		 
-		 VirtualPwd[8]=8;
-		   pwd1[8]=8;
-		  
-			
-		if(run_t.keyTime==1){
-				  pwd2[8]=8;
-		 }
-		
-		 run_t.passswordsMatch = 0;
-
-	  	}
-
-     
-	 break;
-
-	 case KEY_2://0x400: //CIN5
-
-	    if(k2 != n2){
-           k1= n2;
 	
-		
-		 run_t.Numbers_counter ++ ;
-
-		  OK_LED_ON()   ;
-		 VirtualPwd[2]=2;
-		 pwd1[2]=2;
-		
-		   
-		 if(run_t.keyTime==1){
-				 pwd2[2]=2;
-		   }
-
-		
-		  
-		   run_t.passswordsMatch = 0;
-		   run_t.buzzer_flag =1;
-		 
-	    }
-
-	 break;
-
-
-	 case KEY_9://0x02: //CIN6
-
-		if(k9 !=n9){
-			k9 = n9;
-		
-		run_t.buzzer_flag =1;
-		run_t.Numbers_counter ++ ;
-	  
-		VirtualPwd[9]=9;
-		pwd1[9]=9;
-
-		if(run_t.keyTime==1){
-			pwd2[9]=9;
-		}
-	
-
-	
-		run_t.passswordsMatch = 0;
-		}
-
-	 break;
-
-	 case KEY_3://0x100: //CIN7
-
-	    if(k3 != n3){
-			k3= n3;
-		
-		
-		run_t.Numbers_counter ++ ;
-	     BAT_LED_ON() ;     
-		
-		VirtualPwd[3]=3;
-		pwd1[3]=3;
-
-		
-		if(run_t.keyTime==1){
-			pwd2[3]=3;
-		}
-		run_t.passswordsMatch = 0;
-		run_t.buzzer_flag =1;
-	    }
-
-	 break;
-
-	 case KEY_0://0x800: //CIN8
-
-	    if(k10 != n10){
-			k10 = n10;
-		
-		run_t.buzzer_flag =1;
-		run_t.Numbers_counter ++ ;
-	
-		VirtualPwd[10]=0;
-		pwd1[10]=0;
-
-	
-		if(run_t.keyTime==1){
-			pwd2[10]=0;
-		}
-		
-       run_t.passswordsMatch = 0;
-	
-	    }
-	 break;
-
-	 case KEY_4://0x400: //CIN9
-
-	   if(k4 != n4){
-	   	  k4 = n4;
-		
-		 
-		  run_t.Numbers_counter ++ ;
-		 OK_LED_ON()   ;
-		 ERR_LED_ON()  ;
-		 VirtualPwd[4]=4;
-		 pwd1[4]=4;
-		 
-
-		   
-		 if(run_t.keyTime==1){
-				  pwd2[4]=4;
-		   }
-		   run_t.passswordsMatch = 0;
-		   run_t.buzzer_flag =1;
-	   	}
-	 break;
-
-	case KEY_5://0x10: //CIN11
-	  if(k5 != n5){
-	  	  k5 = n5;
-		
-			 run_t.buzzer_flag =1;
-			 run_t.Numbers_counter ++ ;
-			
-			 VirtualPwd[5]=5;
-			 pwd1[5]=5;
-			
-			
-			  if(run_t.keyTime==1){
-		          pwd2[5]=5;
-
-			  }
-			run_t.passswordsMatch = 0;
-	  	}
-
-	 break;
 
 	 case SPECIAL_2://0x200: //CIN10 '#'
-         if(k11 != n11){
-	        k11 = n11;
-		 	run_t.buzzer_flag =1;
-		    run_t.passswordsMatch = 1;
+         if(k1 != n1){
+	        k1 = n1;
+	
+		   if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
 
-         	}
+				 run_t.buzzer_flag =1;
+
+		         switch(run_t.Numbers_counter){
+
+
+					case 4:
+						   if(temp_4 == 1234){
+						    run_t.BackLight =1;
+							
+						   run_t.passswordsMatch = 1;
+						   Buzzer_LongSound();
+
+
+						   }
+						   else{
+   							  run_t.passswordsMatch = 0;
+						      run_t.Numbers_counter = 0;
+							  return ;
+
+						   }
+
+				    break;
+
+					case 5:
+
+					break;
+
+					case 6:
+
+					break;
+
+
+				 }
+
+               
+	  	
+	              
+
+
+		   }
+		   else{
+
+		    run_t.passswordsMatch = 0;
+	  	     run_t.buzzer_flag =1;
+	         run_t.Numbers_counter = 0;
+
+		     return ;
+
+
+		   }
+		   
+	   }
 
 	 break;
 
 	 default:
 	 	
-	 // run_t.BackLight =0;
-	  run_t.buzzer_flag =0;
-	  
-
 	 break;
 
 
 	}
 
-
+    }
    
 
 
@@ -662,15 +511,9 @@ void RunCommand_Unlock(void)
 
 	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
 
-      run_t.passswordsMatch =0;
-	  if(pwd1[1]==1  && pwd1[2]==2 && pwd1[3]==3 && pwd1[4]==4){
-	  	     run_t.BackLight =1;
+    
 
-			Buzzer_LongSound();
-	  	}
-	  run_t.Numbers_counter = 0;
-
-      run_t.passswordsMatch =0;
+      //run_t.passswordsMatch =0;
 	}
 	  ///if(run_t.Numbers_counter==2)run_t.BackLight =1;
 
@@ -776,7 +619,9 @@ void Buzzer_Sound(void)
 
 	if(run_t.buzzer_flag ==1){
 			  
-	     BUZZER_KeySound();
+		 run_t.buzzer_flag=0;
+
+		 BUZZER_KeySound();
          i=1;
 	              
 	}
@@ -790,25 +635,83 @@ void Buzzer_Sound(void)
 
    if(i==1){
    	
-      __delay_ms(300);
+      __delay_ms(200);
 				  n0++;
 				  n1++;
-				  n2++;
-				  n3++;
-				  n4++;
-				  n5++;
-				  n6++;
-				  n7++;
-				  n8++;
-				  n9++;
-				  n10++;
-				  n11++;
+				  
 
 	 i=0;
 	 run_t.buzzer_flag=0; //WT.EDIT 2022.07.21
-
-
+    // run_t.passswordsMatch =0;
    }
 }
 
+unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number)
+{
+     unsigned char temp ;
+	 switch(number){
 
+      case KEY_1: 
+            
+	 	    temp = 1;
+
+	  break; 
+
+	  case KEY_2:
+
+	       temp =2;
+
+	  break;
+
+	  case KEY_3:
+	  	   temp =3;
+
+	  break;
+
+	  case KEY_4:
+	  	   temp =4;
+	  break;
+
+	  case KEY_5:
+	  	   temp = 5;
+
+	  break;
+
+	  case 	KEY_6:
+
+	       temp =6;
+
+	  break;
+
+	  case KEY_7 :
+
+	       temp =7;
+	  break;
+
+	  case KEY_8 :
+
+	       temp =8;
+	  break;
+
+	  case KEY_9 :
+
+	       temp =9;
+	  break;
+
+	  case KEY_0 :
+
+	       temp =0;
+	  break;
+
+
+      default :
+
+	  break;
+
+
+
+	 }
+
+	return temp;
+
+}

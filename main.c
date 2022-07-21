@@ -19,7 +19,7 @@ unsigned char SC_Data[2];
 void main(void) 
 {
    
-    unsigned char resetKey,k;
+    unsigned char resetKey,k,i=1;
     unsigned int KeyValue,adc;
 
    SC12B_Init_Function();
@@ -53,20 +53,35 @@ void main(void)
 	      KeyValue =(SC_Data[0]<<8) + SC_Data[1];
 		  
 	         //keyValue = SC_Data[0];
-            RunCheck_Mode(KeyValue);
+             RunCheck_Mode(KeyValue);
 	      	
           }
-	 
-      	}
-  
+	      
+	 	 
+      }
+		 if(run_t.passswordsMatch ==1){
+		   
+		     resetKey = Scan_Key();
+			 {
+		        if(resetKey ==0x01){
 
-	     RunCommand_Unlock();
+		           ERR_LED_ON()  ;
+			       OK_LED_ON()  ;
+
+				}
+
+			 }
+		    
+		 }
+
+	    // RunCommand_Unlock();
 	    
 		 if(run_t.BackLight ==1){
 
 			 // run_t.BackLight =0;
 		       BACKLIGHT_ON() ;
-			   if(pwd1[1]==1)  ERR_LED_ON()  ;
+			  // if(pwd1[1]==1)  ERR_LED_ON()  ;
+			  
 
 		 }
 		 else{
@@ -79,7 +94,7 @@ void main(void)
 
 	    Buzzer_Sound();
 
-
+#if 0
 	resetKey = Scan_Key();
 	 {
         if(resetKey ==0x01){
@@ -99,7 +114,7 @@ void main(void)
 		 	 
 	     run_t.passsword_unlock =0;
       }
-
+#endif 
 	 
 //     // Modify password state 
 //     if(run_t.timer_60ms==1){
