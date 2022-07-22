@@ -43,11 +43,7 @@ void main(void)
 	 #if 1
 	   k++;
 
-
-	
-	
-	  
-      if(run_t.passswordsMatch==0){
+    if(run_t.passswordsMatch==0){
 	  if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
 		 
 	      KeyValue =(SC_Data[0]<<8) + SC_Data[1];

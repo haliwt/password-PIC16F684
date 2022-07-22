@@ -349,14 +349,14 @@ void RunCheck_Mode(unsigned int dat)
    static  unsigned long int  temp_5,temp_6;
    unsigned char k0=0xff,k1=0xff;
  
-  
+     if(dat ==0)return ;
 
-    if(dat !=SPECIAL_1 && dat != SPECIAL_2 && dat !=0){
+    if(dat !=SPECIAL_1 && dat != SPECIAL_2 && run_t.passswordsMatch ==0){
 
 			
 			if(k0 != n1){
 			   k0=n1;
-	
+			run_t.passswordsMatch = 0;
 			 temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
 		   
 			  run_t.Numbers_counter ++ ;
@@ -365,37 +365,60 @@ void RunCheck_Mode(unsigned int dat)
 	
 			   case 1:
 				   temp_1= temp;
+				  // pwd[0] =temp;
+			        
+			   run_t.buzzer_flag =1;
 	
 			   break;
 			   
 			   case 2:
-				   temp_2= temp_1 *10 + temp;
+				   temp_2= temp_1 *10 + temp; // 12
+				  // pwd[1] =temp;
+				 
+			   run_t.buzzer_flag =1;
 			   break;
 	
 			   case 3:
 					
-					temp_3= temp_2*10 + temp;
+					temp_3= temp_2*10 + temp; //120+3
+					//pwd[2] =temp;
+					
+			   run_t.buzzer_flag =1;
 	
 			   break;
 	
 			   case 4: 
 					temp_4= temp_3*10 +temp;
+					//pwd[3] =temp;
+					
+			   run_t.buzzer_flag =1;
 			   break;
 	
 			   case 5:
 					temp_5= temp_4*10 + temp;
+					//pwd[4] =temp;
+					
+			   run_t.buzzer_flag =1;
 			   break;
 	
 			   case 6:
 					temp_6= temp_5*10 + temp;
+					//pwd[5] =temp;
+					
+			          run_t.buzzer_flag =1;
+			   break;
+
+			   default:
+			   	run_t.passswordsMatch = 0;
+			   run_t.buzzer_flag =0;
+
 			   break;
 			  
 			   
 			   }
 			   
 	
-	           run_t.passswordsMatch = 0;
-			   run_t.buzzer_flag =1;
+	          
 	
 			}
 
@@ -409,7 +432,14 @@ void RunCheck_Mode(unsigned int dat)
        if(k1 != n1){
 
 	      k1 = n1;
-		 //passwordNumbers=0;
+		  temp=0;
+	  
+	      temp_1=0;
+		  temp_2=0;
+		  temp_3=0;
+		  temp_4=0;
+		  temp_5=0;
+		  temp_6=0;
 	     run_t.buzzer_flag =1;
 
 	     run_t.Numbers_counter =0 ;
@@ -428,26 +458,32 @@ void RunCheck_Mode(unsigned int dat)
 	
 		   if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
 
-				 run_t.buzzer_flag =1;
+				 
 
 		         switch(run_t.Numbers_counter){
 
 
 					case 4:
+						run_t.buzzer_flag =1;
 						   if(temp_4 == 1234){
 						    run_t.BackLight =1;
 							
-						   run_t.passswordsMatch = 1;
+						 // run_t.passswordsMatch = 0;
+                           run_t.Numbers_counter = 0;
+
 						   Buzzer_LongSound();
 
 
 						   }
 						   else{
-   							  run_t.passswordsMatch = 0;
+   							  //run_t.passswordsMatch = 0;
 						      run_t.Numbers_counter = 0;
 							  return ;
 
 						   }
+                     
+
+							
 
 				    break;
 
@@ -464,13 +500,10 @@ void RunCheck_Mode(unsigned int dat)
 
                
 	  	
-	              
-
-
-		   }
+	         }
 		   else{
 
-		    run_t.passswordsMatch = 0;
+		 //   run_t.passswordsMatch = 0;
 	  	     run_t.buzzer_flag =1;
 	         run_t.Numbers_counter = 0;
 
@@ -484,18 +517,14 @@ void RunCheck_Mode(unsigned int dat)
 	 break;
 
 	 default:
-	 	
+	 	  run_t.buzzer_flag =0;
 	 break;
 
 
 	}
 
-    }
-   
-
-
 }
-
+}  
 
 /****************************************************************************
 *
@@ -641,8 +670,7 @@ void Buzzer_Sound(void)
 				  
 
 	 i=0;
-	 run_t.buzzer_flag=0; //WT.EDIT 2022.07.21
-    // run_t.passswordsMatch =0;
+    run_t.passswordsMatch =0;
    }
 }
 

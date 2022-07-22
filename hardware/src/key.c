@@ -253,7 +253,8 @@ deviceAddr 设置器件地址 REG 设置寄存器地址 DAT8 写入数据内容�
 Complete_Status I2C_Write_To_Device(unsigned char deviceAddr,unsigned char REG,unsigned char*DAT8)
 {
 				I2C_Start();
-			if (SendByteAndGetNACK((deviceAddr<<1) & ~0x01)) {
+
+                if (SendByteAndGetNACK((deviceAddr<<1) & ~0x01)) {
 					I2C_Stop();
 				return UNDONE;
 			}
