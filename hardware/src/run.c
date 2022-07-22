@@ -22,19 +22,7 @@
 
 //#define unsigned char       uint8_t 
 
-
-
-
-//unsigned long int  passwordNumbers ;
-
-
-
-
-
-
-
-
-unsigned char n0,n1;
+static unsigned char n0,n1,n2;
 
 
 
@@ -73,7 +61,7 @@ static void Administrator_Password_Init(void)
 		run_t.passsword_unlock=0;	
 		run_t.eepromAddress=0;
 		run_t.passswordsMatch = 0;
-		run_t.Numbers_counter=0;
+		
 
 		return;
 		
@@ -344,94 +332,24 @@ static void ReadPassword_EEPROM_SaveData(void)
 void RunCheck_Mode(unsigned int dat)
 {
    unsigned char temp;
-   static unsigned char	temp_1,temp_2;
+   static unsigned char	temp_1,temp_2,number;
+ 
    static  unsigned int temp_3,temp_4;
    static  unsigned long int  temp_5,temp_6;
-   unsigned char k0=0xff,k1=0xff;
+   static unsigned char k0=0xff,k1=0xff,k2=0xff,key;
  
-     if(dat ==0)return ;
+   
 
-    if(dat !=SPECIAL_1 && dat != SPECIAL_2 && run_t.passswordsMatch ==0){
+    switch(dat){
 
-			
-			if(k0 != n1){
-			   k0=n1;
-			run_t.passswordsMatch = 0;
-			 temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
-		   
-			  run_t.Numbers_counter ++ ;
-			
-			  switch(run_t.Numbers_counter){
-	
-			   case 1:
-				   temp_1= temp;
-				  // pwd[0] =temp;
-			        
-			   run_t.buzzer_flag =1;
-	
-			   break;
-			   
-			   case 2:
-				   temp_2= temp_1 *10 + temp; // 12
-				  // pwd[1] =temp;
-				 
-			   run_t.buzzer_flag =1;
-			   break;
-	
-			   case 3:
-					
-					temp_3= temp_2*10 + temp; //120+3
-					//pwd[2] =temp;
-					
-			   run_t.buzzer_flag =1;
-	
-			   break;
-	
-			   case 4: 
-					temp_4= temp_3*10 +temp;
-					//pwd[3] =temp;
-					
-			   run_t.buzzer_flag =1;
-			   break;
-	
-			   case 5:
-					temp_5= temp_4*10 + temp;
-					//pwd[4] =temp;
-					
-			   run_t.buzzer_flag =1;
-			   break;
-	
-			   case 6:
-					temp_6= temp_5*10 + temp;
-					//pwd[5] =temp;
-					
-			          run_t.buzzer_flag =1;
-			   break;
-
-			   default:
-			   	run_t.passswordsMatch = 0;
-			   run_t.buzzer_flag =0;
-
-			   break;
-			  
-			   
-			   }
-			   
-	
-	          
-	
-			}
-
-
-	}
-    else{
-	switch(dat){
+	  
 
 	case SPECIAL_1 ://0x40: //CIN1->'*'
 		
-       if(k1 != n1){
+       if(k0 != n0){
 
-	      k1 = n1;
+	      k0 = n0;
+		  run_t.BackLight=1;
 		  temp=0;
 	  
 	      temp_1=0;
@@ -441,27 +359,27 @@ void RunCheck_Mode(unsigned int dat)
 		  temp_5=0;
 		  temp_6=0;
 	     run_t.buzzer_flag =1;
-
+         number =0;
 	     run_t.Numbers_counter =0 ;
 		run_t.passswordsMatch = 0;
 		//run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
 		run_t.changePassword=0;
-       	}
+       }
 		
 	break;
 
 	
 
-	 case SPECIAL_2://0x200: //CIN10 '#'
+	 case SPECIAL_2://0x200: //CIN10 '#' ->confirm 
          if(k1 != n1){
 	        k1 = n1;
-	
+	    //    run_t.BackLight=1;
 		   if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
 
 				 
 
-		         switch(run_t.Numbers_counter){
-
+		         //switch(run_t.Numbers_counter){
+                   switch(number){
 
 					case 4:
 						run_t.buzzer_flag =1;
@@ -469,7 +387,8 @@ void RunCheck_Mode(unsigned int dat)
 						    run_t.BackLight =1;
 							
 						 // run_t.passswordsMatch = 0;
-                           run_t.Numbers_counter = 0;
+                          // run_t.Numbers_counter = 0;
+                             number=0;
 
 						   Buzzer_LongSound();
 
@@ -488,10 +407,46 @@ void RunCheck_Mode(unsigned int dat)
 				    break;
 
 					case 5:
+						run_t.buzzer_flag =1;
+						   if(temp_4 == 12345){
+						    run_t.BackLight =1;
+							
+						 // run_t.passswordsMatch = 0;
+                          // run_t.Numbers_counter = 0;
+							number = 0;
+						   Buzzer_LongSound();
+
+
+						   }
+						   else{
+   							  //run_t.passswordsMatch = 0;
+						      run_t.Numbers_counter = 0;
+							  return ;
+
+						   }
+                     
 
 					break;
 
 					case 6:
+						run_t.buzzer_flag =1;
+						   if(temp_4 == 123456){
+						    run_t.BackLight =1;
+							
+						 // run_t.passswordsMatch = 0;
+                          // run_t.Numbers_counter = 0;
+								number=0;
+						   Buzzer_LongSound();
+
+
+						   }
+						   else{
+   							  //run_t.passswordsMatch = 0;
+						      run_t.Numbers_counter = 0;
+							  return ;
+
+						   }
+                     
 
 					break;
 
@@ -505,7 +460,8 @@ void RunCheck_Mode(unsigned int dat)
 
 		 //   run_t.passswordsMatch = 0;
 	  	     run_t.buzzer_flag =1;
-	         run_t.Numbers_counter = 0;
+	        // run_t.Numbers_counter = 0;
+	         number = 0;
 
 		     return ;
 
@@ -516,16 +472,204 @@ void RunCheck_Mode(unsigned int dat)
 
 	 break;
 
-	 default:
-	 	  run_t.buzzer_flag =0;
+	 
+	case KEY_0:
+		if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+
 	 break;
 
+    case KEY_1 :
 
-	}
+		if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+			
+    case KEY_2:
+          if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+	case  KEY_3:
+			if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+			
+	case KEY_4:
+			if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+	break;
+			
+	case KEY_5:
+			if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+	break;
+			
+	case KEY_6:
+		if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+	break;
+	case KEY_7:
+		if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+	break;
+			
+	case KEY_8:
+			if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+   break;
+			
+	case KEY_9:
+		  if(key==0){
+     	     number++;
+		
+		     key=1;
+		}
+	break;
+		  
 
+	}  
+
+	  
+	    if(k2 != n2 && key==1){
+				k2=n2;
+		        key = 0;
+			   run_t.buzzer_flag =1;
+				temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
+				
+				// number++;
+				run_t.Numbers_counter ++; //run_t.Numbers_counter + 1 ;
+				if(run_t.Numbers_counter >250){
+					run_t.BackLight=1;
+					//run_t.buzzer_flag =1
+					 Buzzer_LongSound();
+				     run_t.Numbers_counter =10;
+
+				}
+
+
+//				    if(temp ==3){
+//						run_t.BackLight=1;
+//						run_t.buzzer_flag =1;
+//
+//
+//					}
+					
+					if(number ==4){
+						run_t.BackLight=1;
+						//run_t.buzzer_flag =1;
+					     Buzzer_LongSound();
+					}
+				return ;
+//
+//				if(temp ==0){
+//				  run_t.BackLight=1;
+//				  run_t.buzzer_flag =1;
+//
+//
+//				}
+//
+//				if(temp ==6){
+//				  run_t.BackLight=1;
+//				  run_t.buzzer_flag =1;
+//
+//
+//				}
+//			  
+               #if 0
+				// run_t.Numbers_counter ++ ;
+			     number++;
+				 //switch(run_t.Numbers_counter){
+	             switch(number){
+				 	
+				  case 1:
+					  temp_1= temp;
+					 // pwd[0] =temp;
+					 if(number==1)
+					       run_t.BackLight=1;
+					   
+				  run_t.buzzer_flag =1;
+	   
+				  break;
+				  
+				  case 2:
+					  temp_2= temp_1 *10 + temp; // 12
+					 // pwd[1] =temp;
+					
+					
+				  run_t.buzzer_flag =1;
+				  break;
+	   
+				  case 3:
+					   
+					   temp_3= temp_2*10 + temp; //120+3
+					   //pwd[2] =temp;
+					   
+				  run_t.buzzer_flag =1;
+	   
+				  break;
+	   
+				  case 4: 
+					   temp_4= temp_3*10 +temp;
+					   //pwd[3] =temp;
+					    if(number ==4)
+					  			 run_t.BackLight=1;
+					   
+				  run_t.buzzer_flag =1;
+				  break;
+	   
+				  case 5:
+					   temp_5= temp_4*10 + temp;
+					   //pwd[4] =temp;
+					   
+				  run_t.buzzer_flag =1;
+				  break;
+	   
+				  case 6:
+					   temp_6= temp_5*10 + temp;
+					   //pwd[5] =temp;
+					   if(number ==6)run_t.BackLight=1;
+					   
+						 run_t.buzzer_flag =1;
+				  break;
+	            
+				 
+				 
+				  
+				//  }
+				  
+	         
+				 
+	   
+			   }
+				   #endif 
+	         }
+
+ 
 }
-}  
-
 /****************************************************************************
 *
 *Function Name:void RunCheck_Mode(unsigned int dat)
@@ -664,9 +808,11 @@ void Buzzer_Sound(void)
 
    if(i==1){
    	
-      __delay_ms(200);
+      __delay_ms(400);
 				  n0++;
 				  n1++;
+				  n2++;
+				
 				  
 
 	 i=0;
@@ -733,6 +879,7 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number)
 
 
       default :
+	  	 
 
 	  break;
 
@@ -741,5 +888,21 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number)
 	 }
 
 	return temp;
+
+}
+
+void BackLight_Fun(void)
+{
+	 if(run_t.BackLight ==1){
+
+			  run_t.BackLight =0;
+		      BACKLIGHT_ON() ;
+		    
+		}
+		 else{
+
+              BACKLIGHT_OFF() ;
+			 
+		 }
 
 }

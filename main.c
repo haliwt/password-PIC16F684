@@ -19,7 +19,7 @@ unsigned char SC_Data[2];
 void main(void) 
 {
    
-    unsigned char resetKey,k,i=1;
+    unsigned char resetKey,k;
     unsigned int KeyValue,adc;
 
    SC12B_Init_Function();
@@ -35,27 +35,23 @@ void main(void)
    run_t.eepromAddress=0;
    while(1)
    {
-
-
-        
-
-
-	 #if 1
-	   k++;
+		#if 1
+	//   k++;
 
     if(run_t.passswordsMatch==0){
-	  if(I2C_Read_From_Device(SC12B_ADDR,0x08,SC_Data,2)==DONE){
+	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
-	      KeyValue =(SC_Data[0]<<8) + SC_Data[1];
-		  
-	         //keyValue = SC_Data[0];
-             RunCheck_Mode(KeyValue);
-	      	
+	      KeyValue =(unsigned int)(SC_Data[0]<<8) + SC_Data[1];
+		   
+             
+          RunCheck_Mode(KeyValue); 
+			
+	      	      
           }
-	      
+	       
 	 	 
       }
-		 if(run_t.passswordsMatch ==1){
+	if(run_t.passswordsMatch ==1){
 		   
 		     resetKey = Scan_Key();
 			 {
@@ -72,21 +68,7 @@ void main(void)
 
 	    // RunCommand_Unlock();
 	    
-		 if(run_t.BackLight ==1){
-
-			 // run_t.BackLight =0;
-		       BACKLIGHT_ON() ;
-			  // if(pwd1[1]==1)  ERR_LED_ON()  ;
-			  
-
-		 }
-		 else{
-
-              BACKLIGHT_OFF() ;
-			  ERR_LED_OFF();
-		      OK_LED_OFF();
-			  BAT_LED_OFF();
-		 }
+		BackLight_Fun();
 
 	    Buzzer_Sound();
 

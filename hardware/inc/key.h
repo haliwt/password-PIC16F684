@@ -25,8 +25,8 @@
 #define I2C_SCL_SetLow()                  do{PORTCbits.RC2 =0;}while(0)
 
 // IO input 
-#define SDA    RC1//PORTCbits.RC1
-#define SCL    RC2//PORTCbits.RC2
+#define SDA    PORTCbits.RC1
+#define SCL    PORTCbits.RC2
 
 #define SDA_IN          PORTCbits.RC1 
 

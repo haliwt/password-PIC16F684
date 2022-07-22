@@ -28,11 +28,7 @@ typedef struct __RUN_T{
     unsigned char userId;
     
 
-
-
-
-
-	unsigned char eepromAddress;
+    unsigned char eepromAddress;
 	unsigned char BackLight;
 	unsigned char buzzer_flag;
 	unsigned char Numbers_counter;
@@ -59,6 +55,7 @@ void RunCommand_Unlock(void);
 //unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 
 void Buzzer_Sound(void);
+void BackLight_Fun(void);
 
 
 #endif 

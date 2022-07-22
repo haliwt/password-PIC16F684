@@ -9,7 +9,6 @@
 static void I2C_Start(void);
 static void I2C_Stop(void);
 void I2C_Respond(unsigned char acksig);
-static unsigned char SendByte_GetNACK(unsigned char data);
 static unsigned char I2C_Receive8bit(void);
 unsigned char SendByteAndGetNACK(unsigned char dataToSend);
 
@@ -75,103 +74,7 @@ static void I2C_Stop(void)
 		I2C_Delay();
 		SDA = IO_HIGH;
 }
-/**
- * @brief  IIC send byte and get answer signal
- *  
- */
 
-
-
-/**
- * @brief 
- * 
- */
-
-
-
-/**
- * @brief 
- * 
- * @param deviceAddr 
- * @param reg 
- * @param dat8 
- */
-uint8_t SC12B_To_Write_Reg(unsigned char deviceAddr,
-                 unsigned char reg,unsigned char *dat8)
-{
-    I2C_Start();
-    if(SendByte_GetNACK(deviceAddr <<1) & ~0x01){
-        I2C_Stop();
-        return 0;
-    }
-
-     if(SendByte_GetNACK(reg)){
-        I2C_Stop();
-        return 0;
-    }
-    if(SendByte_GetNACK(*dat8)){
-        I2C_Stop();
-        return 0;
-    }
-    I2C_Stop();
-    return 1;
-
-}
-/************************************************************
-*
-*Function Name: uint8_t uint8_t Send_OneByte_Ack(uint8_t dat)
-*Function : I2C to send one byte data
-*Input Ref: send data
-*Return Ref: 0 -fail 1 -success
-*
-************************************************************/
-uint8_t Send_OneByte_Ack(uint8_t dat)
-{
-    uint8_t i,temp;
-    SDA_IO_Output() ;//I2C_SDA_IO_OUT();
-    for(i=0;i<8;i++){
-       I2C_SCL_SetLow();
-          __delay_us(2);//Delay_I2C(1);
-         temp = (dat >>7)&0x01;
-        if(temp & 0x01){
-           I2C_SDA_SetHigh();
-        }
-        else{
-           I2C_SDA_SetLow();
-        }
-         __delay_us(5);//Delay_I2C(1);
-        I2C_SCL_SetHigh();
-         __delay_us(5);//Delay_I2C(1);
-        I2C_SCL_SetLow();
-        
-        dat<<=1;   //MSB the first ahead ,LSB the last end
-    }
-    I2C_SCL_SetLow();
-    
-     __delay_us(5);//Delay_I2C(3);
-  SDA_IO_Input()   ;//I2C_SDA_IO_IN();
-     __delay_us(5);//Delay_I2C(3);
-    I2C_SCL_SetHigh();
-     __delay_us(5);//Delay_I2C(1);
-    i=250;
-    while(i--){
-        
-        if(I2C_SDA()==0){
-              I2C_SCL_SetLow();
-              return 0;
-        }
-        
-    }
-    
-    I2C_SCL_SetLow();
-    return 1;
-    
-}
-
-/**
- * @brief 
- * 
- */
 /*****************************************************************************
 						* 发送一个字节数据，并获取应答
 ******************************************************************************/
