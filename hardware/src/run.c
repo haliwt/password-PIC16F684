@@ -54,12 +54,14 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
 static void Administrator_Password_Init(void)
 {
     static unsigned char adminiId,fail;
-	unsigned char Readpwd[6];
+	unsigned char Readpwd[6],value;
 	
 	adminiId= EEPROM_Read_Byte(ADMINI); //
 	if(adminiId !=1){ //don't new password be write to EEPROM
 
-	     if(CompareValue(initpwd, pwd1,4)){
+	    value =CompareValue(initpwd, pwd1,4);
+
+	     if(value==1){
 						   
 				
 			run_t.BackLight=2;
@@ -73,9 +75,6 @@ static void Administrator_Password_Init(void)
 
 		    fail =1;
 			
-		
-
-
 		}
 		
 
@@ -90,7 +89,7 @@ static void Administrator_Password_Init(void)
 			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
 			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
 
-			 if(CompareValue(Readpwd,&pwd_4,6) ==1){//if(strcmp(pwd1,pwd2)==0)
+			 if(CompareValue(Readpwd,pwd1,6) ==1){//if(strcmp(pwd1,pwd2)==0)
 				
 				
 				run_t.passsword_unlock=1;
@@ -153,6 +152,7 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2,unsigned
 		if(*(pt1+i) != *(pt2+i)){
 			return 0;
 		}
+		
 	}
 	return 1;
    

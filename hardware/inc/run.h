@@ -47,9 +47,9 @@ typedef struct __RUN_T{
 
 RUN_T run_t;
 
-unsigned int pwd_4;
 
-unsigned long int pwd_5,pwd_6;
+
+
 
 void RunCheck_Mode(unsigned int dat);
 void RunCommand_Unlock(void);
