@@ -52,13 +52,10 @@ static void Administrator_Password_Init(void)
     unsigned char adminiId;
 	adminiId= EEPROM_Read_Byte(ADMINI); //
 	if(adminiId !=1){ //don't new password be write to EEPROM
-	  
-	 
 
 	
-
-		  
-		run_t.passsword_unlock=0;	
+	   
+	    run_t.passsword_unlock=0;	
 		run_t.eepromAddress=0;
 		run_t.passswordsMatch = 0;
 		
@@ -334,8 +331,8 @@ void RunCheck_Mode(unsigned int dat)
    unsigned char temp;
    static unsigned char	temp_1,temp_2;
  
-   static  unsigned int temp_3,temp_4;
-   static  unsigned long int  temp_5,temp_6;
+   static  unsigned int temp_3;
+   //static  unsigned long int  temp_5,temp_6;
    static unsigned char k0=0xff,k1=0xff,k2=0xff,key,spec;
  
    
@@ -355,9 +352,9 @@ void RunCheck_Mode(unsigned int dat)
 	      temp_1=0;
 		  temp_2=0;
 		  temp_3=0;
-		  temp_4=0;
-		  temp_5=0;
-		  temp_6=0;
+		  pwd_4=0;
+		  pwd_5=0;
+		  pwd_6=0;
 		  ERR_LED_OFF();
 		  OK_LED_OFF();
 	     run_t.buzzer_flag =1;
@@ -377,8 +374,6 @@ void RunCheck_Mode(unsigned int dat)
 	        k1 = n1;
 			spec=1;
 		 run_t.buzzer_flag =1;
-		// run_t.passswordsMatch = 1;
-	     // run_t.BackLight=2;
 		 if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
 
 				 
@@ -388,7 +383,7 @@ void RunCheck_Mode(unsigned int dat)
 
 					case 4:
 						run_t.buzzer_flag =1;
-						   if(temp_4 == 1234){
+						   if(pwd_4 == 1234){
 						   
 				
                           run_t.BackLight=2;
@@ -404,7 +399,7 @@ void RunCheck_Mode(unsigned int dat)
    							  ERR_LED_ON();
 							  run_t.passswordsMatch = 0;
 						      run_t.Numbers_counter = 0;
-							  return ;
+							  
 
 						   }
                      
@@ -415,7 +410,7 @@ void RunCheck_Mode(unsigned int dat)
 
 					case 5:
 						run_t.buzzer_flag =1;
-						   if(temp_5 == 12345){
+						   if(pwd_5 == 12345){
 						  run_t.BackLight=2;
 							
 						   run_t.Numbers_counter =0 ;
@@ -430,7 +425,7 @@ void RunCheck_Mode(unsigned int dat)
    							  ERR_LED_ON();
 							  run_t.passswordsMatch = 0;
 						      run_t.Numbers_counter = 0;
-							  return ;
+							 
 
 						   }
                      
@@ -439,7 +434,7 @@ void RunCheck_Mode(unsigned int dat)
 
 					case 6:
 						run_t.buzzer_flag =1;
-						   if(temp_6 == 123456){
+						   if(pwd_6 == 123456){
 						    run_t.BackLight =2;
 							
 					       run_t.Numbers_counter =0 ;
@@ -455,8 +450,7 @@ void RunCheck_Mode(unsigned int dat)
    							  ERR_LED_ON();
 							  run_t.passswordsMatch = 0;
 						      run_t.Numbers_counter = 0;
-							  return ;
-
+							 
 						   }
                      
 
@@ -628,34 +622,27 @@ void RunCheck_Mode(unsigned int dat)
 					  temp_2= temp_1 *10 + temp; // 12
 					 
 					
-					
-				
-				  break;
+				 break;
 	   
 				  case 3:
 					   
 					   temp_3= temp_2*10 + temp; //120+3
 					  
-					   
-				
-	   
-				  break;
+				 break;
 	   
 				  case 4: 
-					   temp_4= temp_3*10 +temp;
+					   pwd_4= temp_3*10 +temp;
 	
 					   
 				  break;
 	   
 				  case 5:
-					   temp_5= temp_4*10 + temp;
+					   pwd_5= pwd_4*10 + temp;
 					   
-					   
-				  run_t.buzzer_flag =1;
-				  break;
+				break;
 	   
 				  case 6:
-					   temp_6= temp_5*10 + temp;
+					   pwd_6= pwd_5*10 + temp;
 					
 				  break;
 	            
@@ -683,17 +670,11 @@ void RunCommand_Unlock(void)
 {
 
 
-	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
-
-    
-
-      //run_t.passswordsMatch =0;
-	}
-	  ///if(run_t.Numbers_counter==2)run_t.BackLight =1;
-
-	 //  Administrator_Password_Init();
-	   
-	 // run_t.BackLight =1;
+//	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
+//
+//     Administrator_Password_Init();
+//	   
+//	 run_t.BackLight =2;
 //
 //      //virtual password  run_t.Numbers_counter > 4 &&  run_t.Numbers_counter < 20
 //      if(run_t.Numbers_counter > 6  && run_t.Numbers_counter < 21){
@@ -728,7 +709,7 @@ void RunCommand_Unlock(void)
 //            }
 //		   
 //    }
-//     
+     
 	
 
   
