@@ -23,9 +23,13 @@
 //#define unsigned char       uint8_t 
 
 static unsigned char n0,n1,n2;
+unsigned char Fail;
 unsigned char pwd1[6];
 unsigned char pwd2[6];
 unsigned char initpwd[4]={1,2,3,4};
+
+
+enum __PWD{FAIL,SUCCESS};
 
 
 
@@ -34,10 +38,10 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2,unsigned
 
 static void ReadPassword_EEPROM_SaveData(void);
 
-//static void NewPassword_Administrator_Login(void);
 static void Administrator_Password_Init(void);
 
 unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
+
 
 
 
@@ -73,7 +77,7 @@ static void Administrator_Password_Init(void)
 		}
 		else{
 
-		    fail =1;
+		    	Fail =1;
 			
 		}
 		
@@ -81,29 +85,11 @@ static void Administrator_Password_Init(void)
 	  }
 	  else{
 
-	       
-			Readpwd[0] = EEPROM_Read_Byte(ADMINI + 0X01);
-			Readpwd[1] = EEPROM_Read_Byte(ADMINI + 0X02);
-			Readpwd[2] = EEPROM_Read_Byte(ADMINI + 0X03);
-			Readpwd[3] = EEPROM_Read_Byte(ADMINI + 0X04);
-			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
-			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
+	       ReadPassword_EEPROM_SaveData();
 
-			 if(CompareValue(Readpwd,pwd1,6) ==1){//if(strcmp(pwd1,pwd2)==0)
-				
-				
-				run_t.passsword_unlock=1;
+		 }
 
-			
-			}
-			else{
-
-               fail =1;
-
-			}
-	 }
-
-	 if(fail == 1){
+	 if(Fail == 1){
 
 		OK_LED_OFF();
 		ERR_LED_ON();
@@ -112,7 +98,7 @@ static void Administrator_Password_Init(void)
 		 run_t.passsword_unlock=0;	
 		run_t.eepromAddress=0;
 		run_t.passswordsMatch = 0;
-        fail ++;
+        Fail ++;
 
 
 	 }
@@ -262,7 +248,8 @@ void SavePassword_To_EEPROM(void)
 					 EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
 					 EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
 
-                     OK_LED_ON();
+					 ERR_LED_OFF();
+					 OK_LED_ON();
 					 run_t.BackLight =2;
 					 Buzzer_LongSound();
 					 run_t.Confirm =0;
@@ -303,9 +290,9 @@ void SavePassword_To_EEPROM(void)
 ****************************************************************************/
 static void ReadPassword_EEPROM_SaveData(void)
 {
-  
+      unsigned char value ,Readpwd[6];
 	  static  unsigned char eevalue ,ReadAddress;
-	      switch(run_t.eepromAddress){
+	   switch(run_t.eepromAddress){
 
 			  case 0:
                    ReadAddress = ADMINI;
@@ -355,44 +342,43 @@ static void ReadPassword_EEPROM_SaveData(void)
                 break;
 
 			  case 11:
-                 ERR_LED_ON();
 				 run_t.eepromAddress=0;
-				  run_t.userId++;
-                return ;
+				 run_t.userId=0;
+			    
+                Fail = 1;
 			 break;
 
         }
+		
+	   eevalue = EEPROM_Read_Byte(ReadAddress);
+		if(eevalue ==1){
 
-		if(ReadAddress == ADMINI){
-
-			 Administrator_Password_Init();
-		}
-		else{		
-			eevalue = EEPROM_Read_Byte(ReadAddress);
-			if(eevalue ==1){
-#if 0
 					Readpwd[0] = EEPROM_Read_Byte(ReadAddress + 0X01);
 					Readpwd[1] = EEPROM_Read_Byte(ReadAddress + 0X02);
 					Readpwd[2] = EEPROM_Read_Byte(ReadAddress + 0X03);
 					Readpwd[3] = EEPROM_Read_Byte(ReadAddress + 0X04);
 					Readpwd[4] = EEPROM_Read_Byte(ReadAddress + 0X05);
 					Readpwd[5] = EEPROM_Read_Byte(ReadAddress + 0X06);
-					if(CompareValue(Readpwd,pwd1) ==1)//if(strcmp(pwd1,pwd2)==0)
+
+					value = CompareValue(Readpwd,pwd1,6);
+					
+					if(value==1)//if(strcmp(pwd1,pwd2)==0)
 					{
-						OK_LED_ON();
-						Motor_CCW_Run();//open passwordlock 
-						return ;
+						run_t.BackLight=2;
+		
+		                run_t.passsword_unlock=1;	
 
 					}
 					else{
 						run_t.eepromAddress++ ;	
 					}
-#endif 
+
 			}
 			else{
 	            run_t.eepromAddress++ ;	
 			}
-		}
+
+		 
 		
 }
 
@@ -775,93 +761,11 @@ void RunCommand_Unlock(void)
 
            Administrator_Password_Init();
    	}
-//	   
-//	 run_t.BackLight =2;
-//
-//      //virtual password  run_t.Numbers_counter > 4 &&  run_t.Numbers_counter < 20
-//      if(run_t.Numbers_counter > 6  && run_t.Numbers_counter < 21){
-//
-//           tempCounter = run_t.Numbers_counter;
-//
-//	      
-//		  // VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
-//	       pwd1[5]= VirtualPwd[tempCounter];
-//		   pwd1[4]= VirtualPwd[tempCounter-1];
-//		   pwd1[3]= VirtualPwd[tempCounter-2];
-//		   pwd1[2]= VirtualPwd[tempCounter-3];
-//		   pwd1[1]= VirtualPwd[tempCounter-4];
-//		   pwd1[0]= VirtualPwd[tempCounter-5];
-//		   run_t.passswordsMatch=1;
-//          
-//		  
-//	  }
-//	
-//	  
-//	 ReadPassword_EEPROM_SaveData();
-//	 if(run_t.Numbers_counter >6){
-//       VirtualPwd[tempCounter] = VirtualPwd[tempCounter] <<1;
-//		   i++;
-//		   if(i>run_t.Numbers_counter){
-//             i=0;
-//			 run_t.passsword_unlock =0;
-//		     run_t.Numbers_counter=0;
-//			 run_t.passswordsMatch=0;
-//			 return ;
-//			 
-//            }
-//		   
-//    }
-     
-	
 
-  
 
-   
-}
+ }
 
-/****************************************************************************
-*
-*Function Name:void RunCheck_Mode(unsigned int dat)
-*Function : run is main 
-*Input Ref: NO
-*Retrun Ref:NO
-*
-****************************************************************************/
-//void Modidy_NewPassword_Function(void)
-//{
-//     unsigned char setupkey;
-//	 static unsigned char setInit =0xff,inputnumber=0xff;
-//
-//	 if(run_t.admini_confirm ==1){ //setup new user password for 10 numbers
-//
-//	     setupkey = Scan_Key();
-//		 
-//
-//         if(setupkey ==0x81 || run_t.changePassword ==1){
-//
-//           run_t.changePassword=1;
-//		   if(setInit != run_t.resetKey){
-//		   	   setInit = run_t.resetKey;
-//			   BUZZER_KeySound();
-//           	}
-//		    Administrator_Password_Init();
-//		    if(run_t.passsword_unlock == 1){
-//				
-//		        if(inputnumber != run_t.inputNumber){
-//					inputnumber = run_t.inputNumber;
-//					BUZZER_KeySound();
-//					BUZZER_KeySound();
-//		    	}
-//			
-//			     } 
-//		    }
-//			
-//			
-//
-//			
-//			     
-//    }
-// }
+
 /****************************************************************************
 *
 *Function Name:void RunCheck_Mode(unsigned int dat)
