@@ -33,7 +33,7 @@ enum __PWD{FAIL,SUCCESS};
 
 
 
-static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2,unsigned char cnt);
+static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 
 
 static void ReadPassword_EEPROM_SaveData(void);
@@ -57,37 +57,11 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
 ****************************************************************************/
 static void Administrator_Password_Init(void)
 {
-    static unsigned char adminiId,fail;
-	unsigned char Readpwd[6],value;
+   
 	
-	adminiId= EEPROM_Read_Byte(ADMINI); //
-	if(adminiId !=1){ //don't new password be write to EEPROM
-
-	    value =CompareValue(initpwd, pwd1,4);
-
-	     if(value==1){
-						   
-				
-			run_t.BackLight=2;
-		
-		    run_t.passsword_unlock=1;	
-		
-			
-
-		}
-		else{
-
-		    	Fail =1;
-			
-		}
-		
-
-	  }
-	  else{
-
-	       ReadPassword_EEPROM_SaveData();
-
-		 }
+	ReadPassword_EEPROM_SaveData();
+	
+	
 
 	 if(Fail == 1){
 
@@ -131,10 +105,10 @@ static void Administrator_Password_Init(void)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2,unsigned char cnt)
+static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 {
 	unsigned char i ;
-   for(i=0;i<cnt;i++){
+   for(i=0;i<6;i++){
 		if(*(pt1+i) != *(pt2+i)){
 			return 0;
 		}
@@ -159,7 +133,7 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2,unsigned
 ****************************************************************************/
 void SavePassword_To_EEPROM(void)
 {
-	unsigned char eevalue;
+	unsigned char eevalue,value;
 
 	
 	eevalue= EEPROM_Read_Byte(run_t.userId);
@@ -237,9 +211,9 @@ void SavePassword_To_EEPROM(void)
 
 	
          if(run_t.inputPwdTimes ==2){
-		 	 run_t.BackLight =2;
-				
-			 if(CompareValue(pwd1, pwd2,6)){
+		 	value =CompareValue(pwd1, pwd2);
+			
+			 if(value ==1){
 			         EEPROM_Write_Byte(run_t.userId , 0x01);
 					 EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
 					 EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
@@ -349,9 +323,11 @@ static void ReadPassword_EEPROM_SaveData(void)
 			 break;
 
         }
+
+	   
 		
 	   eevalue = EEPROM_Read_Byte(ReadAddress);
-		if(eevalue ==1){
+	   if(eevalue ==1){
 
 					Readpwd[0] = EEPROM_Read_Byte(ReadAddress + 0X01);
 					Readpwd[1] = EEPROM_Read_Byte(ReadAddress + 0X02);
@@ -360,7 +336,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 					Readpwd[4] = EEPROM_Read_Byte(ReadAddress + 0X05);
 					Readpwd[5] = EEPROM_Read_Byte(ReadAddress + 0X06);
 
-					value = CompareValue(Readpwd,pwd1,6);
+					value = CompareValue(Readpwd,pwd1);
 					
 					if(value==1)//if(strcmp(pwd1,pwd2)==0)
 					{
@@ -375,7 +351,28 @@ static void ReadPassword_EEPROM_SaveData(void)
 
 			}
 			else{
-	            run_t.eepromAddress++ ;	
+
+			     if(ReadAddress == ADMINI){
+					value =CompareValue(initpwd, pwd1);
+
+				     if(value==1){
+									   
+							
+						run_t.BackLight=2;
+					
+					    run_t.passsword_unlock=1;	
+					
+						
+
+					}
+					else{
+
+					    	run_t.eepromAddress++ ;	
+						
+					}
+				 }
+				 else
+	                  run_t.eepromAddress++ ;	
 			}
 
 		 
@@ -445,6 +442,25 @@ void RunCheck_Mode(unsigned int dat)
 			spec=1;
 		 run_t.buzzer_flag =1;
 		
+		  switch(run_t.Numbers_counter){
+             
+					case 4:
+			           pwd1[4]=0;
+		 			   pwd2[4]=0;
+
+					   pwd1[5]=0;
+		 			   pwd2[5]=0;
+						  
+                     break;
+
+					 case 5:
+					   pwd1[5]=0;
+		 			   pwd2[5]=0;
+
+					 break;
+
+		}
+
 		 if(run_t.passsword_unlock ==2){
                 run_t.Confirm = 1;
 				run_t.inputPwdTimes ++ ;
@@ -452,106 +468,10 @@ void RunCheck_Mode(unsigned int dat)
 
 		 }
 		 else run_t.passswordsMatch = 1;
-		 	 
-//		 if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
-//
-//				 
-//
-//		         switch(run_t.Numbers_counter){
-//             
-//
-////					case 4:
-////			
-////						   if(pwd_4 == 1234){
-////						   
-////				
-////                          run_t.BackLight=2;
-////						  run_t.Numbers_counter =0 ;
-////						  ERR_LED_OFF();
-////						  OK_LED_ON();
-////						   Buzzer_LongSound();
-////
-////
-////						   }
-////						   else{
-////						   	  OK_LED_OFF();
-////   							  ERR_LED_ON();
-////							  run_t.passswordsMatch = 0;
-////						      run_t.Numbers_counter = 0;
-////							  
-////
-////						   }
-////                     
-////
-////							
-////
-////				    break;
-//
-//					case 5:
-//						
-//						   if(pwd_5 == 12345){
-//						  run_t.BackLight=2;
-//							
-//						   run_t.Numbers_counter =0 ;
-//						   ERR_LED_OFF();
-//						   OK_LED_ON();
-//						   Buzzer_LongSound();
-//
-//
-//						   }
-//						   else{
-//						   	  OK_LED_OFF();
-//   							  ERR_LED_ON();
-//							  run_t.passswordsMatch = 0;
-//						      run_t.Numbers_counter = 0;
-//							 
-//
-//						   }
-//                     
-//
-//					break;
-//
-//					case 6:
-//						
-//						   if(pwd_6 == 123456){
-//						    run_t.BackLight =2;
-//							
-//					       run_t.Numbers_counter =0 ;
-//						  ERR_LED_OFF();
-//						  OK_LED_ON();
-//								
-//						   Buzzer_LongSound();
-//
-//
-//						   }
-//						   else{
-//						   	  OK_LED_OFF();
-//   							  ERR_LED_ON();
-//							  run_t.passswordsMatch = 0;
-//						      run_t.Numbers_counter = 0;
-//							 
-//						   }
-//                     
-//
-//					break;
-//
-//
-//				 }
-//
-//               
-//	  	
-//	         }
-//		   else{
-//		   	 OK_LED_OFF();
-//			ERR_LED_ON();
-//			run_t.Numbers_counter = 0;
-//
-//		    run_t.passswordsMatch = 0;
-//	  	   
-//	      }
 		   
-	   }
-
+	  	   
+	 }
+		   
 	 break;
 
 	 
@@ -650,36 +570,7 @@ void RunCheck_Mode(unsigned int dat)
 				k2=n2;
 		        key = 0;
 			    spec =1;
-				
-//				 run_t.Numbers_counter++;
-//				 if(run_t.Numbers_counter ==1){
-//
-//                       OK_LED_ON();
-//				 }
-//				 if(run_t.Numbers_counter==2)ERR_LED_ON();
-//
-//				 if(run_t.Numbers_counter == 3){
-//
-//				          BAT_LED_ON();
-//
-//				 }	
-//
-//				 if(run_t.Numbers_counter ==4) 
-//				 {
-//				       
-//						BAT_LED_OFF();
-//				 	}
-//
-//				 if(run_t.Numbers_counter ==5) OK_LED_OFF();
-//				 if(run_t.Numbers_counter ==6){
-//
-//				        ERR_LED_OFF();
-//						BAT_LED_OFF();
-//				         OK_LED_OFF();
-//				        run_t.Numbers_counter =0;
-//
-//				 }
-                run_t.Numbers_counter ++ ;
+				run_t.Numbers_counter ++ ;
 				run_t.buzzer_flag =1;
 			
 				temp = InputNumber_ToSpecialNumbers(dat); //input Numbers

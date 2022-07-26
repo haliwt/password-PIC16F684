@@ -31,12 +31,12 @@ void main(void)
   // INTERRUPT_GlobalInterruptEnable();
   // INTERRUPT_PeripheralInterruptEnable() ;
    run_t.changePassword=0;
-  // run_t.Numbers_counter=0;
+   run_t.Numbers_counter=0;
    run_t.eepromAddress=0;
    while(1)
    {
-		#if 1
-	//   k++;
+	
+
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
@@ -75,48 +75,7 @@ void main(void)
 
 	    Buzzer_Sound();
 
-#if 0
-	resetKey = Scan_Key();
-	 {
-        if(resetKey ==0x01){
 
-           ERR_LED_ON()  ;
-	       OK_LED_ON()  ;
-
-		}
-
-	 }
-	   
-      if(k >2){ //5s ->battery be checking 
-         k = 0;
-         adc= ADC_ReadVoltage();
-	     if(adc > 675)BAT_LED_ON() ;
-		 else BAT_LED_OFF() ;
-		 	 
-	     run_t.passsword_unlock =0;
-      }
-#endif 
-	 
-//     // Modify password state 
-//     if(run_t.timer_60ms==1){
-//	   run_t.timer_60ms=0;
-//       Modidy_NewPassword_Function();
-//
-//    }
-
-//	 if(run_t.passsword_unlock ==0 || run_t.passsword_error==1){
-//
-//	       if(run_t.timer_led==1){
-//			        ERR_LED_ON()  ;	
-//				}
-//				else{
-//                    ERR_LED_OFF();
-//				}
-//
-//		if(run_t.passsword_error==1)run_t.changePassword =0;
-//
-//     }
-	 #endif 
    }
     
 }
