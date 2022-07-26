@@ -26,7 +26,7 @@ static unsigned char n0,n1,n2;
 unsigned char Fail;
 unsigned char pwd1[6];
 unsigned char pwd2[6];
-unsigned char initpwd[4]={1,2,3,4};
+unsigned char initpwd[6]={1,2,3,4,0,0};
 
 
 enum __PWD{FAIL,SUCCESS};
@@ -79,7 +79,7 @@ static void Administrator_Password_Init(void)
 
 	 if(run_t.passsword_unlock ==1){
 
-	  
+	     run_t.eepromAddress=0;
 		 run_t.Numbers_counter =0 ;
 		 ERR_LED_OFF();
 		 OK_LED_ON();
@@ -135,11 +135,7 @@ void SavePassword_To_EEPROM(void)
 {
 	unsigned char eevalue,value;
 
-	
-	eevalue= EEPROM_Read_Byte(run_t.userId);
-	if(eevalue ==1)run_t.userId++;
-	
-    switch(run_t.userId){
+	switch(run_t.userId){
 					  
 		   case 0:
 		
@@ -195,20 +191,32 @@ void SavePassword_To_EEPROM(void)
 			break;
 
 		   case 11:
+		   	    run_t.userId = 10;
+				ERR_LED_ON();
+				__delay_ms(500);
+		        ERR_LED_OFF();
+				__delay_ms(500);
+				ERR_LED_ON();
+				__delay_ms(500);
+				ERR_LED_OFF();
+				__delay_ms(500);
+				ERR_LED_ON();
 				
-				run_t.userId = 0;
 				
 				return ;
 		   break;
+
+		  
 
 
 		
 				  
 	}
 
+	eevalue= EEPROM_Read_Byte(run_t.userId);
+	if(eevalue ==1)run_t.userId++;
 	
-	
-
+         if(run_t.userId < 11){
 	
          if(run_t.inputPwdTimes ==2){
 		 	value =CompareValue(pwd1, pwd2);
@@ -241,6 +249,7 @@ void SavePassword_To_EEPROM(void)
 				
 
 			 }
+         	}
 			  
 
 		
@@ -264,70 +273,73 @@ void SavePassword_To_EEPROM(void)
 ****************************************************************************/
 static void ReadPassword_EEPROM_SaveData(void)
 {
-      unsigned char value ,Readpwd[6];
+      static unsigned char value ,Readpwd[6];
 	  static  unsigned char eevalue ,ReadAddress;
-	   switch(run_t.eepromAddress){
+	  
+	    switch(run_t.eepromAddress){
+	
+				 case 0:
+					  ReadAddress = ADMINI;
+				 break;
+				 case 1:
+					 ReadAddress = USER_1;
+				  
+			   break;
+	
+				 case 2:
+					 ReadAddress = USER_2;
+			   break;
+	
+			   case 3:
+					 ReadAddress = USER_3;
+			   break;
+	
+			   case 4:
+					 ReadAddress = USER_4;
+			   break;
+	
+			   case 5:
+					ReadAddress = USER_5;
+				break;
+	
+			   case 6:
+					 ReadAddress = USER_6;
+				break;
+				
+				case 7:
+					ReadAddress = USER_7;
+				  break;
+	
+				 case 8:
+				 
+				   ReadAddress = USER_8;
+				 break;
+	
+				 case 9:
+				 
+					  ReadAddress = USER_9;
+			   break;
+	
+				 case 10:
+				 
+					  ReadAddress = USER_10;
+				   break;
+	
+				 case 11:
 
-			  case 0:
-                   ReadAddress = ADMINI;
-			  break;
-			  case 1:
-                  ReadAddress = USER_1;
-               
-            break;
+				 case 12:
+					run_t.eepromAddress=0;
+				
+				   Fail = 1;
+				   return ;
+				break;
+	
+		   }
 
-			  case 2:
-			      ReadAddress = USER_2;
-            break;
 
-			case 3:
-			      ReadAddress = USER_3;
-            break;
-
-			case 4:
-			      ReadAddress = USER_4;
-            break;
-
-			case 5:
-			     ReadAddress = USER_5;
-             break;
-
-			case 6:
-			      ReadAddress = USER_6;
-             break;
-             
-			 case 7:
-			     ReadAddress = USER_7;
-               break;
-
-			  case 8:
-			  
-                ReadAddress = USER_8;
-              break;
-
-			  case 9:
-			  
-                   ReadAddress = USER_9;
-            break;
-
-			  case 10:
-			  
-                   ReadAddress = USER_10;
-                break;
-
-			  case 11:
-				 run_t.eepromAddress=0;
-				 run_t.userId=0;
-			    
-                Fail = 1;
-			 break;
-
-        }
-
-	   
-		
-	   eevalue = EEPROM_Read_Byte(ReadAddress);
-	   if(eevalue ==1){
+	   if(run_t.eepromAddress <11){
+		   eevalue = EEPROM_Read_Byte(ReadAddress);
+		   if(eevalue ==1){
 
 					Readpwd[0] = EEPROM_Read_Byte(ReadAddress + 0X01);
 					Readpwd[1] = EEPROM_Read_Byte(ReadAddress + 0X02);
@@ -342,7 +354,8 @@ static void ReadPassword_EEPROM_SaveData(void)
 					{
 						run_t.BackLight=2;
 		
-		                run_t.passsword_unlock=1;	
+		                run_t.passsword_unlock=1;
+						return ;
 
 					}
 					else{
@@ -362,7 +375,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 					
 					    run_t.passsword_unlock=1;	
 					
-						
+						return ;
 
 					}
 					else{
@@ -376,6 +389,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 			}
 
 		 
+	   	}
 		
 }
 

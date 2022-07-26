@@ -54,9 +54,8 @@ void main(void)
 		  RunCommand_Unlock();
 		   
 		    
-       
-	 }
-	  if(run_t.passsword_unlock==2){
+     }
+	 if(run_t.passsword_unlock==2){
 	  	
 		resetKey = Scan_Key();
 		if(resetKey ==0x01){
