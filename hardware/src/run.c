@@ -23,11 +23,12 @@
 //#define unsigned char       uint8_t 
 
 static unsigned char n0,n1,n2;
+unsigned char pwd1[6];
+unsigned char pwd2[6];
 
 
 
-
-//static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
+static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 
 static void ReadPassword_EEPROM_SaveData(void);
 
@@ -35,6 +36,7 @@ static void ReadPassword_EEPROM_SaveData(void);
 static void Administrator_Password_Init(void);
 
 unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
+
 
 
 
@@ -49,45 +51,85 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
 ****************************************************************************/
 static void Administrator_Password_Init(void)
 {
-    unsigned char adminiId;
+    static unsigned char adminiId,fail;
+	unsigned char Readpwd[6];
+	
 	adminiId= EEPROM_Read_Byte(ADMINI); //
 	if(adminiId !=1){ //don't new password be write to EEPROM
 
-	
-	   
-	    run_t.passsword_unlock=0;	
-		run_t.eepromAddress=0;
-		run_t.passswordsMatch = 0;
+	     if(pwd_4 == 1234){
+						   
+				
+			run_t.BackLight=2;
+		
+		    run_t.passsword_unlock=1;	
+		
+			
+
+		}
+		else{
+
+		    fail =1;
+			
 		
 
-		return;
+
+		}
 		
 
 	  }
 	  else{
 
-	  //run_t.BackLight =1;
-//			//run_t.eepromAddress++ ;	
-//			Readpwd[0] = EEPROM_Read_Byte(ADMINI + 0X01);
-//			Readpwd[1] = EEPROM_Read_Byte(ADMINI + 0X02);
-//			Readpwd[2] = EEPROM_Read_Byte(ADMINI + 0X03);
-//			Readpwd[3] = EEPROM_Read_Byte(ADMINI + 0X04);
-//			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
-//			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
-//
-//			 if(CompareValue(Readpwd,pwd1) ==1){//if(strcmp(pwd1,pwd2)==0)
-//				
-//				OK_LED_ON();
-//				Motor_CCW_Run();//open passwordlock 
-//				run_t.passsword_unlock=1;
-//				run_t.admini_confirm =1;
-//				run_t.resetKey++;
-//				run_t.inputNumber++;
-//				return ;
-//
-//	        }
+	       
+			Readpwd[0] = EEPROM_Read_Byte(ADMINI + 0X01);
+			Readpwd[1] = EEPROM_Read_Byte(ADMINI + 0X02);
+			Readpwd[2] = EEPROM_Read_Byte(ADMINI + 0X03);
+			Readpwd[3] = EEPROM_Read_Byte(ADMINI + 0X04);
+			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
+			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
+
+			 if(CompareValue(Readpwd,&pwd_4) ==1){//if(strcmp(pwd1,pwd2)==0)
+				
+				
+				run_t.passsword_unlock=1;
+
+			
+			}
+			else{
+
+               fail =1;
+
+			}
 	 }
-	 run_t.passsword_unlock=0;
+
+	 if(fail == 1){
+
+		OK_LED_OFF();
+		ERR_LED_ON();
+		run_t.passswordsMatch = 0;
+		run_t.Numbers_counter = 0;
+		 run_t.passsword_unlock=0;	
+		run_t.eepromAddress=0;
+		run_t.passswordsMatch = 0;
+        fail ++;
+
+
+	 }
+
+	 if(run_t.passsword_unlock ==1){
+
+	  
+		 run_t.Numbers_counter =0 ;
+		 ERR_LED_OFF();
+		 OK_LED_ON();
+		 Buzzer_LongSound();
+		 Motor_CCW_Run();//open passwordlock 
+		run_t.passswordsMatch = 0;
+
+	    run_t.passsword_unlock++;
+ 
+	 }
+	
 
 
 }
@@ -102,10 +144,10 @@ static void Administrator_Password_Init(void)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
+static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 {
 	unsigned char i ;
-   for(i=1;i<5;i++){
+   for(i=1;i<6;i++){
 		if(*(pt1+i) != *(pt2+i)){
 			return 0;
 		}
@@ -130,11 +172,16 @@ unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 void SavePassword_To_EEPROM(void)
 {
 	unsigned char eevalue;
+
+	
+	eevalue= EEPROM_Read_Byte(run_t.userId);
+	if(eevalue ==1)run_t.userId++;
+	
     switch(run_t.userId){
 					  
 		   case 0:
 		
-				run_t.userId= ADMINI;
+			  run_t.userId= ADMINI;
 				
 		   break;
 
@@ -188,28 +235,52 @@ void SavePassword_To_EEPROM(void)
 		   case 11:
 				
 				run_t.userId = 0;
-				//run_t.keyTime++;
 				
+				return ;
 		   break;
 
 
-		eevalue= EEPROM_Read_Byte(run_t.userId);
-		if(eevalue==0xff){
-#if 0
-			EEPROM_Write_Byte(run_t.userId , 0x01);
-			EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
-			EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
-			EEPROM_Write_Byte(run_t.userId + 0x03,pwd1[2]);
-			EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
-			EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
-			EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
-#endif 
-		}
-		else{
-			run_t.userId++;
-		}
+		
 				  
 	}
+
+	
+	
+
+	  if(run_t.Confirm ==1){
+         if(run_t.inputPwdTimes ==2){
+				run_t.BackLight =1;
+			 if(CompareValue(pwd1, pwd2)){
+			         EEPROM_Write_Byte(run_t.userId , 0x01);
+					 EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
+					 EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
+					 EEPROM_Write_Byte(run_t.userId + 0x03,pwd1[2]);
+					 EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
+					 EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
+					 EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
+
+                     OK_LED_ON();
+					 run_t.Confirm =0;
+			    	run_t.inputPwdTimes =0;
+
+					return;
+
+			 }
+			 else{
+				ERR_LED_ON();
+				run_t.Confirm =0;
+			    run_t.inputPwdTimes =0;
+				return ;
+
+			 }
+			  
+
+		 }
+	     
+	}
+		
+
+	 
 			  
 }
 
@@ -358,10 +429,10 @@ void RunCheck_Mode(unsigned int dat)
 		  ERR_LED_OFF();
 		  OK_LED_OFF();
 	     run_t.buzzer_flag =1;
-		spec=1;
+		 spec=1;
 	     run_t.Numbers_counter =0 ;
 		run_t.passswordsMatch = 0;
-		//run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
+		//run_t.inputPwdTimes = 0;
 		run_t.changePassword=0;
        }
 		
@@ -374,6 +445,15 @@ void RunCheck_Mode(unsigned int dat)
 	        k1 = n1;
 			spec=1;
 		 run_t.buzzer_flag =1;
+		
+		 if(run_t.passsword_unlock ==1){
+                run_t.Confirm = 1;
+				run_t.inputPwdTimes ++ ;
+		        
+
+		 }
+		 else run_t.passswordsMatch = 1;
+		 	 
 		 if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
 
 				 
@@ -381,35 +461,35 @@ void RunCheck_Mode(unsigned int dat)
 		         switch(run_t.Numbers_counter){
              
 
-					case 4:
-						run_t.buzzer_flag =1;
-						   if(pwd_4 == 1234){
-						   
-				
-                          run_t.BackLight=2;
-						  run_t.Numbers_counter =0 ;
-						  ERR_LED_OFF();
-						  OK_LED_ON();
-						   Buzzer_LongSound();
-
-
-						   }
-						   else{
-						   	  OK_LED_OFF();
-   							  ERR_LED_ON();
-							  run_t.passswordsMatch = 0;
-						      run_t.Numbers_counter = 0;
-							  
-
-						   }
-                     
-
-							
-
-				    break;
+//					case 4:
+//			
+//						   if(pwd_4 == 1234){
+//						   
+//				
+//                          run_t.BackLight=2;
+//						  run_t.Numbers_counter =0 ;
+//						  ERR_LED_OFF();
+//						  OK_LED_ON();
+//						   Buzzer_LongSound();
+//
+//
+//						   }
+//						   else{
+//						   	  OK_LED_OFF();
+//   							  ERR_LED_ON();
+//							  run_t.passswordsMatch = 0;
+//						      run_t.Numbers_counter = 0;
+//							  
+//
+//						   }
+//                     
+//
+//							
+//
+//				    break;
 
 					case 5:
-						run_t.buzzer_flag =1;
+						
 						   if(pwd_5 == 12345){
 						  run_t.BackLight=2;
 							
@@ -433,7 +513,7 @@ void RunCheck_Mode(unsigned int dat)
 					break;
 
 					case 6:
-						run_t.buzzer_flag =1;
+						
 						   if(pwd_6 == 123456){
 						    run_t.BackLight =2;
 							
@@ -614,35 +694,43 @@ void RunCheck_Mode(unsigned int dat)
 				 	
 				  case 1:
 					  temp_1= temp;
-					
+				      if(run_t.inputPwdTimes ==1)pwd2[0]=temp;
+					  else  pwd1[0] =temp;
 					
 				break;
 				  
 				  case 2:
 					  temp_2= temp_1 *10 + temp; // 12
-					 
+					  if(run_t.inputPwdTimes ==1) pwd2[1]=temp;
+					  else pwd1[1] = temp;
 					
 				 break;
 	   
 				  case 3:
 					   
 					   temp_3= temp_2*10 + temp; //120+3
+					   if(run_t.inputPwdTimes ==1)pwd2[2] =temp;
+					   else pwd1[2]= temp;
 					  
 				 break;
 	   
 				  case 4: 
 					   pwd_4= temp_3*10 +temp;
-	
+					   if(run_t.inputPwdTimes ==1)pwd2[3] =temp;
+					   else pwd1[3] = temp;
 					   
 				  break;
 	   
 				  case 5:
 					   pwd_5= pwd_4*10 + temp;
-					   
+					   if(run_t.inputPwdTimes ==1) pwd2[4] = temp;
+					   else pwd1[4] =temp;
 				break;
 	   
 				  case 6:
 					   pwd_6= pwd_5*10 + temp;
+					   if(run_t.inputPwdTimes ==1) pwd2[5] =temp;
+					   else pwd1[5]= temp;
 					
 				  break;
 	            
@@ -670,9 +758,10 @@ void RunCommand_Unlock(void)
 {
 
 
-//	if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
-//
-//     Administrator_Password_Init();
+   if(run_t.passswordsMatch ==1 && run_t.changePassword==0){ //be pressed "#" is over confirm 
+
+           Administrator_Password_Init();
+   	}
 //	   
 //	 run_t.BackLight =2;
 //

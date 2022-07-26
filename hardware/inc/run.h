@@ -20,6 +20,8 @@ typedef struct __RUN_T{
     //unsigned char cmdCtr_;   //event order cunter
 
     unsigned char adminiId;
+	unsigned char Confirm;
+	unsigned char inputPwdTimes;
 
 	unsigned char changePassword;
    
@@ -58,5 +60,6 @@ void RunCommand_Unlock(void);
 void Buzzer_Sound(void);
 void BackLight_Fun(void);
 
+void SavePassword_To_EEPROM(void);
 
 #endif 

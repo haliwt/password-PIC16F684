@@ -51,24 +51,25 @@ void main(void)
 	 	 
       }
 	if(run_t.passswordsMatch ==1){
-		
+		  RunCommand_Unlock();
 		   
-		     resetKey = Scan_Key();
-			 {
-		        if(resetKey ==0x01){
-
-		           ERR_LED_ON()  ;
-			       OK_LED_ON()  ;
-
-				}
-
-			 }
-        if(resetKey != 0x01)
-			run_t.passswordsMatch=0;
 		    
-		}
+       
+	 }
+	  if(run_t.passsword_unlock==1){
+	  	
+		resetKey = Scan_Key();
+		if(resetKey ==0x01){
 
-	    // RunCommand_Unlock();
+           ERR_LED_ON()  ;
+	       OK_LED_ON()  ;
+
+		}
+		SavePassword_To_EEPROM();
+
+	 }
+
+	
 	    
 		BackLight_Fun();
 
