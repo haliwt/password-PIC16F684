@@ -37,12 +37,7 @@ void main(void)
    {
 		#if 1
 	//   k++;
-
-	
-   //ERR_LED_ON();
-   //OK_LED_ON();
-  /// BAT_LED_ON();
-    if(run_t.passswordsMatch==0){
+	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
 	      KeyValue =(unsigned int)(SC_Data[0]<<8) + SC_Data[1];
@@ -58,18 +53,18 @@ void main(void)
 	if(run_t.passswordsMatch ==1){
 		
 		   
-//		     resetKey = Scan_Key();
-//			 {
-//		        if(resetKey ==0x01){
-//
-//		           ERR_LED_ON()  ;
-//			       OK_LED_ON()  ;
-//
-//				}
-//
-//			 }
+		     resetKey = Scan_Key();
+			 {
+		        if(resetKey ==0x01){
 
-		run_t.passswordsMatch=0;
+		           ERR_LED_ON()  ;
+			       OK_LED_ON()  ;
+
+				}
+
+			 }
+        if(resetKey != 0x01)
+			run_t.passswordsMatch=0;
 		    
 		}
 
