@@ -56,7 +56,7 @@ void main(void)
 		    
        
 	 }
-	  if(run_t.passsword_unlock==1){
+	  if(run_t.passsword_unlock==2){
 	  	
 		resetKey = Scan_Key();
 		if(resetKey ==0x01){

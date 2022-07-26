@@ -25,10 +25,12 @@
 static unsigned char n0,n1,n2;
 unsigned char pwd1[6];
 unsigned char pwd2[6];
+unsigned char initpwd[4]={1,2,3,4};
 
 
 
-static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
+static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2,unsigned char cnt);
+
 
 static void ReadPassword_EEPROM_SaveData(void);
 
@@ -57,7 +59,7 @@ static void Administrator_Password_Init(void)
 	adminiId= EEPROM_Read_Byte(ADMINI); //
 	if(adminiId !=1){ //don't new password be write to EEPROM
 
-	     if(pwd_4 == 1234){
+	     if(CompareValue(initpwd, pwd1,4)){
 						   
 				
 			run_t.BackLight=2;
@@ -88,7 +90,7 @@ static void Administrator_Password_Init(void)
 			Readpwd[4] = EEPROM_Read_Byte(ADMINI + 0X05);
 			Readpwd[5] = EEPROM_Read_Byte(ADMINI + 0X06);
 
-			 if(CompareValue(Readpwd,&pwd_4) ==1){//if(strcmp(pwd1,pwd2)==0)
+			 if(CompareValue(Readpwd,&pwd_4,6) ==1){//if(strcmp(pwd1,pwd2)==0)
 				
 				
 				run_t.passsword_unlock=1;
@@ -144,10 +146,10 @@ static void Administrator_Password_Init(void)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
+static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2,unsigned char cnt)
 {
 	unsigned char i ;
-   for(i=1;i<6;i++){
+   for(i=0;i<cnt;i++){
 		if(*(pt1+i) != *(pt2+i)){
 			return 0;
 		}
@@ -247,10 +249,11 @@ void SavePassword_To_EEPROM(void)
 	
 	
 
-	  if(run_t.Confirm ==1){
+	
          if(run_t.inputPwdTimes ==2){
-				run_t.BackLight =1;
-			 if(CompareValue(pwd1, pwd2)){
+		 	 run_t.BackLight =2;
+				
+			 if(CompareValue(pwd1, pwd2,6)){
 			         EEPROM_Write_Byte(run_t.userId , 0x01);
 					 EEPROM_Write_Byte(run_t.userId + 0x01,pwd1[0]);
 					 EEPROM_Write_Byte(run_t.userId + 0x02,pwd1[1]);
@@ -260,22 +263,26 @@ void SavePassword_To_EEPROM(void)
 					 EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
 
                      OK_LED_ON();
+					 run_t.BackLight =2;
+					 Buzzer_LongSound();
 					 run_t.Confirm =0;
 			    	run_t.inputPwdTimes =0;
+					run_t.passsword_unlock=0;
 
-					return;
+			
 
 			 }
 			 else{
 				ERR_LED_ON();
 				run_t.Confirm =0;
 			    run_t.inputPwdTimes =0;
-				return ;
+				run_t.passsword_unlock=0;
+				
 
 			 }
 			  
 
-		 }
+		
 	     
 	}
 		
@@ -399,10 +406,8 @@ static void ReadPassword_EEPROM_SaveData(void)
 ****************************************************************************/
 void RunCheck_Mode(unsigned int dat)
 {
-   unsigned char temp;
-   static unsigned char	temp_1,temp_2;
- 
-   static  unsigned int temp_3;
+   unsigned char temp, i;
+  
    //static  unsigned long int  temp_5,temp_6;
    static unsigned char k0=0xff,k1=0xff,k2=0xff,key,spec;
  
@@ -418,22 +423,30 @@ void RunCheck_Mode(unsigned int dat)
 
 	      k0 = n0;
 		  run_t.BackLight=1;
-		  temp=0;
+
+		  if(run_t.inputPwdTimes ==1){
+		        for(i=0;i<6;i++){
+					  pwd2[i]=0;
+					
+				 }
+					
+
+         }
+		 else{
+	        for(i=0;i<6;i++){
+		  	   pwd1[i]=0;
+		
+		  }
+		  
 	  
-	      temp_1=0;
-		  temp_2=0;
-		  temp_3=0;
-		  pwd_4=0;
-		  pwd_5=0;
-		  pwd_6=0;
-		  ERR_LED_OFF();
-		  OK_LED_OFF();
-	     run_t.buzzer_flag =1;
-		 spec=1;
-	     run_t.Numbers_counter =0 ;
-		run_t.passswordsMatch = 0;
-		//run_t.inputPwdTimes = 0;
-		run_t.changePassword=0;
+			  ERR_LED_OFF();
+			  OK_LED_OFF();
+		     run_t.buzzer_flag =1;
+			 spec=1;
+		     run_t.Numbers_counter =0 ;
+			run_t.passswordsMatch = 0;
+			run_t.changePassword=0;
+		  }
        }
 		
 	break;
@@ -446,30 +459,56 @@ void RunCheck_Mode(unsigned int dat)
 			spec=1;
 		 run_t.buzzer_flag =1;
 		
-		 if(run_t.passsword_unlock ==1){
+		 if(run_t.passsword_unlock ==2){
                 run_t.Confirm = 1;
 				run_t.inputPwdTimes ++ ;
-		        
+		        run_t.Numbers_counter=0;
 
 		 }
 		 else run_t.passswordsMatch = 1;
 		 	 
-		 if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
-
-				 
-
-		         switch(run_t.Numbers_counter){
-             
-
-//					case 4:
-//			
-//						   if(pwd_4 == 1234){
-//						   
-//				
-//                          run_t.BackLight=2;
-//						  run_t.Numbers_counter =0 ;
-//						  ERR_LED_OFF();
-//						  OK_LED_ON();
+//		 if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
+//
+//				 
+//
+//		         switch(run_t.Numbers_counter){
+//             
+//
+////					case 4:
+////			
+////						   if(pwd_4 == 1234){
+////						   
+////				
+////                          run_t.BackLight=2;
+////						  run_t.Numbers_counter =0 ;
+////						  ERR_LED_OFF();
+////						  OK_LED_ON();
+////						   Buzzer_LongSound();
+////
+////
+////						   }
+////						   else{
+////						   	  OK_LED_OFF();
+////   							  ERR_LED_ON();
+////							  run_t.passswordsMatch = 0;
+////						      run_t.Numbers_counter = 0;
+////							  
+////
+////						   }
+////                     
+////
+////							
+////
+////				    break;
+//
+//					case 5:
+//						
+//						   if(pwd_5 == 12345){
+//						  run_t.BackLight=2;
+//							
+//						   run_t.Numbers_counter =0 ;
+//						   ERR_LED_OFF();
+//						   OK_LED_ON();
 //						   Buzzer_LongSound();
 //
 //
@@ -479,77 +518,51 @@ void RunCheck_Mode(unsigned int dat)
 //   							  ERR_LED_ON();
 //							  run_t.passswordsMatch = 0;
 //						      run_t.Numbers_counter = 0;
-//							  
+//							 
 //
 //						   }
 //                     
 //
-//							
+//					break;
 //
-//				    break;
-
-					case 5:
-						
-						   if(pwd_5 == 12345){
-						  run_t.BackLight=2;
-							
-						   run_t.Numbers_counter =0 ;
-						   ERR_LED_OFF();
-						   OK_LED_ON();
-						   Buzzer_LongSound();
-
-
-						   }
-						   else{
-						   	  OK_LED_OFF();
-   							  ERR_LED_ON();
-							  run_t.passswordsMatch = 0;
-						      run_t.Numbers_counter = 0;
-							 
-
-						   }
-                     
-
-					break;
-
-					case 6:
-						
-						   if(pwd_6 == 123456){
-						    run_t.BackLight =2;
-							
-					       run_t.Numbers_counter =0 ;
-						  ERR_LED_OFF();
-						  OK_LED_ON();
-								
-						   Buzzer_LongSound();
-
-
-						   }
-						   else{
-						   	  OK_LED_OFF();
-   							  ERR_LED_ON();
-							  run_t.passswordsMatch = 0;
-						      run_t.Numbers_counter = 0;
-							 
-						   }
-                     
-
-					break;
-
-
-				 }
-
-               
-	  	
-	         }
-		   else{
-		   	 OK_LED_OFF();
-			ERR_LED_ON();
-			run_t.Numbers_counter = 0;
-
-		    run_t.passswordsMatch = 0;
-	  	   
-	      }
+//					case 6:
+//						
+//						   if(pwd_6 == 123456){
+//						    run_t.BackLight =2;
+//							
+//					       run_t.Numbers_counter =0 ;
+//						  ERR_LED_OFF();
+//						  OK_LED_ON();
+//								
+//						   Buzzer_LongSound();
+//
+//
+//						   }
+//						   else{
+//						   	  OK_LED_OFF();
+//   							  ERR_LED_ON();
+//							  run_t.passswordsMatch = 0;
+//						      run_t.Numbers_counter = 0;
+//							 
+//						   }
+//                     
+//
+//					break;
+//
+//
+//				 }
+//
+//               
+//	  	
+//	         }
+//		   else{
+//		   	 OK_LED_OFF();
+//			ERR_LED_ON();
+//			run_t.Numbers_counter = 0;
+//
+//		    run_t.passswordsMatch = 0;
+//	  	   
+//	      }
 		   
 	   }
 
@@ -693,14 +706,14 @@ void RunCheck_Mode(unsigned int dat)
 	        
 				 	
 				  case 1:
-					  temp_1= temp;
+					 
 				      if(run_t.inputPwdTimes ==1)pwd2[0]=temp;
 					  else  pwd1[0] =temp;
 					
 				break;
 				  
 				  case 2:
-					  temp_2= temp_1 *10 + temp; // 12
+					 
 					  if(run_t.inputPwdTimes ==1) pwd2[1]=temp;
 					  else pwd1[1] = temp;
 					
@@ -708,27 +721,27 @@ void RunCheck_Mode(unsigned int dat)
 	   
 				  case 3:
 					   
-					   temp_3= temp_2*10 + temp; //120+3
+					
 					   if(run_t.inputPwdTimes ==1)pwd2[2] =temp;
 					   else pwd1[2]= temp;
 					  
 				 break;
 	   
 				  case 4: 
-					   pwd_4= temp_3*10 +temp;
+					
 					   if(run_t.inputPwdTimes ==1)pwd2[3] =temp;
 					   else pwd1[3] = temp;
 					   
 				  break;
 	   
 				  case 5:
-					   pwd_5= pwd_4*10 + temp;
+					 
 					   if(run_t.inputPwdTimes ==1) pwd2[4] = temp;
 					   else pwd1[4] =temp;
 				break;
 	   
 				  case 6:
-					   pwd_6= pwd_5*10 + temp;
+					
 					   if(run_t.inputPwdTimes ==1) pwd2[5] =temp;
 					   else pwd1[5]= temp;
 					
