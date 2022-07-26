@@ -6,7 +6,7 @@
  */
 
 #include "main.h"
-__CONFIG(0x01A4);  //__CONFIG(0x01B4);  
+__CONFIG(0x01D4);  //__CONFIG(0x01B4);  
 //#pragma config CONFIG = 0x01B4 
 //#pragma config FOSC = INTRCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, BOREN = ON, CP = OFF, CPD = OFF   //PIC16F676 
 //PIC16F684 
@@ -19,7 +19,7 @@ unsigned char SC_Data[2];
 void main(void) 
 {
    
-    unsigned char resetKey,k;
+    unsigned char resetKey;
     unsigned int KeyValue,adc;
 
    SC12B_Init_Function();
@@ -35,7 +35,9 @@ void main(void)
    run_t.eepromAddress=0;
    while(1)
    {
-	
+
+   
+	#if 1
 
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
@@ -45,26 +47,27 @@ void main(void)
              
           RunCheck_Mode(KeyValue); 
 			
-	      	      
-          }
-	       
-	 	 
-      }
-	if(run_t.passswordsMatch ==1){
+	      }
+	   }
+	if(run_t.passswordsMatch ==1 && run_t.passsword_unlock !=2){
 		  RunCommand_Unlock();
 		   
 		    
      }
-	 if(run_t.passsword_unlock==2){
+	 if(run_t.passsword_unlock==2){ //lock turn on Open 
 	  	
 		resetKey = Scan_Key();
 		if(resetKey ==0x01){
 
            ERR_LED_ON()  ;
 	       OK_LED_ON()  ;
+		   run_t.Confirm =1;
 
 		}
-		SavePassword_To_EEPROM();
+		if(  run_t.Confirm ==1)
+		     SavePassword_To_EEPROM();
+		
+			
 
 	 }
 
@@ -74,7 +77,7 @@ void main(void)
 
 	    Buzzer_Sound();
 
-
+     #endif 
    }
     
 }

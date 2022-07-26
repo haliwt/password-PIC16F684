@@ -424,11 +424,8 @@ void RunCheck_Mode(unsigned int dat)
 		  if(run_t.inputPwdTimes ==1){
 		        for(i=0;i<6;i++){
 					  pwd2[i]=0;
-					
-				 }
-					
-
-         }
+				}
+		 }
 		 else{
 	        for(i=0;i<6;i++){
 		  	   pwd1[i]=0;
@@ -475,10 +472,10 @@ void RunCheck_Mode(unsigned int dat)
 
 		}
 
-		 if(run_t.passsword_unlock ==2){
-                run_t.Confirm = 1;
-				run_t.inputPwdTimes ++ ;
-		        run_t.Numbers_counter=0;
+		 if( run_t.Confirm ==1){
+              run_t.inputPwdTimes ++ ;
+		      run_t.Numbers_counter=0;
+			  run_t.passswordsMatch = 1;
 
 		 }
 		 else run_t.passswordsMatch = 1;
@@ -788,6 +785,10 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number)
 
 void BackLight_Fun(void)
 {
+     static unsigned char cnt;
+
+	 
+
 	 if(run_t.BackLight ==1 ){
 
 			  run_t.BackLight =0;
@@ -813,6 +814,17 @@ void BackLight_Fun(void)
 	     BACKLIGHT_OFF() ;
          BACKLIGHT_2_OFF();
 
+	 }
+
+
+	if( run_t.Confirm == 1 ){
+
+	     cnt ++ ;
+
+        if(cnt < 125 )
+	        OK_LED_ON();
+		else 
+	        OK_LED_OFF();
 	 }
 	
 

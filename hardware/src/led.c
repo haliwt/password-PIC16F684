@@ -39,42 +39,24 @@ unsigned char Scan_Key(void)
 {
 
    static unsigned int k1=0 ;
-    unsigned char  cnt;
-
+   static unsigned char  cnt;
+   unsigned char value;
 
 	if(RESET_KEY==0){
-        if(k1<181)
-			k1++;
-
-	}
-	else{
-      k1=0;
-	}
-
-
-	if(k1==180){ //be pressed key continue
-
-       cnt=0x01;
-	   return cnt;
-
-	}
-	return 0;
-
-#if 0
-   if(RESET_KEY  ==0 ){
         cnt=0;
-        k1++;   
-    }
- 
-    if(RESET_KEY  == 1 ){ //key be release
+		k1++;
+
+	}
+	
+   if(RESET_KEY  == 1 ){ //key be release
         cnt++;
-        if(cnt<30) return 0;
+        if(cnt<10) return 0;
         
         cnt=0;
-        if(k1 >180 && k1< 182){
+        if(k1 >50 && k1< 80){
             value = 0x01; //sort times be pressed key
         }
-        else if(k1>300){ //long times be pressed key
+        else if(k1>181){ //long times be pressed key
             value = 0x81;
 		
         }
@@ -86,7 +68,7 @@ unsigned char Scan_Key(void)
       
     }
     return 0;
-#endif 
+
 }
 
 
