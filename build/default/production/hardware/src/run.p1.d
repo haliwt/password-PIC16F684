@@ -1,0 +1,13 @@
+build/default/production/hardware/src/run.p1:	\
+	hardware/src/../inc/../../main.h	\
+	hardware/src/../inc/../../hardware/inc/buzzer.h	\
+	hardware/src/../inc/../../hardware/inc/ADC.h	\
+	hardware/src/../inc/run.h	\
+	hardware/src/../../main.h	\
+	hardware/src/../inc/../../hardware/inc/run.h	\
+	hardware/src/../inc/../../hardware/inc/motor.h	\
+	hardware/src/../inc/../../hardware/inc/eeprom.h	\
+	hardware/src/../inc/../../hardware/inc/led.h	\
+	hardware/src/../inc/../../hardware/inc/key.h	\
+	hardware/src/../inc/../../hardware/inc/../../main.h	\
+	hardware/src/../inc/../../hardware/inc/interrupt.h	\

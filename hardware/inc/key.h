@@ -80,7 +80,7 @@
 #define TOUCH_KEY_6                   0x80
 #define TOUCH_KEY_7   
 
-extern uint8_t SC_Data[2];
+extern unsigned char  SC_Data[2];
 
 
 typedef enum
@@ -111,7 +111,7 @@ void SC12B_Init_Function(void);
 
 void ICman_Init_SET(unsigned char SC_ADDR);  //IC->SC12B Initialize funciton
 
-uint8_t I2C_SimpleRead_From_Device(uint8_t *dat8);
+unsigned char  I2C_SimpleRead_From_Device(unsigned char *dat8);
 
 
 

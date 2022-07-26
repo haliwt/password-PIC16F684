@@ -16,19 +16,22 @@ static void LED_Init(void)
     ANSELbits.ANS0 = 0;
     ANSELbits.ANS1 = 0;
     ANSELbits.ANS2 =0 ; //I/O as digital 
+    ANSELbits.ANS7 =0 ; //gpio as digital
 
     TRISAbits.TRISA0 =0;
     TRISAbits.TRISA1 =0 ;
     TRISAbits.TRISA2 = 0;  //I/O as output 
     TRISCbits.TRISC4 = 0;
+	TRISCbits.TRISC3 = 0; 
     //RESET KEY gpio input PORT
     TRISAbits.TRISA3 = 1;   //I/O as input
     
     //Setup GPIO output defult value 
     PORTAbits.RA0=1;
 	PORTAbits.RA1=1;
-	PORTAbits.RA2=0;  //back light
+	PORTAbits.RA2=0;  //back light led1
 	PORTCbits.RC4=1;
+	PORTCbits.RC3= 0; //back light led2
 
 }
 

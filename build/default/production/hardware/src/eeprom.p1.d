@@ -1,0 +1,12 @@
+build/default/production/hardware/src/eeprom.p1:	\
+	hardware/src/../../hardware/inc/buzzer.h	\
+	hardware/src/../../hardware/inc/ADC.h	\
+	hardware/src/../../main.h	\
+	hardware/src/../../hardware/inc/run.h	\
+	hardware/src/../../hardware/inc/motor.h	\
+	hardware/src/../../hardware/inc/eeprom.h	\
+	hardware/src/../../hardware/inc/led.h	\
+	hardware/src/../../hardware/inc/key.h	\
+	hardware/src/../../hardware/inc/../../main.h	\
+	hardware/src/../../hardware/inc/interrupt.h	\
+	hardware/src/../inc/eeprom.h	\

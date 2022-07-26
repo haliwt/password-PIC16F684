@@ -6,11 +6,11 @@
  */
 
 #include "main.h"
-//__CONFIG(0x01B4);  
+__CONFIG(0x01A4);  //__CONFIG(0x01B4);  
 //#pragma config CONFIG = 0x01B4 
 //#pragma config FOSC = INTRCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, BOREN = ON, CP = OFF, CPD = OFF   //PIC16F676 
 //PIC16F684 
-#pragma config FOSC = INTOSCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, CP = OFF, CPD = OFF, BOREN = ON, IESO = OFF, FCMEN = ON
+//#pragma config FOSC = INTOSCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, CP = OFF, CPD = OFF, BOREN = ON, IESO = OFF, FCMEN = ON
 
 unsigned char SC_Data[2];
 /*
@@ -31,13 +31,17 @@ void main(void)
   // INTERRUPT_GlobalInterruptEnable();
   // INTERRUPT_PeripheralInterruptEnable() ;
    run_t.changePassword=0;
-   run_t.Numbers_counter=0;
+  // run_t.Numbers_counter=0;
    run_t.eepromAddress=0;
    while(1)
    {
 		#if 1
 	//   k++;
 
+	
+   //ERR_LED_ON();
+   //OK_LED_ON();
+  /// BAT_LED_ON();
     if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
@@ -52,19 +56,22 @@ void main(void)
 	 	 
       }
 	if(run_t.passswordsMatch ==1){
+		
 		   
-		     resetKey = Scan_Key();
-			 {
-		        if(resetKey ==0x01){
+//		     resetKey = Scan_Key();
+//			 {
+//		        if(resetKey ==0x01){
+//
+//		           ERR_LED_ON()  ;
+//			       OK_LED_ON()  ;
+//
+//				}
+//
+//			 }
 
-		           ERR_LED_ON()  ;
-			       OK_LED_ON()  ;
-
-				}
-
-			 }
+		run_t.passswordsMatch=0;
 		    
-		 }
+		}
 
 	    // RunCommand_Unlock();
 	    

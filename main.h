@@ -10,7 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 //#include  <string.h>
-#include <xc.h>
+//#include <xc.h>
+#include <pic.h>
 
 #include "hardware/inc/buzzer.h"
 #include "hardware/inc/key.h"
@@ -26,7 +27,7 @@
 
 #define _XTAL_FREQ         4000000  //PIC16F684 default 
 
-typedef  unsigned char   uint8_t ;
+
 
 
 #ifdef	__cplusplus

@@ -5,6 +5,9 @@
 #define  BACKLIGHT_ON()          (PORTAbits.RA2 =1)
 #define  BACKLIGHT_OFF()         (PORTAbits.RA2 =0)
 
+#define  BACKLIGHT_2_ON()       (PORTCbits.RC3 = 1)
+#define  BACKLIGHT_2_OFF()      (PORTCbits.RC3 = 0)
+
 #define  BAT_LED_ON()           (PORTCbits.RC4 = 0)
 #define  BAT_LED_OFF()           (PORTCbits.RC4 =1 )
 

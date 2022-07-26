@@ -336,7 +336,7 @@ void RunCheck_Mode(unsigned int dat)
  
    static  unsigned int temp_3,temp_4;
    static  unsigned long int  temp_5,temp_6;
-   static unsigned char k0=0xff,k1=0xff,k2=0xff,key;
+   static unsigned char k0=0xff,k1=0xff,k2=0xff,key,spec;
  
    
 
@@ -359,7 +359,9 @@ void RunCheck_Mode(unsigned int dat)
 		  temp_5=0;
 		  temp_6=0;
 	     run_t.buzzer_flag =1;
+		 //key =0;
          number =0;
+		 spec=1;
 	     run_t.Numbers_counter =0 ;
 		run_t.passswordsMatch = 0;
 		//run_t.passsword_error=0;  //modeify password is input mistake number error blank of flag.
@@ -373,100 +375,103 @@ void RunCheck_Mode(unsigned int dat)
 	 case SPECIAL_2://0x200: //CIN10 '#' ->confirm 
          if(k1 != n1){
 	        k1 = n1;
+			spec=1;
+		 run_t.buzzer_flag =1;
+		 run_t.passswordsMatch = 1;
 	    //    run_t.BackLight=1;
-		   if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
-
-				 
-
-		         //switch(run_t.Numbers_counter){
-                   switch(number){
-
-					case 4:
-						run_t.buzzer_flag =1;
-						   if(temp_4 == 1234){
-						    run_t.BackLight =1;
-							
-						 // run_t.passswordsMatch = 0;
-                          // run_t.Numbers_counter = 0;
-                             number=0;
-
-						   Buzzer_LongSound();
-
-
-						   }
-						   else{
-   							  //run_t.passswordsMatch = 0;
-						      run_t.Numbers_counter = 0;
-							  return ;
-
-						   }
-                     
-
-							
-
-				    break;
-
-					case 5:
-						run_t.buzzer_flag =1;
-						   if(temp_4 == 12345){
-						    run_t.BackLight =1;
-							
-						 // run_t.passswordsMatch = 0;
-                          // run_t.Numbers_counter = 0;
-							number = 0;
-						   Buzzer_LongSound();
-
-
-						   }
-						   else{
-   							  //run_t.passswordsMatch = 0;
-						      run_t.Numbers_counter = 0;
-							  return ;
-
-						   }
-                     
-
-					break;
-
-					case 6:
-						run_t.buzzer_flag =1;
-						   if(temp_4 == 123456){
-						    run_t.BackLight =1;
-							
-						 // run_t.passswordsMatch = 0;
-                          // run_t.Numbers_counter = 0;
-								number=0;
-						   Buzzer_LongSound();
-
-
-						   }
-						   else{
-   							  //run_t.passswordsMatch = 0;
-						      run_t.Numbers_counter = 0;
-							  return ;
-
-						   }
-                     
-
-					break;
-
-
-				 }
-
-               
-	  	
-	         }
-		   else{
-
-		 //   run_t.passswordsMatch = 0;
-	  	     run_t.buzzer_flag =1;
-	        // run_t.Numbers_counter = 0;
-	         number = 0;
-
-		     return ;
-
-
-		   }
+//		   if(run_t.Numbers_counter > 3 && run_t.Numbers_counter < 7){
+//
+//				 
+//
+//		         //switch(run_t.Numbers_counter){
+//                   switch(number){
+//
+//					case 4:
+//						run_t.buzzer_flag =1;
+//						   if(temp_4 == 1234){
+//						    run_t.BackLight =1;
+//							
+//						 // run_t.passswordsMatch = 0;
+//                          // run_t.Numbers_counter = 0;
+//                             number=0;
+//
+//						   Buzzer_LongSound();
+//
+//
+//						   }
+//						   else{
+//   							  //run_t.passswordsMatch = 0;
+//						      run_t.Numbers_counter = 0;
+//							  return ;
+//
+//						   }
+//                     
+//
+//							
+//
+//				    break;
+//
+//					case 5:
+//						run_t.buzzer_flag =1;
+//						   if(temp_4 == 12345){
+//						    run_t.BackLight =1;
+//							
+//						 // run_t.passswordsMatch = 0;
+//                          // run_t.Numbers_counter = 0;
+//							number = 0;
+//						   Buzzer_LongSound();
+//
+//
+//						   }
+//						   else{
+//   							  //run_t.passswordsMatch = 0;
+//						      run_t.Numbers_counter = 0;
+//							  return ;
+//
+//						   }
+//                     
+//
+//					break;
+//
+//					case 6:
+//						run_t.buzzer_flag =1;
+//						   if(temp_4 == 123456){
+//						    run_t.BackLight =1;
+//							
+//						 // run_t.passswordsMatch = 0;
+//                          // run_t.Numbers_counter = 0;
+//								number=0;
+//						   Buzzer_LongSound();
+//
+//
+//						   }
+//						   else{
+//   							  //run_t.passswordsMatch = 0;
+//						      run_t.Numbers_counter = 0;
+//							  return ;
+//
+//						   }
+//                     
+//
+//					break;
+//
+//
+//				 }
+//
+//               
+//	  	
+//	         }
+//		   else{
+//
+//		 //   run_t.passswordsMatch = 0;
+//	  	     run_t.buzzer_flag =1;
+//	        // run_t.Numbers_counter = 0;
+//	         number = 0;
+//
+//		     return ;
+//
+//
+//		   }
 		   
 	   }
 
@@ -475,9 +480,11 @@ void RunCheck_Mode(unsigned int dat)
 	 
 	case KEY_0:
 		if(key==0){
-     	     number++;
-		
+     	 //    number++;
+		    temp = 0;//InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			 
 		}
 
 	 break;
@@ -485,90 +492,121 @@ void RunCheck_Mode(unsigned int dat)
     case KEY_1 :
 
 		if(key==0){
-     	     number++;
-		
+     	  //   number++;
+		     temp = 1; //InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			
+			 
 		}
 			
     case KEY_2:
           if(key==0){
-     	     number++;
-		
+     	  //   number++;
+		   temp = 2 ;//InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+		    spec=0;
+			
 		}
 	case  KEY_3:
 			if(key==0){
-     	     number++;
-		
+     	  //   number++;
+		    temp = 3; //InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			  
 		}
 			
 	case KEY_4:
 			if(key==0){
-     	     number++;
-		
+     	   ///  number++;
+		temp = 4;//InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			 
 		}
 	break;
 			
 	case KEY_5:
 			if(key==0){
-     	     number++;
-		
+     	   //  number++;
+		temp = 5;//InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			  
 		}
 	break;
 			
 	case KEY_6:
 		if(key==0){
-     	     number++;
-		
+     	  //   number++;
+		temp = 6;///InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			 
 		}
 	break;
 	case KEY_7:
 		if(key==0){
-     	     number++;
-		
+     	 //    number++;
+		temp = 7;///InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			
 		}
 	break;
 			
 	case KEY_8:
 			if(key==0){
-     	     number++;
-		
+     	  //   number++;
+		   temp = 8;//InputNumber_ToSpecialNumbers(dat); //input Numbers
 		     key=1;
+			 spec=0;
+			
 		}
    break;
 			
 	case KEY_9:
-		  if(key==0){
-     	     number++;
+		  if(key==0 ){
+		  	 key=1;
+     	   //  number++;
+		     temp = 9;//InputNumber_ToSpecialNumbers(dat); //input Numbers
+		     spec=0;
 		
-		     key=1;
 		}
 	break;
 		  
 
 	}  
 
-	  
-	    if(k2 != n2 && key==1){
+	
+	  if(k2 != n2 && key==1 && spec ==0){
 				k2=n2;
 		        key = 0;
-			   run_t.buzzer_flag =1;
-				temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
-				
-				// number++;
-				run_t.Numbers_counter ++; //run_t.Numbers_counter + 1 ;
-				if(run_t.Numbers_counter >250){
-					run_t.BackLight=1;
-					//run_t.buzzer_flag =1
-					 Buzzer_LongSound();
-				     run_t.Numbers_counter =10;
+			    spec =1;
+				 number++;
+				 run_t.Numbers_counter++;
+				 if(number ==1){
 
-				}
+                       OK_LED_ON();
+				 }
+				 if(number ==2)BAT_LED_ON();
+
+				 if(run_t.Numbers_counter == 3)	run_t.buzzer_flag =2;
+
+				 if(run_t.Numbers_counter ==4) 
+				 {
+				        ERR_LED_ON();
+						BAT_LED_ON();
+				 	}
+
+				 if(run_t.Numbers_counter ==5) OK_LED_ON();
+				run_t.buzzer_flag =1;
+				//number++;
+			//	temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
+				
+			
+			
 
 
 //				    if(temp ==3){
@@ -577,13 +615,21 @@ void RunCheck_Mode(unsigned int dat)
 //
 //
 //					}
+//					
+//					if(number ==4 && temp == 4){
+//						run_t.BackLight=1;
+//						//run_t.buzzer_flag =1;
+//					     Buzzer_LongSound();
+//					}
+
+//				   if(run_t.Numbers_counter==6 && temp ==9){
+//						run_t.BackLight=1;
+//						//run_t.buzzer_flag =1;
+//					     Buzzer_LongSound();
+//					}
+//				run_t.buzzer_flag =1;
 					
-					if(number ==4){
-						run_t.BackLight=1;
-						//run_t.buzzer_flag =1;
-					     Buzzer_LongSound();
-					}
-				return ;
+				//return ;
 //
 //				if(temp ==0){
 //				  run_t.BackLight=1;
@@ -666,10 +712,9 @@ void RunCheck_Mode(unsigned int dat)
 	   
 			   }
 				   #endif 
-	         }
-
- 
-}
+	   }
+	 
+  }
 /****************************************************************************
 *
 *Function Name:void RunCheck_Mode(unsigned int dat)
@@ -788,13 +833,15 @@ void RunCommand_Unlock(void)
 ****************************************************************************/
 void Buzzer_Sound(void)
 {
-    uint8_t i;
+    unsigned char  i;
 
-	if(run_t.buzzer_flag ==1){
+	if(run_t.buzzer_flag ==1 ){
 			  
 		 run_t.buzzer_flag=0;
+	//	 run_t.Numbers_counter++;
 
 		 BUZZER_KeySound();
+	   
          i=1;
 	              
 	}
@@ -804,15 +851,15 @@ void Buzzer_Sound(void)
 	   BUZZER_PIN_OFF() ;
 	}
 
-	
+   
 
    if(i==1){
    	
-      __delay_ms(400);
+      __delay_ms(300);
 				  n0++;
 				  n1++;
 				  n2++;
-				
+		
 				  
 
 	 i=0;
@@ -893,16 +940,34 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number)
 
 void BackLight_Fun(void)
 {
-	 if(run_t.BackLight ==1){
+	 if(run_t.BackLight ==1 ){
 
 			  run_t.BackLight =0;
 		      BACKLIGHT_ON() ;
 		    
-		}
-		 else{
+	}
+	else{
 
               BACKLIGHT_OFF() ;
 			 
-		 }
+			 
+    }
+
+	 if(run_t.BackLight==2){
+	 	 run_t.BackLight =0;
+	 	
+	    BACKLIGHT_2_ON();
+	    BACKLIGHT_ON() ;
+
+     }
+	 else{
+
+	     BACKLIGHT_OFF() ;
+         BACKLIGHT_2_OFF();
+
+	 }
+	
+
+		 
 
 }

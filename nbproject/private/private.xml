@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/run.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/main.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/key.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/interrupt.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/main.h</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/buzzer.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/inc/key.h</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/ADC.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/inc/run.h</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/led.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/tim1.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/src/eeprom.c</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/inc/buzzer.h</file>
+            <file>file:/E:/Password_Lock_PRO/PasswordLock_Codes/PasswordLock_Simple_pic16f684pro.X/hardware/inc/tim1.h</file>
+        </group>
+    </open-files>
+</project-private>

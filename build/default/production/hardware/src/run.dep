@@ -1,0 +1,21 @@
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\stdarg.h
+hardware/src/../inc/../../main.h
+hardware/src/../inc/../../hardware/inc/buzzer.h
+hardware/src/../inc/../../hardware/inc/ADC.h
+hardware/src/../inc/run.h
+hardware/src/../../main.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\htc.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\eeprom_routines.h
+hardware/src/../inc/../../hardware/inc/run.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\stdio.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\chip_select.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\conio.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\stdlib.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\pic.h
+hardware/src/../inc/../../hardware/inc/motor.h
+C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\pic16f684.h
+hardware/src/../inc/../../hardware/inc/eeprom.h
+hardware/src/../inc/../../hardware/inc/led.h
+hardware/src/../inc/../../hardware/inc/key.h
+hardware/src/../inc/../../hardware/inc/../../main.h
+hardware/src/../inc/../../hardware/inc/interrupt.h

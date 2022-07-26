@@ -1,0 +1,11 @@
+build/default/production/main.p1:	\
+	hardware/inc/buzzer.h	\
+	hardware/inc/ADC.h	\
+	main.h	\
+	hardware/inc/run.h	\
+	hardware/inc/motor.h	\
+	hardware/inc/eeprom.h	\
+	hardware/inc/led.h	\
+	hardware/inc/key.h	\
+	hardware/inc/../../main.h	\
+	hardware/inc/interrupt.h	\

@@ -1,0 +1,19 @@
+_Buzzer_Sound: CODE, 1670 0 29
+_LED_Init: CODE, 1624 0 20
+_BUZZER_KeySound: CODE, 1699 0 30
+_main: CODE, 1729 0 34
+_Motor_Init: CODE, 1542 0 11
+_SendByteAndGetNACK: CODE, 1809 0 58
+_SC12B_Init_Function: CODE, 1512 0 6
+_I2C_Receive8Bit: CODE, 1644 0 26
+_BackLight_Fun: CODE, 1589 0 17
+_I2C_Stop: CODE, 1564 0 12
+_BUZZER_Init: CODE, 1507 0 5
+_I2C_Delay: CODE, 1518 0 6
+_System_Init: CODE, 1505 0 2
+_RunCheck_Mode: CODE, 1867 0 181
+_I2C_Start: CODE, 1576 0 13
+_ADC_Init: CODE, 1532 0 10
+_I2C_Respond: CODE, 1606 0 18
+_I2C_Simple_Read_From_Device: CODE, 1763 0 46
+Total: 524
