@@ -18,67 +18,34 @@ unsigned char SC_Data[2];
  */
 void main(void) 
 {
-    static unsigned char i;
+    static unsigned char clearEeprom;
     unsigned char resetKey;
-    unsigned int KeyValue,adc,k;
+    unsigned int KeyValue,adc;
 
    SC12B_Init_Function();
-    //TMR1_Initialize();
+    TMR0_Initialize();
 	Motor_Init();
 	
     ADC_Init();
     System_Init();
-  // INTERRUPT_GlobalInterruptEnable();
-  // INTERRUPT_PeripheralInterruptEnable() ;
+   INTERRUPT_GlobalInterruptEnable();
+   INTERRUPT_PeripheralInterruptEnable() ;
    run_t.changePassword=0;
    run_t.Numbers_counter=0;
    run_t.eepromAddress=0;
    while(1)
    {
-
-    k++;
-   resetKey = Scan_Key();
-		   if(resetKey ==0x01){
-               KeyValue ++;
-               if(KeyValue==1) BAT_LED_ON();
-               else {
-                    KeyValue=0;
-                   BAT_LED_OFF();
-               }
-			   run_t.Confirm =1; //input amdministrator password flag
-			   run_t.Numbers_counter=0;
-			   run_t.buzzer_flag =1;
-		       BUZZER_KeySound();
-               
-		   }
-		   if(resetKey == 0x81){
-               
-               adc ++;
-               if(adc==1)
-			        OK_LED_ON();
-               else{
-                   OK_LED_OFF();
-                   adc = 0;
-               }
-			  run_t.BackLight =2;
-                Buzzer_LongSound();
-			  //ClearEEPRO_Data();
-                i=1;
-			
-              
-		   }
-   if(i==1){
-       i=0;
-     ClearEEPRO_Data();
-   
-     }
-	   if(k > 30000){
-	   	k=0;
-	   BackLight_Fun();
-	    Buzzer_Sound();
-	   }
+       if(run_t.gTimer_300==1){
+           run_t.gTimer_300 =0;
+             OK_LED_ON();
+       }
+       else 
+            OK_LED_OFF();
+      
+       
+  
 	#if 0
-
+    
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
@@ -87,7 +54,7 @@ void main(void)
 			
 	      }
 	   }
-
+   
 	if(run_t.passswordsMatch ==1 && run_t.adminiId !=1){
 		
 		  RunCommand_Unlock();
@@ -100,13 +67,12 @@ void main(void)
 			run_t.Confirm =1; //input amdministrator password flag
 			run_t.Numbers_counter=0;
 			run_t.buzzer_flag =1;
-		
-
-		}
+	     }
 		if(resetKey == 0x81){
 			
 		   run_t.BackLight =2;
-		   ClearEEPRO_Data();
+		 //  ClearEEPRO_Data();
+           clearEeprom=1;
            Buzzer_LongSound();
 		}
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
@@ -116,9 +82,15 @@ void main(void)
         }
 	}
 	
-    BackLight_Fun();
-    Buzzer_Sound();
-
+     if(run_t.gTimer_30ms==3){
+         run_t.gTimer_30ms;
+         BackLight_Fun();
+         Buzzer_Sound();
+         if(clearEeprom==1){
+             clearEeprom = 0;
+            ClearEEPRO_Data();
+         }
+   }
      #endif 
    }
     

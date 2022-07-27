@@ -16,7 +16,7 @@
 #include "hardware/inc/buzzer.h"
 #include "hardware/inc/key.h"
 #include "hardware/inc/led.h"
-//#include "hardware/inc/tim0.h"
+#include "hardware/inc/tim0.h"
 //#include "hardware/inc/tim1.h"
 #include "hardware/inc/interrupt.h"
 #include "hardware/inc/run.h"

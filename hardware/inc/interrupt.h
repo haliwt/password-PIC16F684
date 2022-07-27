@@ -51,6 +51,7 @@
  */
 #define INTERRUPT_PeripheralInterruptDisable()      (INTCONbits.PEIE = 0)
 
+void interrupt INT(void);  
 
 #endif  // INTERRUPT_MANAGER_H
 /**

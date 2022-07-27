@@ -29,13 +29,18 @@ typedef struct __RUN_T{
 
     unsigned char userId;
     
-
     unsigned char eepromAddress;
 	unsigned char BackLight;
 	unsigned char buzzer_flag;
 	unsigned char Numbers_counter;
 	unsigned char passswordsMatch;
 	unsigned char passsword_unlock;
+
+	
+	unsigned char gTimer_20ms;
+	unsigned char gTimer_30ms;
+	unsigned char gTimer_300;
+	
 	
 
 
