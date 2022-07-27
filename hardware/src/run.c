@@ -819,14 +819,7 @@ void BackLight_Fun(void)
 		      BACKLIGHT_ON() ;
 		    
 	}
-	else{
-
-              BACKLIGHT_OFF() ;
-			 
-			 
-    }
-
-	 if(run_t.BackLight==2){
+    else if(run_t.BackLight==2){
 	 	 run_t.BackLight =0;
 	 	
 	    BACKLIGHT_2_ON();
@@ -875,7 +868,10 @@ void ClearEEPRO_Data(void)
 {
 
    unsigned char i;
-   for(i=0;i<=0xff;i++)
+   for(i=0;i<0x7C;i++){
        EEPROM_Write_Byte(i,0);
+       if(i==0x7B)return ;
+   }
+   
 }
 

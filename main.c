@@ -18,7 +18,7 @@ unsigned char SC_Data[2];
  */
 void main(void) 
 {
-   
+    static unsigned char i;
     unsigned char resetKey;
     unsigned int KeyValue,adc;
 
@@ -53,19 +53,30 @@ void main(void)
 		   }
 		   if(resetKey == 0x81){
                
-               adc = adc ^ 0x01;
+               adc ++;
                if(adc==1)
 			        OK_LED_ON();
-               else
+               else{
                    OK_LED_OFF();
+                   adc = 0;
+               }
 			  run_t.BackLight =2;
-			 // ClearEEPRO_Data();
-			  Buzzer_LongSound();
+                Buzzer_LongSound();
+			  //ClearEEPRO_Data();
+                i=1;
+			
               
 		   }
-
-   ///BackLight_Fun();
-   // Buzzer_Sound();
+   if(i==1){
+       i=0;
+     ClearEEPRO_Data();
+   
+     
+   }
+//   if(resetKey==0){
+//   BackLight_Fun();
+//    Buzzer_Sound();
+//   }
 	#if 0
 
 	if(run_t.passswordsMatch==0){
