@@ -36,8 +36,37 @@ void main(void)
    while(1)
    {
 
-   
-	#if 1
+
+   resetKey = Scan_Key();
+		   if(resetKey ==0x01){
+               KeyValue ++;
+               if(KeyValue==1) BAT_LED_ON();
+               else {
+                    KeyValue=0;
+                   BAT_LED_OFF();
+               }
+			   run_t.Confirm =1; //input amdministrator password flag
+			   run_t.Numbers_counter=0;
+			   run_t.buzzer_flag =1;
+		       BUZZER_KeySound();
+               
+		   }
+		   if(resetKey == 0x81){
+               
+               adc = adc ^ 0x01;
+               if(adc==1)
+			        OK_LED_ON();
+               else
+                   OK_LED_OFF();
+			  run_t.BackLight =2;
+			 // ClearEEPRO_Data();
+			  Buzzer_LongSound();
+              
+		   }
+
+   ///BackLight_Fun();
+   // Buzzer_Sound();
+	#if 0
 
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){

@@ -100,7 +100,7 @@ unsigned char  Scan_Key(void)
 		{
 			if(key.read == key.buffer) // adjust key be down 
 			{
-				if(++key.on_time> 50) //1000  0.5us
+				if(++key.on_time> 1000) //1000  0.5us ->
 				{
 					key.value = key.buffer^_KEY_ALL_OFF; // key.value = 0x1E ^ 0x1f = 0x01, com = 0x0E ^ 0x1f = 0x11
 					key.on_time = 0;
@@ -120,7 +120,7 @@ unsigned char  Scan_Key(void)
 		{
 			if(key.read == key.buffer) //again adjust key if be pressed down 
 			{
-				if(++key.on_time>500)// 10000 long key be down
+				if(++key.on_time>20000)// 10000 long key be down
 				{
 					
 					key.value = key.value|0x80; //key.value = 0x01 | 0x80  =0x81  
@@ -132,7 +132,7 @@ unsigned char  Scan_Key(void)
 			}
 			else if(key.read == _KEY_ALL_OFF)  // loose hand 
 				{
-					if(++key.off_time>2) //30 don't holding key dithering
+					if(++key.off_time>30) //30 don't holding key dithering
 					{
 						key.value = key.buffer^_KEY_ALL_OFF; // key.value = 0x1E ^ 0x1f = 0x01
 						
@@ -154,7 +154,7 @@ unsigned char  Scan_Key(void)
 		{
 			if(key.read == _KEY_ALL_OFF)
 			{
-				if(++key.off_time>5)//50 //100
+				if(++key.off_time>50)//50 //100
 				{
 					key.state   = start;
                   

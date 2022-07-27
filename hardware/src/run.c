@@ -655,7 +655,6 @@ static void ReadPassword_EEPROM_SaveData(void)
 
 				     if(value==1){
 									   
-						BAT_LED_ON();	
 						run_t.BackLight=2;
 					
 					    run_t.passsword_unlock=1;	
