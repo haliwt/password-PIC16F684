@@ -88,6 +88,6 @@ void System_Init(void);
 
 
 unsigned char Scan_Key(void);
-
+void KEY_ISR(void);
 
 #endif 

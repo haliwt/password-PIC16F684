@@ -35,17 +35,12 @@ void main(void)
    run_t.eepromAddress=0;
    while(1)
    {
-       if(run_t.gTimer_300==1){
-           run_t.gTimer_300 =0;
-             OK_LED_ON();
-       }
-       else 
-            OK_LED_OFF();
+ 
       
        
   
-	#if 0
-    
+	#if 1
+      
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
@@ -54,7 +49,7 @@ void main(void)
 			
 	      }
 	   }
-   
+       
 	if(run_t.passswordsMatch ==1 && run_t.adminiId !=1){
 		
 		  RunCommand_Unlock();
@@ -62,13 +57,13 @@ void main(void)
 	
 	if(run_t.passsword_unlock==2){ //lock turn on Open 
 	  	
-		resetKey = Scan_Key();
-		if(resetKey ==0x01){
+		//resetKey = Scan_Key();
+		if(run_t.getKey ==0x01){
 			run_t.Confirm =1; //input amdministrator password flag
 			run_t.Numbers_counter=0;
 			run_t.buzzer_flag =1;
 	     }
-		if(resetKey == 0x81){
+		if(run_t.getKey == 0x81){
 			
 		   run_t.BackLight =2;
 		 //  ClearEEPRO_Data();
@@ -82,17 +77,19 @@ void main(void)
         }
 	}
 	
-     if(run_t.gTimer_30ms==3){
-         run_t.gTimer_30ms;
+    
          BackLight_Fun();
          Buzzer_Sound();
          if(clearEeprom==1){
+             ERR_LED_ON();
+             BAT_LED_ON();
              clearEeprom = 0;
             ClearEEPRO_Data();
          }
+         
    }
      #endif 
    }
     
-}
+
 

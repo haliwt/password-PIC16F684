@@ -45,7 +45,7 @@ void TMR0_ISR(void)
     INTCONbits.T0IF = 0;
     TMR0 = 217;
 	run_t.gTimer_20ms ++;
-	
+	run_t.gTimer_30ms++;
     t0++;
     if(t0>9){ //10*10 =100ms
        t0=0;

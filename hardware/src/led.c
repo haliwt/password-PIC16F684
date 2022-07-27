@@ -25,6 +25,9 @@ static void LED_Init(void)
 	TRISCbits.TRISC3 = 0; 
     //RESET KEY gpio input PORT
     TRISAbits.TRISA3 = 1;   //I/O as input
+    IOCAbits.IOCA3 =1 ;    //Open interrupter flag
+	INTCONbits.RAIE=1;
+	INTCONbits.RAIF=0;
     
     //Setup GPIO output defult value 
     PORTAbits.RA0=1;
@@ -174,4 +177,10 @@ unsigned char  Scan_Key(void)
 
 }
 
+
+void KEY_ISR(void)
+{
+   	INTCONbits.RAIF = 0;
+    run_t.getKey =  Scan_Key();
+}
 

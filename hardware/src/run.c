@@ -710,19 +710,16 @@ void Buzzer_Sound(void)
 
    if(i==1){
    	
-      //__delay_ms(300);
-      if(run_t.gTimer_300 ==1){
-	  	   run_t.gTimer_300 =0;
+      __delay_ms(300);
+     // if(run_t.gTimer_300 ==1){
+	  	//   run_t.gTimer_300 =0;
 				  n0++;
 				  n1++;
 				  n2++;
-		
-				  
-      
-	               i=0;
+                  i=0;
      
           run_t.passswordsMatch =0;
-      	}
+      //	}
    }
 }
 /****************************************************************************
