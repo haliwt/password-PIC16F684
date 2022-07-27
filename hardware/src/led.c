@@ -96,11 +96,11 @@ unsigned char  Scan_Key(void)
 			}
 			break;
 		}
-		case first:
+		case first: //shot key times 
 		{
 			if(key.read == key.buffer) // adjust key be down 
 			{
-				if(++key.on_time> 1000) //1000  0.5us ->
+				if(++key.on_time> 1000) //1000  0.5us -> short time key
 				{
 					key.value = key.buffer^_KEY_ALL_OFF; // key.value = 0x1E ^ 0x1f = 0x01, com = 0x0E ^ 0x1f = 0x11
 					key.on_time = 0;
@@ -116,7 +116,7 @@ unsigned char  Scan_Key(void)
 			}
 			break;
 		}
-		case second:
+		case second: //long key times 
 		{
 			if(key.read == key.buffer) //again adjust key if be pressed down 
 			{

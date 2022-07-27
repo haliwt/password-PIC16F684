@@ -20,7 +20,7 @@ void main(void)
 {
     static unsigned char i;
     unsigned char resetKey;
-    unsigned int KeyValue,adc;
+    unsigned int KeyValue,adc,k;
 
    SC12B_Init_Function();
     //TMR1_Initialize();
@@ -36,7 +36,7 @@ void main(void)
    while(1)
    {
 
-
+    k++;
    resetKey = Scan_Key();
 		   if(resetKey ==0x01){
                KeyValue ++;
@@ -71,12 +71,12 @@ void main(void)
        i=0;
      ClearEEPRO_Data();
    
-     
-   }
-//   if(resetKey==0){
-//   BackLight_Fun();
-//    Buzzer_Sound();
-//   }
+     }
+	   if(k > 30000){
+	   	k=0;
+	   BackLight_Fun();
+	    Buzzer_Sound();
+	   }
 	#if 0
 
 	if(run_t.passswordsMatch==0){
