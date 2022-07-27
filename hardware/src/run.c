@@ -133,8 +133,13 @@ void SavePassword_To_EEPROM(void)
 			break;
 
 		   case 11:
-		   	    run_t.userId = 10;
+		   	    run_t.userId = 0;
 				run_t.Confirm =0; //to save new password of flag 
+				run_t.adminiId =0;
+				run_t.passsword_unlock=0;
+				run_t.inputPwdTimes =0;
+				OK_LED_OFF();
+				
 				ERR_LED_ON();
 				__delay_ms(500);
 		        ERR_LED_OFF();
@@ -177,11 +182,8 @@ void SavePassword_To_EEPROM(void)
 					 OK_LED_ON();
 					 run_t.BackLight =2;
 					 Buzzer_LongSound();
-					 run_t.Confirm =0;
-					 run_t.adminiId =0;
-			    	run_t.inputPwdTimes =0;
-					run_t.passsword_unlock=0;
-
+					 
+					
 			
 
 			 }
@@ -189,13 +191,16 @@ void SavePassword_To_EEPROM(void)
 			 	OK_LED_OFF();
 				ERR_LED_ON();
 				
-				run_t.Confirm =0;
+				
+
+			 }
+
+			    run_t.Confirm =0;
 			    run_t.adminiId =0;
 			    run_t.inputPwdTimes =0;
 				run_t.passsword_unlock=0;
 				
-
-			 }
+			 
          	}
 			  
 
@@ -487,7 +492,7 @@ void RunCommand_Unlock(void)
 
 		OK_LED_OFF();
 		ERR_LED_ON();
-		run_t.passswordsMatch = 0;
+		
 		run_t.Numbers_counter = 0;
 		 run_t.passsword_unlock=0;	
 		run_t.eepromAddress=0;
