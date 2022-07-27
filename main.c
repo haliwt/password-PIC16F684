@@ -37,9 +37,10 @@ void main(void)
    {
  
       
-       
+     //  if(run_t.getKey == 0x01)BAT_LED_ON();
+	 //  if(run_t.getKey ==0X081)OK_LED_ON();
   
-	#if 1
+	#if 0
       
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
@@ -91,5 +92,5 @@ void main(void)
      #endif 
    }
     
-
+}
 

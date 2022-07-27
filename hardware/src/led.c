@@ -180,7 +180,70 @@ unsigned char  Scan_Key(void)
 
 void KEY_ISR(void)
 {
-   	INTCONbits.RAIF = 0;
-    run_t.getKey =  Scan_Key();
+    static unsigned long int k1;
+	static unsigned char cnt,cnt2;
+	INTCONbits.RAIF = 0;
+	
+	if(KEY1_RA3_GetValue() ==0 )
+	{
+	
+
+	   
+	   while(KEY1_RA3_GetValue() ==0){
+
+		    k1++;
+
+	        BAT_LED_ON();
+
+		};
+		
+	}
+	
+
+	if(KEY1_RA3_GetValue() ==1){
+		BAT_LED_OFF();
+
+	if(k1 >2 &&  k1<40000) {
+
+	     cnt ++;
+		 if(cnt==1){
+
+			    ERR_LED_ON();
+			    BAT_LED_OFF();
+		 	}
+		 else{
+		 	cnt=0;
+		    ERR_LED_OFF();
+			BAT_LED_OFF();
+
+
+		 }
+
+		run_t.getKey = 0x01;
+		k1=0;
+	}
+
+	if(k1> 80000  ){
+		cnt2++;
+		if(cnt2==1){
+		OK_LED_ON();
+		BAT_LED_OFF();
+			}
+		else{
+			cnt2=0;
+				OK_LED_OFF();
+		BAT_LED_OFF();
+
+		}
+       run_t.getKey = 0x81;
+	   k1=0;
+
+	}
+	else{
+       k1=0;
+
+	}
+	}
+   
 }
 
