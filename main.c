@@ -63,6 +63,12 @@ void main(void)
 		
 
 		}
+		if(resetKey == 0x81){
+			
+		   run_t.BackLight =2;
+		   ClearEEPRO_Data();
+           Buzzer_LongSound();
+		}
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
             ERR_LED_OFF();
        

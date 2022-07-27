@@ -61,5 +61,7 @@ void Buzzer_Sound(void);
 void BackLight_Fun(void);
 
 void SavePassword_To_EEPROM(void);
+void ClearEEPRO_Data(void);
+
 
 #endif 

@@ -655,7 +655,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 
 				     if(value==1){
 									   
-							
+						BAT_LED_ON();	
 						run_t.BackLight=2;
 					
 					    run_t.passsword_unlock=1;	
@@ -665,7 +665,8 @@ static void ReadPassword_EEPROM_SaveData(void)
 					}
 					else{
 
-					    	run_t.eepromAddress++ ;	
+					     Fail = 1;
+						 return ;
 						
 					}
 				 }
@@ -870,3 +871,12 @@ void BackLight_Fun(void)
 		 
 
 }
+
+void ClearEEPRO_Data(void)
+{
+
+   unsigned char i;
+   for(i=0;i<=0xff;i++)
+       EEPROM_Write_Byte(i,0);
+}
+
