@@ -276,7 +276,15 @@ void RunCheck_Mode(unsigned int dat)
 	        k1 = n1;
 			spec=1;
 		 run_t.buzzer_flag =1;
-		
+
+		 if(run_t.Numbers_counter < 4 ){
+             OK_LED_OFF();
+			 ERR_LED_ON();
+		     run_t.Numbers_counter=0;
+		     run_t.passswordsMatch = 0;
+
+		 }
+		 else{
 		  switch(run_t.Numbers_counter){
              
 					case 4:
@@ -302,11 +310,14 @@ void RunCheck_Mode(unsigned int dat)
 			      run_t.eepromAddress =0;  //administrator passwords 
 
                }
-			 
+			  if(run_t.inputPwdTimes ==2) ERR_LED_ON();
+			  if(run_t.inputPwdTimes ==3 )  BAT_LED_ON();
+			  if(run_t.inputPwdTimes ==4) BAT_LED_OFF();
 			 run_t.passswordsMatch = 1;
 		     run_t.Numbers_counter=0;
 		}
 		 else run_t.passswordsMatch = 1;
+		 }
 		   
 	  	   
 	 }
@@ -630,8 +641,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 					}
 					else{
 						if(run_t.Confirm ==1){
-						   run_t.adminiId	= 0;
-                            Fail = 1;
+						   Fail = 1;
 							return ;
 						}
 						run_t.eepromAddress++ ;	

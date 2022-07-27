@@ -63,8 +63,11 @@ void main(void)
 		
 
 		}
-		if(run_t.Confirm ==1 && run_t.adminiId==1)
+		if(run_t.Confirm ==1 && run_t.adminiId==1){
+            ERR_LED_OFF();
+       
 			SavePassword_To_EEPROM();
+        }
 	}
 	
     BackLight_Fun();
