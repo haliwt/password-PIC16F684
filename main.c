@@ -43,39 +43,32 @@ void main(void)
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
 	      KeyValue =(unsigned int)(SC_Data[0]<<8) + SC_Data[1];
-		   
-             
-          RunCheck_Mode(KeyValue); 
+		  RunCheck_Mode(KeyValue); 
 			
 	      }
 	   }
-	if(run_t.passswordsMatch ==1 && run_t.passsword_unlock !=2){
+
+	if(run_t.passswordsMatch ==1 && run_t.adminiId !=1){
+		
 		  RunCommand_Unlock();
-		   
-		    
-     }
-	 if(run_t.passsword_unlock==2){ //lock turn on Open 
+	}
+	
+	if(run_t.passsword_unlock==2){ //lock turn on Open 
 	  	
 		resetKey = Scan_Key();
 		if(resetKey ==0x01){
-
-           ERR_LED_ON()  ;
-	       OK_LED_ON()  ;
-		   run_t.Confirm =1;
+			run_t.Confirm =1; //input amdministrator password flag
+			run_t.Numbers_counter=0;
+			run_t.buzzer_flag =1;
+		
 
 		}
-		if(  run_t.Confirm ==1)
-		     SavePassword_To_EEPROM();
-		
-			
-
-	 }
-
+		if(run_t.Confirm ==1 && run_t.adminiId==1)
+			SavePassword_To_EEPROM();
+	}
 	
-	    
-		BackLight_Fun();
-
-	    Buzzer_Sound();
+    BackLight_Fun();
+    Buzzer_Sound();
 
      #endif 
    }
