@@ -226,7 +226,6 @@ void RunCheck_Mode(unsigned int dat)
 {
    unsigned char temp, i;
   
-   //static  unsigned long int  temp_5,temp_6;
    static unsigned char k0=0xff,k1=0xff,k2=0xff,key,spec;
  
    
@@ -280,7 +279,12 @@ void RunCheck_Mode(unsigned int dat)
 			spec=1;
 		 run_t.buzzer_flag =1;
 
-		 if(run_t.Numbers_counter < 4 ){
+		 if(run_t.Numbers_counter ==0){
+		 	
+		    run_t.passswordsMatch = 0;
+
+		 }
+		 else if(run_t.Numbers_counter < 4 && run_t.Numbers_counter >0 ){
              OK_LED_OFF();
 			 ERR_LED_ON();
 		     run_t.Numbers_counter=0;
