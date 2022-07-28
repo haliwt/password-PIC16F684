@@ -285,26 +285,9 @@ void RunCheck_Mode(unsigned int dat)
 
 		 }
 		 else{
-		  switch(run_t.Numbers_counter){
-             
-					case 4:
-			           pwd1[4]=0;
-		 			   pwd2[4]=0;
+		
 
-					   pwd1[5]=0;
-		 			   pwd2[5]=0;
-						  
-                     break;
-
-					 case 5:
-					   pwd1[5]=0;
-		 			   pwd2[5]=0;
-
-					 break;
-
-		}
-
-		 if( run_t.Confirm ==1){
+		 	if( run_t.Confirm ==1){
               run_t.inputPwdTimes ++ ;
 			  if(run_t.inputPwdTimes ==1){
 			      run_t.eepromAddress =0;  //administrator passwords 
@@ -551,8 +534,11 @@ void RunCommand_Unlock(void)
 ****************************************************************************/
 static void ReadPassword_EEPROM_SaveData(void)
 {
-      static unsigned char value ,Readpwd[6];
+     
+	  static unsigned char value ,Readpwd[6];
 	  static  unsigned char eevalue ,ReadAddress;
+
+	  for(run_t.eepromAddress =0; run_t.eepromAddress <12;run_t.eepromAddress++){
 	  
 	    switch(run_t.eepromAddress){
 	
@@ -604,8 +590,6 @@ static void ReadPassword_EEPROM_SaveData(void)
 				   break;
 	
 				 case 11:
-
-				 case 12:
 					run_t.eepromAddress=0;
 				
 				   Fail = 1;
@@ -644,7 +628,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 						   Fail = 1;
 							return ;
 						}
-						run_t.eepromAddress++ ;	
+						//n_t.eepromAddress++ ;	
 					}
 
 			}
@@ -669,12 +653,13 @@ static void ReadPassword_EEPROM_SaveData(void)
 						
 					}
 				 }
-				 else
-	                  run_t.eepromAddress++ ;	
+				 //n_t.eepromAddress++ ;	
+				 
 			}
 
 		 
 	   	}
+	  	}
 		
 }
 
