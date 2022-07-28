@@ -153,6 +153,10 @@ void SavePassword_To_EEPROM(void)
 				ERR_LED_OFF();
 				__delay_ms(1000);
 				ERR_LED_ON();
+				__delay_ms(1000);
+				ERR_LED_OFF();
+				__delay_ms(1000);
+				ERR_LED_ON();
 				
 				
 				return ;
