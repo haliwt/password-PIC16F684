@@ -76,11 +76,13 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 void SavePassword_To_EEPROM(void)
 {
 	static unsigned char eevalue,value,eeNumbers;
+	
     if(run_t.inputPwdTimes ==3){
 	for(eeNumbers =0; eeNumbers< 12;eeNumbers++){
 
-	switch(eeNumbers){
-					  
+	  
+		
+		switch(eeNumbers){	  
 		   case 0:
 		
 			  run_t.userId= ADMINI;
@@ -135,7 +137,7 @@ void SavePassword_To_EEPROM(void)
 			break;
 
 		   case 11:
-		   	    run_t.userId = 0;
+		   	    eeNumbers = 0;
 				run_t.Confirm =0; //to save new password of flag 
 				run_t.adminiId =0;
 				run_t.passsword_unlock=0;
@@ -156,17 +158,13 @@ void SavePassword_To_EEPROM(void)
 				return ;
 		   break;
 
-		  
-
-
-		
-				  
-	}
+		  }
 
 		eevalue= EEPROM_Read_Byte(run_t.userId);
 		if(eevalue !=1){
 	
-         if(run_t.userId < 11){
+        // if(run_t.userId < 11){
+            if(eeNumbers <11){
 	
       //   if(run_t.inputPwdTimes ==3){
 		 	value =CompareValue(pwd1, pwd2);
@@ -197,31 +195,24 @@ void SavePassword_To_EEPROM(void)
 			 else{
 			 	OK_LED_OFF();
 				ERR_LED_ON();
-				
-				
-
-			 }
-
-		
-			    run_t.inputPwdTimes =0;
-				
-				
 			 
-         	}
+				 if(eeNumbers ==0) eeNumbers =0;
+				 else
+				 	eeNumbers --;
+				 run_t.inputPwdTimes =0;
+				
+				}
+                }
 			  
          	}
 		
-	     
-		//}
+    	}
 		
-
+		
 	}
-   }
-			  
+
+
 }
-
-
-
 
 
 /****************************************************************************
@@ -271,6 +262,7 @@ void RunCheck_Mode(unsigned int dat)
 		     run_t.Numbers_counter =0 ;
 			run_t.passswordsMatch = 0;
 			run_t.changePassword=0;
+            run_t.inputPwdTimes=0;
 		  }
        }
 		
