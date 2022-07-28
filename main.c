@@ -29,17 +29,14 @@ void main(void)
     System_Init();
    INTERRUPT_GlobalInterruptEnable();
    INTERRUPT_PeripheralInterruptEnable() ;
-   run_t.changePassword=0;
+  
    run_t.Numbers_counter=0;
    run_t.eepromAddress=0;
    while(1)
    {
  
       #if 1
-
-	 
-      
-	if(run_t.passswordsMatch==0){
+      if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
 	      KeyValue =(unsigned int)(SC_Data[0]<<8) + SC_Data[1];
@@ -70,6 +67,13 @@ void main(void)
        
 			SavePassword_To_EEPROM();
         }
+		if(run_t.gTimer_2s == 1 && run_t.unLock_times==1){
+			 run_t.unLock_times ++;
+			 Motor_CW_Run();//open passwordlock 
+			 __delay_ms(300);
+			 Motor_Stop();
+
+		}
 	}
 	
     

@@ -264,7 +264,6 @@ void RunCheck_Mode(unsigned int dat)
 			spec=1;
 		   run_t.Numbers_counter =0 ;
 		    run_t.passswordsMatch = 0;
-			run_t.changePassword=0;
             run_t.inputPwdTimes=0;
 		  }
        }
@@ -517,19 +516,21 @@ void RunCommand_Unlock(void)
 			
          }
 		 else{
-			
+			  
 			 ERR_LED_OFF();
 			 OK_LED_ON();
 			 Buzzer_LongSound();
 			 Motor_CCW_Run();//open passwordlock 
-			
+			 __delay_ms(300);
+			 Motor_Stop();
 
 		   }
-	
+	      run_t.unLock_times = 1;
 		  run_t.Numbers_counter =0 ;
 		  run_t.eepromAddress=0;
 		 run_t.passswordsMatch = 0;
 		 run_t.passsword_unlock=2;
+		 run_t.gTimer_2s =0;
  
 	 }
 	

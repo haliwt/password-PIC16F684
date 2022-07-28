@@ -24,7 +24,8 @@ typedef struct __RUN_T{
 	unsigned char Confirm;
 	unsigned char inputPwdTimes;
 
-	unsigned char changePassword;
+	unsigned char unLock_times;
+
    
 
 
@@ -39,6 +40,7 @@ typedef struct __RUN_T{
 
 	
 	unsigned char gTimer_10s;
+	unsigned char gTimer_2s;
 	
 	
 	
