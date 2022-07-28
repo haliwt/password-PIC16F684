@@ -41,6 +41,7 @@ typedef struct __RUN_T{
 	
 	unsigned char gTimer_10s;
 	unsigned char gTimer_2s;
+	unsigned char gTimer_1s;
 	
 	
 	

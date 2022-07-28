@@ -76,6 +76,7 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 void SavePassword_To_EEPROM(void)
 {
 	static unsigned char eevalue,value,eeNumbers;
+	unsigned int i=2000;
 	
     if(run_t.inputPwdTimes ==3){
 	for(eeNumbers =0; eeNumbers< 12;eeNumbers++){
@@ -143,10 +144,10 @@ void SavePassword_To_EEPROM(void)
 				run_t.passsword_unlock=0;
 				run_t.inputPwdTimes =0;
 				OK_LED_OFF();
-				
-				ERR_LED_ON();
+
+			    ERR_LED_ON();
 				__delay_ms(1000);
-		        ERR_LED_OFF();
+				ERR_LED_OFF();
 				__delay_ms(1000);
 				ERR_LED_ON();
 				__delay_ms(1000);
