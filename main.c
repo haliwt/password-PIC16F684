@@ -37,10 +37,9 @@ void main(void)
    {
  
       
-     //  if(run_t.getKey == 0x01)BAT_LED_ON();
-	 //  if(run_t.getKey ==0X081)OK_LED_ON();
+    
   
-	#if 0
+	#if 1
       
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
@@ -60,13 +59,15 @@ void main(void)
 	  	
 		//resetKey = Scan_Key();
 		if(run_t.getKey ==0x01){
+			run_t.getKey = 0;
 			run_t.Confirm =1; //input amdministrator password flag
 			run_t.Numbers_counter=0;
 			run_t.buzzer_flag =1;
+			
 	     }
 		if(run_t.getKey == 0x81){
-			
-		   run_t.BackLight =2;
+			 run_t.getKey = 0;
+		//   run_t.BackLight =2;
 		 //  ClearEEPRO_Data();
            clearEeprom=1;
            Buzzer_LongSound();
@@ -85,12 +86,12 @@ void main(void)
              ERR_LED_ON();
              BAT_LED_ON();
              clearEeprom = 0;
-            ClearEEPRO_Data();
+             ClearEEPRO_Data();
+			 Buzzer_LongSound();
          }
-         
+         #endif 
    }
-     #endif 
-   }
-    
-}
+     
+ }
+  
 

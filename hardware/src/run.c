@@ -871,7 +871,7 @@ void ClearEEPRO_Data(void)
    unsigned char i;
    for(i=0;i<0x7C;i++){
        EEPROM_Write_Byte(i,0);
-       if(i==0x7B)return ;
+      // if(i==0x7B)return ;
    }
    
 }

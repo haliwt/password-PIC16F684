@@ -76,7 +76,7 @@ typedef  struct  _state_
  }state;
 }key_types;
 
-key_types key;
+//key_types key;
 
 
 

@@ -73,7 +73,7 @@ static void LED_Init(void)
 //    return 0;
 //
 //}
-
+#if 0 
 unsigned char  Scan_Key(void)
 {
   unsigned char   reval = 0;
@@ -177,7 +177,7 @@ unsigned char  Scan_Key(void)
 
 }
 
-
+#endif 
 void KEY_ISR(void)
 {
     static unsigned long int k1;
@@ -193,7 +193,7 @@ void KEY_ISR(void)
 
 		    k1++;
 
-	        BAT_LED_ON();
+	       // BAT_LED_ON();
 
 		};
 		
@@ -201,7 +201,7 @@ void KEY_ISR(void)
 	
 
 	if(KEY1_RA3_GetValue() ==1){
-		BAT_LED_OFF();
+		//BAT_LED_OFF();
 
 	if(k1 >2 &&  k1<40000) {
 
