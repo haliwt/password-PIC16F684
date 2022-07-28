@@ -75,9 +75,11 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 ****************************************************************************/
 void SavePassword_To_EEPROM(void)
 {
-	unsigned char eevalue,value;
+	static unsigned char eevalue,value,eeNumbers;
+    if(run_t.inputPwdTimes ==3){
+	for(eeNumbers =0; eeNumbers< 12;eeNumbers++){
 
-	switch(run_t.userId){
+	switch(eeNumbers){
 					  
 		   case 0:
 		
@@ -141,13 +143,13 @@ void SavePassword_To_EEPROM(void)
 				OK_LED_OFF();
 				
 				ERR_LED_ON();
-				__delay_ms(500);
+				__delay_ms(1000);
 		        ERR_LED_OFF();
-				__delay_ms(500);
+				__delay_ms(1000);
 				ERR_LED_ON();
-				__delay_ms(500);
+				__delay_ms(1000);
 				ERR_LED_OFF();
-				__delay_ms(500);
+				__delay_ms(1000);
 				ERR_LED_ON();
 				
 				
@@ -161,12 +163,12 @@ void SavePassword_To_EEPROM(void)
 				  
 	}
 
-	eevalue= EEPROM_Read_Byte(run_t.userId);
-	if(eevalue ==1)run_t.userId++;
+		eevalue= EEPROM_Read_Byte(run_t.userId);
+		if(eevalue !=1){
 	
          if(run_t.userId < 11){
 	
-         if(run_t.inputPwdTimes ==3){
+      //   if(run_t.inputPwdTimes ==3){
 		 	value =CompareValue(pwd1, pwd2);
 			
 			 if(value ==1){
@@ -182,7 +184,12 @@ void SavePassword_To_EEPROM(void)
 					 OK_LED_ON();
 					 run_t.BackLight =2;
 					 Buzzer_LongSound();
-					 
+					   run_t.Confirm =0;
+			    		run_t.adminiId =0;
+			   			run_t.inputPwdTimes =0;
+						run_t.passsword_unlock=0;
+						
+					 return ;
 					
 			
 
@@ -195,21 +202,21 @@ void SavePassword_To_EEPROM(void)
 
 			 }
 
-			    run_t.Confirm =0;
-			    run_t.adminiId =0;
+		
 			    run_t.inputPwdTimes =0;
-				run_t.passsword_unlock=0;
+				
 				
 			 
          	}
 			  
-
+         	}
 		
 	     
-	}
+		//}
 		
 
-	 
+	}
+   }
 			  
 }
 

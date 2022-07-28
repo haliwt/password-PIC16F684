@@ -203,7 +203,7 @@ void KEY_ISR(void)
 	if(KEY1_RA3_GetValue() ==1){
 		//BAT_LED_OFF();
 
-	if(k1 >2 &&  k1<40000) {
+	if(k1 >2 &&  k1<50000) {  //if(k1 >2 &&  k1<40000)
 
 	     cnt ++;
 		 if(cnt==1){
@@ -223,7 +223,7 @@ void KEY_ISR(void)
 		k1=0;
 	}
 
-	if(k1> 80000  ){
+	if(k1> 90000  ){
 		cnt2++;
 		if(cnt2==1){
 		OK_LED_ON();
