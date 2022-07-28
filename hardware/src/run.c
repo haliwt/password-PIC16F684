@@ -163,10 +163,9 @@ void SavePassword_To_EEPROM(void)
 		eevalue= EEPROM_Read_Byte(run_t.userId);
 		if(eevalue !=1){
 	
-        // if(run_t.userId < 11){
             if(eeNumbers <11){
 	
-      //   if(run_t.inputPwdTimes ==3){
+      
 		 	value =CompareValue(pwd1, pwd2);
 			
 			 if(value ==1){
@@ -243,7 +242,7 @@ void RunCheck_Mode(unsigned int dat)
 	      k0 = n0;
 		  run_t.BackLight=1;
 
-		  if(run_t.inputPwdTimes ==1){
+		  if(run_t.inputPwdTimes ==2){
 		        for(i=0;i<6;i++){
 					  pwd2[i]=0;
 				}
@@ -254,13 +253,18 @@ void RunCheck_Mode(unsigned int dat)
 		
 		  }
 		  
-	  
-			  ERR_LED_OFF();
+	      if(run_t.adminiId==1){
+		     ERR_LED_OFF();
+          }
+		  else{
 			  OK_LED_OFF();
-		     run_t.buzzer_flag =1;
-			 spec=1;
-		     run_t.Numbers_counter =0 ;
-			run_t.passswordsMatch = 0;
+			  ERR_LED_OFF();
+
+		  	}
+		   run_t.buzzer_flag =1;
+			spec=1;
+		   run_t.Numbers_counter =0 ;
+		    run_t.passswordsMatch = 0;
 			run_t.changePassword=0;
             run_t.inputPwdTimes=0;
 		  }
@@ -294,7 +298,13 @@ void RunCheck_Mode(unsigned int dat)
                }
 			  if(run_t.inputPwdTimes ==2) ERR_LED_ON();
 			  if(run_t.inputPwdTimes ==3 )  BAT_LED_ON();
-			  if(run_t.inputPwdTimes ==4) BAT_LED_OFF();
+			  if(run_t.inputPwdTimes > 3){
+					run_t.Confirm =0;
+					run_t.passsword_unlock =0 ;
+			        run_t.adminiId =0 ;
+
+			  }
+			  
 			 run_t.passswordsMatch = 1;
 		     run_t.Numbers_counter=0;
 		}
@@ -471,7 +481,7 @@ void RunCheck_Mode(unsigned int dat)
 /****************************************************************************
 *
 *Function Name:void RunCheck_Mode(unsigned int dat)
-*Function : run is main 
+*Function : Read from EEPROM data. 
 *Input Ref: NO
 *Retrun Ref:NO
 *
@@ -479,7 +489,7 @@ void RunCheck_Mode(unsigned int dat)
 void RunCommand_Unlock(void)
 {
    if(run_t.Confirm == 1)run_t.eepromAddress = 0;
-	  ReadPassword_EEPROM_SaveData();
+	 ReadPassword_EEPROM_SaveData();
 	
 	  if(Fail == 1){
 
@@ -491,15 +501,15 @@ void RunCommand_Unlock(void)
 		run_t.eepromAddress=0;
 		run_t.passswordsMatch = 0;
         Fail ++;
-		if(run_t.Confirm ==1)run_t.Confirm =0;
-
-
-	 }
+		
+        run_t.Confirm =0;
+	    run_t.adminiId =0;
+	  }
 
 	 if(run_t.passsword_unlock ==1){
 
-         if(run_t.Confirm ==1){
-			run_t.adminiId =1;
+         if(run_t.Confirm ==1){ //prepare new password 
+			run_t.adminiId =1;  //cofirm of administrator input password is correct.
 			
          }
 		 else{

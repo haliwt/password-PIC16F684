@@ -38,9 +38,9 @@ typedef struct __RUN_T{
 	unsigned char passsword_unlock;
 
 	
-	unsigned char gTimer_20ms;
-	unsigned char gTimer_30ms;
-	unsigned char gTimer_300;
+	unsigned char gTimer_10s;
+	
+	
 	
 	
 

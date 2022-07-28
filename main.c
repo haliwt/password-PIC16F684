@@ -19,7 +19,6 @@ unsigned char SC_Data[2];
 void main(void) 
 {
     static unsigned char clearEeprom;
-    unsigned char resetKey;
     unsigned int KeyValue,adc;
 
    SC12B_Init_Function();
@@ -36,10 +35,7 @@ void main(void)
    while(1)
    {
  
-      
-    
-  
-	#if 1
+      #if 1
       
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
@@ -54,21 +50,16 @@ void main(void)
 		
 		  RunCommand_Unlock();
 	}
-	
-	if(run_t.passsword_unlock==2){ //lock turn on Open 
-	  	
-		//resetKey = Scan_Key();
-		if(run_t.getKey ==0x01){
+    if(run_t.passsword_unlock==2){ //lock turn on Open 
+		if(run_t.getKey ==0x01){ //input password flag.
 			run_t.getKey = 0;
 			run_t.Confirm =1; //input amdministrator password flag
 			run_t.Numbers_counter=0;
 			run_t.buzzer_flag =1;
 			
 	     }
-		if(run_t.getKey == 0x81){
+		if(run_t.getKey == 0x81){ //clear password flag 
 			 run_t.getKey = 0;
-		//   run_t.BackLight =2;
-		 //  ClearEEPRO_Data();
            clearEeprom=1;
            Buzzer_LongSound();
 		}
@@ -89,6 +80,14 @@ void main(void)
              ClearEEPRO_Data();
 			 Buzzer_LongSound();
          }
+
+		    
+      if(run_t.gTimer_10s==1){ //5s ->battery be checking 
+          run_t.gTimer_10s =0;
+         adc= ADC_ReadVoltage();
+	     if(adc <  640)BAT_LED_ON() ;//3V ->Vdd = 4.8V
+		 else BAT_LED_OFF() ;
+      }
          #endif 
    }
      

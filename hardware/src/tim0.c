@@ -44,15 +44,15 @@ void TMR0_ISR(void)
     static unsigned char t0,tm1;
     INTCONbits.T0IF = 0;
     TMR0 = 217;
-	run_t.gTimer_20ms ++;
-	run_t.gTimer_30ms++;
+	
+
     t0++;
-    if(t0>9){ //10*10 =100ms
+    if(t0>99){ //10*100 =1000ms "1s"
        t0=0;
 	   tm1++;
-	   if(tm1==3){
+	   if(tm1>9){
 		 tm1=0;
-		 run_t.gTimer_300 =1;
+		 run_t.gTimer_10s =1;
 
 	   }
 	
