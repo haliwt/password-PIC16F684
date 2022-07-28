@@ -36,6 +36,8 @@ void main(void)
    {
  
       #if 1
+
+	 
       
 	if(run_t.passswordsMatch==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
@@ -58,9 +60,9 @@ void main(void)
 			run_t.buzzer_flag =1;
 			
 	     }
-		if(run_t.getKey == 0x81){ //clear password flag 
+		if(run_t.getKey == 0x81){
 			 run_t.getKey = 0;
-           clearEeprom=1;
+			clearEeprom=1;
            Buzzer_LongSound();
 		}
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
