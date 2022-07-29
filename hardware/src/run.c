@@ -528,7 +528,7 @@ void RunCommand_Unlock(void)
 			 OK_LED_ON();
 			 Buzzer_LongSound();
 			 Motor_CCW_Run();//open passwordlock 
-			 __delay_ms(300);
+			 __delay_ms(800);
 			 Motor_Stop();
 
 		   }
@@ -694,15 +694,6 @@ static void ReadPassword_EEPROM_SaveData(void)
 
 	  
 }
-/****************************************************************************
-*
-*Function Name:void VirtualPassword_Handle(void )
-*Function : run is main 
-*Input Ref: NO
-*Retrun Ref:NO
-*
-****************************************************************************/
-
 
 /****************************************************************************
 *
@@ -890,7 +881,14 @@ void BackLight_Fun(void)
 		 
 
 }
-
+/****************************************************************************
+*
+*Function Name:void ClearEEPRO_Data(void)
+*Function : run is main 
+*Input Ref: NO
+*Retrun Ref:NO
+*
+****************************************************************************/
 void ClearEEPRO_Data(void)
 {
 

@@ -67,7 +67,7 @@ void main(void)
        
 			SavePassword_To_EEPROM();
         }
-		if(run_t.gTimer_2s == 1 && run_t.unLock_times==1 && run_t.Confirm == 0){
+		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
 			 run_t.unLock_times ++;
 			 Motor_CW_Run();//open passwordlock 
 			 __delay_ms(300);
