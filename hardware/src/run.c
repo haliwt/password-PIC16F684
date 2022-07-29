@@ -498,8 +498,11 @@ void RunCheck_Mode(unsigned int dat)
 ****************************************************************************/
 void RunCommand_Unlock(void)
 {
-   if(run_t.Confirm == 1)run_t.eepromAddress = 0;
-	 ReadPassword_EEPROM_SaveData();
+
+     if(run_t.powerOn !=1){
+		 if(run_t.Confirm == 1)run_t.eepromAddress = 0;
+		 ReadPassword_EEPROM_SaveData();
+     }
 	
 	  if(Fail == 1){
 
@@ -549,6 +552,7 @@ void RunCommand_Unlock(void)
 		 run_t.error_times=0;
 		 run_t.gTimer_8s =4;
 		 run_t.lock_fail=0;
+		 run_t.powerOn =2;
  
 	 }
 	

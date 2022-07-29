@@ -19,7 +19,9 @@ typedef struct __RUN_T{
 	//enum State state_;
     //unsigned char cmdCtr_;   //event order cunter
 
-    unsigned char getKey;
+    unsigned char powerOn;
+	unsigned char getKey;
+	
 	unsigned char adminiId;
 	unsigned char Confirm;
 	unsigned char inputPwdTimes;

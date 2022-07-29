@@ -36,6 +36,13 @@ void main(void)
    {
  
       #if 1
+
+	  if(run_t.powerOn ==0){
+         run_t.powerOn++;
+		 run_t.passswordsMatch =1;
+		 run_t.passsword_unlock =1;
+
+	  }
       if(run_t.passswordsMatch==0 && run_t.panel_lock==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
@@ -70,7 +77,7 @@ void main(void)
 		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
 			 run_t.unLock_times ++;
 			 Motor_CW_Run();//open passwordlock 
-			 __delay_ms(300);
+			 __delay_ms(800);
 			 Motor_Stop();
 
 		}
