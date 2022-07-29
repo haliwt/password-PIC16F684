@@ -24,7 +24,7 @@
 
 static unsigned char n0,n1,n2;
 unsigned char Fail;
-unsigned char pwd1[6],Readpwd[6];
+unsigned char pwd1[6];
 unsigned char pwd2[6];
 unsigned char initpwd[6]={1,2,3,4,0,0};
 unsigned char virtualPwd[20];
@@ -78,9 +78,7 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2)
 void SavePassword_To_EEPROM(void)
 {
 	static unsigned char eevalue,value,eeNumbers;
-	unsigned int i=2000;
-	
-    if(run_t.inputPwdTimes ==3){
+   if(run_t.inputPwdTimes ==3){
 	for(eeNumbers =0; eeNumbers< 12;eeNumbers++){
 
 	  
@@ -172,7 +170,7 @@ void SavePassword_To_EEPROM(void)
 	
             if(eeNumbers <11){
 	
-      
+                
 		 	value =CompareValue(pwd1, pwd2);
 			
 			 if(value ==1){
@@ -186,7 +184,6 @@ void SavePassword_To_EEPROM(void)
 
 					 ERR_LED_OFF();
 					 OK_LED_ON();
-					 run_t.BackLight =2;
 					 Buzzer_LongSound();
 					   run_t.Confirm =0;
 			    		run_t.adminiId =0;
@@ -246,7 +243,9 @@ void RunCheck_Mode(unsigned int dat)
        if(k0 != n0){
 
 	      k0 = n0;
+		   run_t.buzzer_flag =1;
 		  run_t.BackLight=1;
+		  run_t.gTimer_8s=0;
 
 		  if(run_t.inputPwdTimes ==2){
 		        for(i=0;i<6;i++){
@@ -267,7 +266,6 @@ void RunCheck_Mode(unsigned int dat)
 			  ERR_LED_OFF();
 
 		  	}
-		   run_t.buzzer_flag =1;
 			spec=1;
 		   run_t.Numbers_counter =0 ;
 		    run_t.passswordsMatch = 0;
@@ -284,11 +282,13 @@ void RunCheck_Mode(unsigned int dat)
 	        k1 = n1;
 			spec=1;
 		 run_t.buzzer_flag =1;
+		 run_t.BackLight=1;
+		 run_t.gTimer_8s=0;
 
 		 if(run_t.Numbers_counter ==0){
 		 	
 		    run_t.passswordsMatch = 0;
-
+            run_t.gTimer_8s=5;
 		 }
 		 else if(run_t.Numbers_counter < 4 && run_t.Numbers_counter >0 ){
              OK_LED_OFF();
@@ -326,6 +326,7 @@ void RunCheck_Mode(unsigned int dat)
 		     run_t.Numbers_counter=0;
 			}
 		 	else run_t.passswordsMatch = 1;
+			
 		 }
 		   
 	  	   
@@ -431,6 +432,8 @@ void RunCheck_Mode(unsigned int dat)
 			    spec =1;
 				run_t.Numbers_counter ++ ;
 				run_t.buzzer_flag =1;
+				 run_t.BackLight=1;
+				 run_t.gTimer_8s=0;
 			
 				temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
 				if(run_t.Numbers_counter > 20) run_t.Numbers_counter =20;
@@ -552,6 +555,7 @@ void RunCommand_Unlock(void)
 		 run_t.passsword_unlock=2;
 		 run_t.gTimer_2s =0;
 		 run_t.error_times=0;
+		 run_t.gTimer_8s =4;
  
 	 }
 	
@@ -661,9 +665,8 @@ static void ReadPassword_EEPROM_SaveData(void)
 					
 					if(value==1)//if(strcmp(pwd1,pwd2)==0)
 					{
-						run_t.BackLight=2;
-		
-		                run_t.passsword_unlock=1;
+						
+						run_t.passsword_unlock=1;
 						return ;
 
 					}
@@ -683,9 +686,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 
 				     if(value==1){
 									   
-						run_t.BackLight=2;
-					
-					    run_t.passsword_unlock=1;	
+						run_t.passsword_unlock=1;	
 					
 						return ;
 
@@ -731,13 +732,8 @@ void Buzzer_Sound(void)
          i=1;
 	              
 	}
-	else{
-	
-				  
-	   BUZZER_PIN_OFF() ;
-	}
 
-   
+	
 
    if(i==1){
    	
@@ -843,27 +839,23 @@ void BackLight_Fun(void)
 {
      static unsigned char cnt,endcnt;
 
-	 
-
 	 if(run_t.BackLight ==1 ){
 
-			  run_t.BackLight =0;
+			
 		      BACKLIGHT_ON() ;
+	          BACKLIGHT_2_ON();
 		    
 	}
-    else if(run_t.BackLight==2){
-	 	 run_t.BackLight =0;
-	 	
-	    BACKLIGHT_2_ON();
-	    BACKLIGHT_ON() ;
 
-     }
-	 else{
+	if(run_t.gTimer_8s >8){
+		run_t.BackLight =0;
+		run_t.gTimer_8s=0;
+		BACKLIGHT_OFF() ;
+        BACKLIGHT_2_OFF();
+		 OK_LED_OFF();
 
-	     BACKLIGHT_OFF() ;
-         BACKLIGHT_2_OFF();
-
-	 }
+	}
+   
 
 
 	if( run_t.adminiId==1){
