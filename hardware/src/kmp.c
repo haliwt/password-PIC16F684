@@ -1,10 +1,5 @@
 #include "../inc/kmp.h"
 #include "../../main.h"
-
-
-
-
-
 /**************************************************************************
 	*
 	*Function Name :unsigned char BF_Search(unsigned char *virtual,unsigned char *pattern)

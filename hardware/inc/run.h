@@ -25,7 +25,8 @@ typedef struct __RUN_T{
 	unsigned char inputPwdTimes;
 
 	unsigned char unLock_times;
-
+    unsigned char error_times;
+	unsigned char panel_lock;
 
    
 
@@ -43,6 +44,7 @@ typedef struct __RUN_T{
 	unsigned char gTimer_10s;
 	unsigned char gTimer_2s;
 	unsigned char gTimer_1s;
+	unsigned char gTimer_60s;
 	
 	
 	

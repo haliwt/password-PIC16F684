@@ -36,14 +36,14 @@ void main(void)
    {
  
       #if 1
-      if(run_t.passswordsMatch==0){
+      if(run_t.passswordsMatch==0 && run_t.panel_lock==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
 	      KeyValue =(unsigned int)(SC_Data[0]<<8) + SC_Data[1];
 		  RunCheck_Mode(KeyValue); 
 			
 	      }
-	   }
+	  }
        
 	if(run_t.passswordsMatch ==1 && run_t.adminiId !=1){
 		
@@ -76,7 +76,7 @@ void main(void)
 		}
 	}
 	
-    
+       
          BackLight_Fun();
          Buzzer_Sound();
          if(clearEeprom==1){
@@ -94,7 +94,22 @@ void main(void)
 	     if(adc <  640)BAT_LED_ON() ;//3V ->Vdd = 4.8V
 		 else BAT_LED_OFF() ;
       }
-         #endif 
+
+	  if(run_t.panel_lock ==1){
+          if(run_t.gTimer_1s >8)
+		  	ERR_LED_OFF();
+          if(run_t.gTimer_60s > 59){
+              run_t.panel_lock =0;
+			  run_t.error_times = 0;
+
+		  }
+
+
+	  }
+
+
+
+		 #endif 
    }
      
  }

@@ -295,6 +295,13 @@ void RunCheck_Mode(unsigned int dat)
 			 ERR_LED_ON();
 		     run_t.Numbers_counter=0;
 		     run_t.passswordsMatch = 0;
+			 run_t.error_times ++ ;
+			 if(run_t.error_times > 4){
+				run_t.gTimer_60s =0;
+				run_t.gTimer_1s =0;
+				run_t.panel_lock=1;
+			    
+			 }
 
 		 }
 		 else{
@@ -511,7 +518,13 @@ void RunCommand_Unlock(void)
 		run_t.eepromAddress=0;
 		run_t.passswordsMatch = 0;
         Fail ++;
-		
+		run_t.error_times ++ ; //input times 5 ,
+		if(run_t.error_times > 4){
+			run_t.gTimer_60s =0;
+			run_t.gTimer_1s =0;
+			run_t.panel_lock=1;
+			    
+		}
         run_t.Confirm =0;
 	    run_t.adminiId =0;
 	  }
@@ -538,6 +551,7 @@ void RunCommand_Unlock(void)
 		 run_t.passswordsMatch = 0;
 		 run_t.passsword_unlock=2;
 		 run_t.gTimer_2s =0;
+		 run_t.error_times=0;
  
 	 }
 	
