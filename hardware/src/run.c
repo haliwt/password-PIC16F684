@@ -171,7 +171,7 @@ void SavePassword_To_EEPROM(void)
 
 					 ERR_LED_OFF();
 					 OK_LED_ON();
-					 Buzzer_LongSound();
+					// Buzzer_LongSound();
 					   run_t.Confirm =0;
 			    		run_t.adminiId =0;
 			   			run_t.inputPwdTimes =0;
@@ -533,6 +533,7 @@ void RunCommand_Unlock(void)
 			  
 			 ERR_LED_OFF();
 			 OK_LED_ON();
+		     run_t.buzzer_flag=0;
 			 Buzzer_LongSound();
 			 Motor_CCW_Run();//open passwordlock 
 			 __delay_ms(800);
@@ -714,7 +715,7 @@ void Buzzer_Sound(void)
 {
     unsigned char  i;
 
-	if(run_t.buzzer_flag ==1 ){
+	if(run_t.buzzer_flag ==1){
 			  
 		 run_t.buzzer_flag=0;
 	//	 run_t.Numbers_counter++;
@@ -724,6 +725,8 @@ void Buzzer_Sound(void)
          i=1;
 	              
 	}
+
+   
 
 	
 
