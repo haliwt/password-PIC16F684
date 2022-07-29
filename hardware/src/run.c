@@ -144,20 +144,7 @@ void SavePassword_To_EEPROM(void)
 				run_t.passsword_unlock=0;
 				run_t.inputPwdTimes =0;
 				OK_LED_OFF();
-
-			    ERR_LED_ON();
-				__delay_ms(1000);
-				ERR_LED_OFF();
-				__delay_ms(1000);
-				ERR_LED_ON();
-				__delay_ms(1000);
-				ERR_LED_OFF();
-				__delay_ms(1000);
-				ERR_LED_ON();
-				__delay_ms(1000);
-				ERR_LED_OFF();
-				__delay_ms(1000);
-				ERR_LED_ON();
+				run_t.lock_fail =1;
 				
 				
 				return ;
@@ -189,6 +176,7 @@ void SavePassword_To_EEPROM(void)
 			    		run_t.adminiId =0;
 			   			run_t.inputPwdTimes =0;
 						run_t.passsword_unlock=0;
+						run_t.lock_fail =0;
 						
 					 return ;
 					
