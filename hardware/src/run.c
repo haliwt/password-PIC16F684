@@ -24,10 +24,10 @@
 
 static unsigned char n0,n1,n2;
 unsigned char Fail;
-unsigned char pwd1[6];
+unsigned char pwd1[6],Readpwd[6];
 unsigned char pwd2[6];
 unsigned char initpwd[6]={1,2,3,4,0,0};
-
+unsigned char virtualPwd[20];
 
 enum __PWD{FAIL,SUCCESS};
 
@@ -37,6 +37,8 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 
 
 static void ReadPassword_EEPROM_SaveData(void);
+static void VirtualPassword_Fun(void );
+
 
 
 unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
@@ -315,8 +317,8 @@ void RunCheck_Mode(unsigned int dat)
 			  
 			 run_t.passswordsMatch = 1;
 		     run_t.Numbers_counter=0;
-		}
-		 else run_t.passswordsMatch = 1;
+			}
+		 	else run_t.passswordsMatch = 1;
 		 }
 		   
 	  	   
@@ -424,11 +426,12 @@ void RunCheck_Mode(unsigned int dat)
 				run_t.buzzer_flag =1;
 			
 				temp = InputNumber_ToSpecialNumbers(dat); //input Numbers
-				
+				if(run_t.Numbers_counter > 20) run_t.Numbers_counter =20;
+				virtualPwd[run_t.Numbers_counter-1]=temp;
 			
 			    #if 1
 				 
-			 
+			     if(run_t.Numbers_counter < 7){
 				 switch(run_t.Numbers_counter){
 	        
 				 	
@@ -465,7 +468,7 @@ void RunCheck_Mode(unsigned int dat)
 					 
 					   if(run_t.inputPwdTimes ==2) pwd2[4] = temp;
 					   else pwd1[4] =temp;
-				break;
+				 break;
 	   
 				  case 6:
 					
@@ -473,13 +476,12 @@ void RunCheck_Mode(unsigned int dat)
 					   else pwd1[5]= temp;
 					
 				  break;
-	            
-				 
-				 
+
+			
 				  
-				  }
+	            }
 				  
-	         
+			    }
 				 
 	   
 				   #endif 
@@ -557,6 +559,9 @@ static void ReadPassword_EEPROM_SaveData(void)
 	  static unsigned char value ,Readpwd[6];
 	  static  unsigned char eevalue ,ReadAddress;
 
+	  
+	  
+
 	  for(run_t.eepromAddress =0; run_t.eepromAddress <12;run_t.eepromAddress++){
 	  
 	    switch(run_t.eepromAddress){
@@ -632,7 +637,13 @@ static void ReadPassword_EEPROM_SaveData(void)
 					Readpwd[4] = EEPROM_Read_Byte(ReadAddress + 0X05);
 					Readpwd[5] = EEPROM_Read_Byte(ReadAddress + 0X06);
 
-					value = CompareValue(Readpwd,pwd1);
+                    if(run_t.Numbers_counter > 6){
+ 
+                        value = BF_Search(virtualPwd,Readpwd);
+					}
+					else
+					    value = CompareValue(Readpwd,pwd1);
+					
 					
 					if(value==1)//if(strcmp(pwd1,pwd2)==0)
 					{
@@ -679,8 +690,19 @@ static void ReadPassword_EEPROM_SaveData(void)
 		 
 	   	}
 	  	}
-		
+	  	
+
+	  
 }
+/****************************************************************************
+*
+*Function Name:void VirtualPassword_Handle(void )
+*Function : run is main 
+*Input Ref: NO
+*Retrun Ref:NO
+*
+****************************************************************************/
+
 
 /****************************************************************************
 *
