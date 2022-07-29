@@ -192,21 +192,13 @@ void KEY_ISR(void)
 	   while(KEY1_RA3_GetValue() ==0){
 
 		    k1++;
-            if(k1> 100000 && k1<160000){
-              i++;
-			  if(i<200)
-                  Buzzer_ResetSond();
-			  if(i>200){
-			  	 BUZZER_PIN_OFF() ;
-                 i =201;
-              }
-			  	
-			}
+	   	}
+    
 	       
 
-		};
-		
 	}
+		
+	
 	
 
 	if(KEY1_RA3_GetValue() ==1){
@@ -214,15 +206,13 @@ void KEY_ISR(void)
 
 	if(k1 >2 &&  k1<60000) {  //if(k1 >2 &&  k1<40000)
 
-		//run_t.buzzer_flag =1;
-		Buzzer_ResetSond();
+		run_t.buzzer_flag =1;
 		run_t.getKey = 0x01;
 		k1=0;
 	}
 
 	if(k1> 160000  ){
 	    
-		OK_LED_ON();
 	   run_t.getKey = 0x81;
 	   k1=0;
 

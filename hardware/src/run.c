@@ -854,6 +854,7 @@ void BackLight_Fun(void)
         BACKLIGHT_2_OFF();
 		OK_LED_OFF();
 		ERR_LED_OFF();
+		run_t.adminiId=0;
 
 	}
 

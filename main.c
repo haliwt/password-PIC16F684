@@ -77,7 +77,7 @@ void main(void)
 		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
 			 run_t.unLock_times ++;
 			 Motor_CW_Run();//open passwordlock 
-			 __delay_ms(800);
+			 __delay_ms(1400);
 			 Motor_Stop();
 
 		}
@@ -87,8 +87,8 @@ void main(void)
          BackLight_Fun();
          Buzzer_Sound();
          if(clearEeprom==1){
-             ERR_LED_ON();
-             BAT_LED_ON();
+              run_t.gTimer_8s =0;
+              run_t.adminiId=1;
              clearEeprom = 0;
              ClearEEPRO_Data();
 			 Buzzer_LongSound();

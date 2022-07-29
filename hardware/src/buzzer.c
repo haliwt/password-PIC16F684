@@ -51,7 +51,7 @@ void Buzzer_ResetSond(void)
 	
      for(m=0;m<40;m++){//m<50
           BEEP=!BEEP;
-          __delay_us(800);//delayUS(99);
+          __delay_us(2);//delayUS(99);
      }
 
 }
