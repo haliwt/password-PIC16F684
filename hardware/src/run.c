@@ -288,7 +288,8 @@ void RunCheck_Mode(unsigned int dat)
 		 if(run_t.Numbers_counter ==0){
 		 	
 		    run_t.passswordsMatch = 0;
-            run_t.gTimer_8s=5;
+            run_t.gTimer_8s=0;
+		 
 		 }
 		 else if(run_t.Numbers_counter < 4 && run_t.Numbers_counter >0 ){
              OK_LED_OFF();
@@ -296,6 +297,7 @@ void RunCheck_Mode(unsigned int dat)
 		     run_t.Numbers_counter=0;
 		     run_t.passswordsMatch = 0;
 			 run_t.error_times ++ ;
+			 run_t.lock_fail=1;
 			 if(run_t.error_times > 4){
 				run_t.gTimer_60s =0;
 				run_t.gTimer_1s =0;
@@ -530,6 +532,7 @@ void RunCommand_Unlock(void)
 		}
         run_t.Confirm =0;
 	    run_t.adminiId =0;
+		run_t.lock_fail=1;
 	  }
 
 	 if(run_t.passsword_unlock ==1){
@@ -556,6 +559,7 @@ void RunCommand_Unlock(void)
 		 run_t.gTimer_2s =0;
 		 run_t.error_times=0;
 		 run_t.gTimer_8s =4;
+		 run_t.lock_fail=0;
  
 	 }
 	
@@ -849,10 +853,25 @@ void BackLight_Fun(void)
 
 	if(run_t.gTimer_8s >8){
 		run_t.BackLight =0;
+		run_t.lock_fail=0;
 		run_t.gTimer_8s=0;
 		BACKLIGHT_OFF() ;
         BACKLIGHT_2_OFF();
-		 OK_LED_OFF();
+		OK_LED_OFF();
+		ERR_LED_OFF();
+
+	}
+
+	if(run_t.lock_fail==1){
+		 cnt ++ ;
+
+        if(cnt < 125 ){
+
+		    ERR_LED_ON();
+			
+		}
+		else 
+	        ERR_LED_OFF();
 
 	}
    
@@ -866,9 +885,7 @@ void BackLight_Fun(void)
 
 		    OK_LED_ON();
 			
-
-			
-        }
+		}
 		else 
 	        OK_LED_OFF();
 

@@ -27,6 +27,7 @@ typedef struct __RUN_T{
 	unsigned char unLock_times;
     unsigned char error_times;
 	unsigned char panel_lock;
+	unsigned char lock_fail;
 
    
 
