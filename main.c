@@ -77,7 +77,7 @@ void main(void)
 		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
 			 run_t.unLock_times ++;
 			 Motor_CW_Run();//open passwordlock 
-			 __delay_ms(1400);
+			 __delay_ms(815);
 			 Motor_Stop();
 
 		}

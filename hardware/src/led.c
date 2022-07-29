@@ -180,7 +180,7 @@ unsigned char  Scan_Key(void)
 #endif 
 void KEY_ISR(void)
 {
-    unsigned char i;
+ 
 	static unsigned long int k1;
 	INTCONbits.RAIF = 0;
 	
