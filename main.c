@@ -70,8 +70,8 @@ void main(void)
            Buzzer_LongSound();
 		}
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
-            ERR_LED_OFF();
-       
+           
+            run_t.gTimer_8s =0;
 			SavePassword_To_EEPROM();
         }
 		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
@@ -88,14 +88,14 @@ void main(void)
          Buzzer_Sound();
          if(clearEeprom==1){
               run_t.gTimer_8s =0;
-              run_t.adminiId=1;
+             run_t.EepromSave_Data =1;
              clearEeprom = 0;
              ClearEEPRO_Data();
 			 Buzzer_LongSound();
          }
 
 		    
-      if(run_t.gTimer_10s==1){ //5s ->battery be checking 
+      if(run_t.gTimer_10s > 6){ //60s ->battery be checking 
           run_t.gTimer_10s =0;
          adc= ADC_ReadVoltage();
 	     if(adc <  640)BAT_LED_ON() ;//3V ->Vdd = 4.8V

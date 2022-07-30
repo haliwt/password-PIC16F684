@@ -143,7 +143,7 @@ void SavePassword_To_EEPROM(void)
 				run_t.adminiId =0;
 				run_t.passsword_unlock=0;
 				run_t.inputPwdTimes =0;
-				OK_LED_OFF();
+				
 				run_t.lock_fail =1;
 				
 				
@@ -169,14 +169,14 @@ void SavePassword_To_EEPROM(void)
 					 EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
 					 EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
 
-					 ERR_LED_OFF();
-					 OK_LED_ON();
-					// Buzzer_LongSound();
-					   run_t.Confirm =0;
+					
+					    run_t.gTimer_8s=0;
+					   	run_t.Confirm =0;
 			    		run_t.adminiId =0;
 			   			run_t.inputPwdTimes =0;
 						run_t.passsword_unlock=0;
 						run_t.lock_fail =0;
+						run_t.EepromSave_Data =1;
 						
 					 return ;
 					
@@ -184,13 +184,18 @@ void SavePassword_To_EEPROM(void)
 
 			 }
 			 else{
-			 	OK_LED_OFF();
-				ERR_LED_ON();
+			 	
+				
 			 
 				 if(eeNumbers ==0) eeNumbers =0;
 				 else
 				 	eeNumbers --;
-				 run_t.inputPwdTimes =0;
+				        run_t.inputPwdTimes =0;
+				  	    run_t.Confirm =0;
+			    		run_t.adminiId =0;
+						run_t.passsword_unlock=0;
+						run_t.lock_fail =1;
+						run_t.EepromSave_Data =0;
 				
 				}
                 }
@@ -303,8 +308,8 @@ void RunCheck_Mode(unsigned int dat)
 			      run_t.eepromAddress =0;  //administrator passwords 
 
                }
-			  if(run_t.inputPwdTimes ==2) ERR_LED_ON();
-			  if(run_t.inputPwdTimes ==3 )  BAT_LED_ON();
+			//  if(run_t.inputPwdTimes ==2) ERR_LED_ON();
+			//  if(run_t.inputPwdTimes ==3 )  BAT_LED_ON();
 			  if(run_t.inputPwdTimes > 3){
 					run_t.Confirm =0;
 					run_t.passsword_unlock =0 ;
@@ -722,7 +727,6 @@ void Buzzer_Sound(void)
 	if(run_t.buzzer_flag ==1){
 			  
 		 run_t.buzzer_flag=0;
-	//	 run_t.Numbers_counter++;
 
 		 BUZZER_KeySound();
 	   
@@ -736,16 +740,14 @@ void Buzzer_Sound(void)
 
    if(i==1){
    	
-      __delay_ms(300);
-     // if(run_t.gTimer_300 ==1){
-	  	//   run_t.gTimer_300 =0;
-				  n0++;
+      __delay_ms(200);//300
+    			 n0++;
 				  n1++;
 				  n2++;
                   i=0;
      
-          run_t.passswordsMatch =0;
-      //	}
+       run_t.passswordsMatch =0;
+      
    }
 }
 /****************************************************************************
@@ -854,13 +856,21 @@ void BackLight_Fun(void)
         BACKLIGHT_2_OFF();
 		OK_LED_OFF();
 		ERR_LED_OFF();
-		run_t.adminiId=0;
+		run_t.EepromSave_Data=0;
+		
+		run_t.EepromSave_Data =0;
+		if(run_t.adminiId==1){
+		    run_t.adminiId=0;
+            run_t.adminiId =0;  //after a period of time auto turn off flag
+			run_t.Confirm = 0; //after a period of time auto turn off flag
+			run_t.passsword_unlock=0;
+		}
 
 	}
 
 	if(run_t.lock_fail==1){
 		 cnt ++ ;
-
+        OK_LED_OFF();
         if(cnt < 125 ){
 
 		    ERR_LED_ON();
@@ -873,10 +883,10 @@ void BackLight_Fun(void)
    
 
 
-	if( run_t.adminiId==1){
+	if( run_t.adminiId==1 || run_t.EepromSave_Data ==1){
 
 	     cnt ++ ;
-
+        ERR_LED_OFF();
         if(cnt < 125 ){
 
 		    OK_LED_ON();
@@ -884,20 +894,7 @@ void BackLight_Fun(void)
 		}
 		else 
 	        OK_LED_OFF();
-
-		if(cnt > 253){
-			endcnt ++;
-		    if(endcnt > 100){
-              endcnt =0;
-			  run_t.adminiId =0;  //after a period of time auto turn off flag
-			  run_t.Confirm = 0; //after a period of time auto turn off flag
-			  run_t.passsword_unlock=0;
-
-		}
-	 }
 	}
-
-		 
 
 }
 /****************************************************************************

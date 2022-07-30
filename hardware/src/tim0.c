@@ -56,7 +56,7 @@ void TMR0_ISR(void)
 	   run_t.gTimer_8s++;
 	   if(tm1>9){ //10s
 		 tm1=0;
-		 run_t.gTimer_10s =1;
+		 run_t.gTimer_10s ++;
 	    
 
 	   }

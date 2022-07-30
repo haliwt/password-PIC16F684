@@ -30,6 +30,7 @@ typedef struct __RUN_T{
     unsigned char error_times;
 	unsigned char panel_lock;
 	unsigned char lock_fail;
+	unsigned char EepromSave_Data ;
 
    
 
