@@ -21,7 +21,7 @@ void BUZZER_Init(void)
 *******************************************/
 void BUZZER_KeySound(void)
 {
-      unsigned int m=50;
+      unsigned int m=80;//50
 	
 //     for(m=0;m<40;m++){
 //          BEEP=!BEEP;
@@ -33,7 +33,7 @@ void BUZZER_KeySound(void)
     while(m--){
 
 		 BEEP=!BEEP;
-         __delay_us(600);//delayUS(99);
+         __delay_us(300);//delayUS(600);
 
 
 	}
@@ -54,7 +54,7 @@ void Buzzer_LongSound(void)
 	 while(m--){
 
 	   BEEP=!BEEP;
-	  __delay_us(600);//delayUS(99);
+	  __delay_us(400);//delayUS(99);
 
 
 

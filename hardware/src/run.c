@@ -260,7 +260,7 @@ void RunCheck_Mode(unsigned int dat)
 		
 		  }
 		  
-	     
+	        ERR_LED_OFF();
 			spec=1;
 		    run_t.lock_fail =0;
 		   run_t.Numbers_counter =0 ;
