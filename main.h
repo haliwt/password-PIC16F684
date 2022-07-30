@@ -23,6 +23,7 @@
 #include "hardware/inc/ADC.h"
 #include "hardware/inc/eeprom.h"
 #include "hardware/inc/motor.h"
+#include "hardware/inc/kmp.h"
 
 
 #define _XTAL_FREQ         4000000  //PIC16F684 default 

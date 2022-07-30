@@ -21,34 +21,59 @@ void BUZZER_Init(void)
 *******************************************/
 void BUZZER_KeySound(void)
 {
-      unsigned int m;
+      unsigned int m=50;
 	
-     for(m=0;m<30;m++){
-          BEEP=!BEEP;
-          __delay_us(500);//delayUS(99);
-         // __delay_ms(1);
-     }
-
-//     m=200;
-//     while(--m){
-//         BEEP=!BEEP;
-//         __delay_us(60);// delayUS(199);
+//     for(m=0;m<40;m++){
+//          BEEP=!BEEP;
+//          __delay_us(600);//delayUS(99);
+//        
 //     }
+
+
+    while(m--){
+
+		 BEEP=!BEEP;
+         __delay_us(600);//delayUS(99);
+
+
+	}
+	 
+
 
 }
 
 void Buzzer_LongSound(void)
 {
-    unsigned int m;
+    unsigned int m=200;
 	
-     for(m=0;m<50;m++){
-          BEEP=!BEEP;
-          __delay_us(800);//delayUS(99);
-         // __delay_ms(1);
-     }
+//     for(m=0;m<200;m++){//m<50
+//          BEEP=!BEEP;
+//          __delay_us(600);//delayUS(99);
+//     }
+
+	 while(m--){
+
+	   BEEP=!BEEP;
+	  __delay_us(600);//delayUS(99);
+
+
+
+	 }
 
 
 
 }
+
+void Buzzer_ResetSond(void)
+{
+     unsigned int m;
+	
+     for(m=0;m<40;m++){//m<50
+          BEEP=!BEEP;
+          __delay_us(2);//delayUS(99);
+     }
+
+}
+
 
 

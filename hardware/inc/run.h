@@ -19,12 +19,19 @@ typedef struct __RUN_T{
 	//enum State state_;
     //unsigned char cmdCtr_;   //event order cunter
 
-    unsigned char getKey;
+    unsigned char powerOn;
+	unsigned char getKey;
+	
 	unsigned char adminiId;
 	unsigned char Confirm;
 	unsigned char inputPwdTimes;
 
-	unsigned char changePassword;
+	unsigned char unLock_times;
+    unsigned char error_times;
+	unsigned char panel_lock;
+	unsigned char lock_fail;
+	unsigned char led_blank ;
+
    
 
 
@@ -38,9 +45,13 @@ typedef struct __RUN_T{
 	unsigned char passsword_unlock;
 
 	
-	unsigned char gTimer_20ms;
-	unsigned char gTimer_30ms;
-	unsigned char gTimer_300;
+	unsigned char gTimer_10s;
+	unsigned char gTimer_2s;
+	unsigned char gTimer_1s;
+	unsigned char gTimer_8s;
+	unsigned char gTimer_60s;
+	
+	
 	
 	
 

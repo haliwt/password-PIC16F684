@@ -19,7 +19,6 @@ unsigned char SC_Data[2];
 void main(void) 
 {
     static unsigned char clearEeprom;
-    unsigned char resetKey;
     unsigned int KeyValue,adc;
 
    SC12B_Init_Function();
@@ -30,35 +29,35 @@ void main(void)
     System_Init();
    INTERRUPT_GlobalInterruptEnable();
    INTERRUPT_PeripheralInterruptEnable() ;
-   run_t.changePassword=0;
+  
    run_t.Numbers_counter=0;
    run_t.eepromAddress=0;
    while(1)
    {
  
-      
-    
-  
-	#if 1
-      
-	if(run_t.passswordsMatch==0){
+      #if 1
+
+	  if(run_t.powerOn ==0){
+         run_t.powerOn++;
+		 run_t.passswordsMatch =1;
+		 run_t.passsword_unlock =1;
+
+	  }
+      if(run_t.passswordsMatch==0 && run_t.panel_lock==0){
 	  if(I2C_Simple_Read_From_Device(SC12B_ADDR,SC_Data,2)==DONE){
 		 
 	      KeyValue =(unsigned int)(SC_Data[0]<<8) + SC_Data[1];
 		  RunCheck_Mode(KeyValue); 
 			
 	      }
-	   }
+	  }
        
 	if(run_t.passswordsMatch ==1 && run_t.adminiId !=1){
 		
 		  RunCommand_Unlock();
 	}
-	
-	if(run_t.passsword_unlock==2){ //lock turn on Open 
-	  	
-		//resetKey = Scan_Key();
-		if(run_t.getKey ==0x01){
+    if(run_t.passsword_unlock==2){ //lock turn on Open 
+		if(run_t.getKey ==0x01){ //input password flag.
 			run_t.getKey = 0;
 			run_t.Confirm =1; //input amdministrator password flag
 			run_t.Numbers_counter=0;
@@ -67,29 +66,57 @@ void main(void)
 	     }
 		if(run_t.getKey == 0x81){
 			 run_t.getKey = 0;
-		//   run_t.BackLight =2;
-		 //  ClearEEPRO_Data();
-           clearEeprom=1;
+			clearEeprom=1;
            Buzzer_LongSound();
 		}
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
-            ERR_LED_OFF();
-       
+           
+            run_t.gTimer_8s =0;
 			SavePassword_To_EEPROM();
         }
+		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
+			 run_t.unLock_times ++;
+			 Motor_CW_Run();//open passwordlock 
+			 __delay_ms(815);
+			 Motor_Stop();
+
+		}
 	}
 	
-    
+       
          BackLight_Fun();
          Buzzer_Sound();
          if(clearEeprom==1){
-             ERR_LED_ON();
-             BAT_LED_ON();
+              run_t.gTimer_8s =0;
+              run_t.led_blank = 1;
              clearEeprom = 0;
              ClearEEPRO_Data();
 			 Buzzer_LongSound();
          }
-         #endif 
+
+		    
+      if(run_t.gTimer_10s > 6){ //60s ->battery be checking 
+          run_t.gTimer_10s =0;
+         adc= ADC_ReadVoltage();
+	     if(adc <  640)BAT_LED_ON() ;//3V ->Vdd = 4.8V
+		 else BAT_LED_OFF() ;
+      }
+
+	  if(run_t.panel_lock ==1){
+          if(run_t.gTimer_1s >8)
+		  	ERR_LED_OFF();
+          if(run_t.gTimer_60s > 59){
+              run_t.panel_lock =0;
+			  run_t.error_times = 0;
+
+		  }
+
+
+	  }
+
+
+
+		 #endif 
    }
      
  }

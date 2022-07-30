@@ -4,7 +4,7 @@
 void ADC_Init(void)
 {
      //CMCON = 0x07; //PIC16F676
-    CMCON0 = 0x07;  //PIC16F684
+     CMCON0 = 0x07;  //PIC16F684
      ANSELbits.ANS4 = 1 ; //I/O as analog  CHANNEL 4 
      WPU = 0x00;
      TRISCbits.TRISC0 = 1 ; 
@@ -25,8 +25,9 @@ unsigned int ADC_ReadVoltage(void)
    ADCON0bits.GO_DONE =1;
    while(ADCON0bits.GO_DONE ==1);
 
-   adcValue = ADRESH ;
+   adcValue = ADRESH ;  //right-justified Mode upper bit is ADRESH[9:8]
    adcValue  &= 0x03;
+   adcValue <<=8;     
    adcValue += ADRESL;
 
    return  adcValue;
