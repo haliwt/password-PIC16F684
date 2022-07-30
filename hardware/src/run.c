@@ -511,10 +511,7 @@ void RunCommand_Unlock(void)
 	
 	  if(Fail == 1){
 
-		OK_LED_OFF();
-		ERR_LED_ON();
-		
-		run_t.Numbers_counter = 0;
+	     run_t.Numbers_counter = 0;
 		 run_t.passsword_unlock=0;	
 		run_t.eepromAddress=0;
 		run_t.passswordsMatch = 0;
@@ -535,36 +532,52 @@ void RunCommand_Unlock(void)
 
          if(run_t.Confirm ==1){ //prepare new password 
 			run_t.adminiId =1;  //cofirm of administrator input password is correct.
-			
+
+		 		//run_t.unLock_times = 1;
+			  run_t.Numbers_counter =0 ;
+			  run_t.eepromAddress=0;
+			 run_t.passswordsMatch = 0;
+			 run_t.passsword_unlock=2;
+			 run_t.gTimer_2s =0;
+			 run_t.error_times=0;
+			 run_t.gTimer_8s =4;
+			 run_t.lock_fail=0;
+			 run_t.powerOn =2;
+
+
+		 
          }
 		 else{
-			  
-			 ERR_LED_OFF();
-			 OK_LED_ON();
-		     run_t.buzzer_flag=0;
-			 Buzzer_LongSound();
-			 Motor_CCW_Run();//open passwordlock 
-			 __delay_ms(800);
-			 Motor_Stop();
 
-		   }
-	      run_t.unLock_times = 1;
-		  run_t.Numbers_counter =0 ;
-		  run_t.eepromAddress=0;
-		 run_t.passswordsMatch = 0;
-		 run_t.passsword_unlock=2;
-		 run_t.gTimer_2s =0;
-		 run_t.error_times=0;
-		 run_t.gTimer_8s =4;
-		 run_t.lock_fail=0;
-		 run_t.powerOn =2;
+		     if(run_t.unLock_times !=2){
+				 ERR_LED_OFF();
+				 OK_LED_ON();
+			     run_t.buzzer_flag=0;
+				 Buzzer_LongSound();
+				 Motor_CCW_Run();//open passwordlock 
+				 __delay_ms(800);
+				 Motor_Stop();
+		       
+
+		      run_t.unLock_times = 1;
+			  run_t.Numbers_counter =0 ;
+			  run_t.eepromAddress=0;
+			 run_t.passswordsMatch = 0;
+			 run_t.passsword_unlock=2;
+			 run_t.gTimer_2s =0;
+			 run_t.error_times=0;
+			 run_t.gTimer_8s =4;
+			 run_t.lock_fail=0;
+			 run_t.powerOn =2;
+		
+		 }
  
-	 }
+	   }
 	
+	 }
 
 
- }
-
+}
 /****************************************************************************
 *
 *Function Name:static void ReadPassword_EEPROM_SaveData(void)

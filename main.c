@@ -52,7 +52,7 @@ void main(void)
 	      }
 	  }
        
-	if(run_t.passswordsMatch ==1 && run_t.adminiId !=1){
+	if(run_t.passswordsMatch ==1 && run_t.adminiId !=1 && run_t.unLock_times !=1){
 		
 		  RunCommand_Unlock();
 	}
@@ -74,13 +74,16 @@ void main(void)
             run_t.gTimer_8s =0;
 			SavePassword_To_EEPROM();
         }
-		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
-			 run_t.unLock_times ++;
+		if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.Confirm == 0){
+			 run_t.unLock_times =2;
 			 Motor_CW_Run();//open passwordlock 
 			 __delay_ms(815);
 			 Motor_Stop();
+			 run_t.unLock_times =3;
+			
 
 		}
+		
 	}
 	
        
@@ -108,6 +111,7 @@ void main(void)
           if(run_t.gTimer_60s > 59){
               run_t.panel_lock =0;
 			  run_t.error_times = 0;
+		      
 
 		  }
 
