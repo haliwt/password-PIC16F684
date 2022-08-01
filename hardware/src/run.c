@@ -172,9 +172,9 @@ void SavePassword_To_EEPROM(void)
 					 EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
 					 EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
 					 EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
-                     __delay_ms(100);
+                     //__delay_ms(100);
 					
-					    run_t.gTimer_8s=0;
+					    run_t.gTimer_8s=10;
 					   	run_t.Confirm =0;
 			    		run_t.adminiId =0;
 			   			run_t.inputPwdTimes =0;
@@ -182,6 +182,7 @@ void SavePassword_To_EEPROM(void)
 						run_t.lock_fail =0;
 						run_t.BackLight =2;
 						run_t.Numbers_counter =0;
+						 run_t.unLock_times =0;
 						Buzzer_LongSound();
 
 						
@@ -202,6 +203,7 @@ void SavePassword_To_EEPROM(void)
 						run_t.passsword_unlock=0;
 						run_t.lock_fail =1;
 						run_t.led_blank  =0;
+						 run_t.unLock_times =0;
 
 					
 			          return ;
@@ -266,6 +268,7 @@ void RunCheck_Mode(unsigned int dat)
 		   run_t.Numbers_counter =0 ;
 		    run_t.passswordsMatch = 0;
             run_t.inputPwdTimes=0;
+		    run_t.unLock_times =0;
 		  }
        }
 		
@@ -280,6 +283,12 @@ void RunCheck_Mode(unsigned int dat)
 		 run_t.buzzer_flag =1;
 		 run_t.BackLight=1;
 		 run_t.gTimer_8s=0;
+
+		  if(run_t.unLock_times == 1 && run_t.Confirm ==0){
+		     run_t.passswordsMatch = 0;
+
+		  }
+		 else{
 
 		 if(run_t.Numbers_counter ==0){
 		 	
@@ -324,6 +333,7 @@ void RunCheck_Mode(unsigned int dat)
 		     run_t.Numbers_counter=0;
 			}
 		 	else run_t.passswordsMatch = 1;
+		 	}
 			
 		 }
 		   
@@ -538,20 +548,9 @@ void RunCommand_Unlock(void)
 
          if(run_t.Confirm ==1){ //prepare new password 
 			run_t.adminiId =1;  //cofirm of administrator input password is correct.
-			
-         }
-		 else{
-			  
-			 ERR_LED_OFF();
-			 OK_LED_ON();
-		     run_t.buzzer_flag=0;
-			 Buzzer_LongSound();
-			 Motor_CCW_Run();//open passwordlock 
-			 __delay_ms(800);
-			 Motor_Stop();
 
-		   }
-	      run_t.unLock_times = 1;
+
+		   run_t.unLock_times = 1;
 		  run_t.Numbers_counter =0 ;
 		  run_t.eepromAddress=0;
 		 run_t.passswordsMatch = 0;
@@ -561,12 +560,39 @@ void RunCommand_Unlock(void)
 		 run_t.gTimer_8s =4;
 		 run_t.lock_fail=0;
 		 run_t.powerOn =2;
+			
+         }
+		 else{
+
+		    if(run_t.unLock_times ==0 ){
+
+			     run_t.unLock_times = 1;
+			  
+				 ERR_LED_OFF();
+				 OK_LED_ON();
+			     run_t.buzzer_flag=0;
+				 Buzzer_LongSound();
+				 Motor_CCW_Run();//open passwordlock 
+				 __delay_ms(800);
+				 Motor_Stop();
+             
+				  run_t.Numbers_counter =0 ;
+				  run_t.eepromAddress=0;
+				 run_t.passswordsMatch = 0;
+				 run_t.passsword_unlock=2;
+				 run_t.gTimer_2s =0;
+				 run_t.error_times=0;
+				 run_t.gTimer_8s =4;
+				 run_t.lock_fail=0;
+				 run_t.powerOn =2;
+				 run_t.gTimer_2s =0;
+		    }
  
-	 }
-	
+	     }
 
 
- }
+ 		}
+}
 
 /****************************************************************************
 *
@@ -868,7 +894,7 @@ void BackLight_Fun(void)
 		OK_LED_OFF();
 		ERR_LED_OFF();
 		run_t.led_blank =0;
-		
+	
 
 		if(run_t.adminiId==1){
 		    run_t.adminiId=0;

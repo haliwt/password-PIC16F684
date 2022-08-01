@@ -54,7 +54,7 @@ void Buzzer_LongSound(void)
 	 while(m--){
 
 	   BEEP=!BEEP;
-	  __delay_us(400);//delayUS(99);
+	  __delay_us(300);//delayUS(99);
 
 
 

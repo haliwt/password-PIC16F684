@@ -207,7 +207,9 @@ void KEY_ISR(void)
 	if(k1 >2 &&  k1<60000) {  //if(k1 >2 &&  k1<40000)
 
 		run_t.buzzer_flag =1;
-		run_t.getKey = 0x01;
+		run_t.Confirm = 1;
+	    run_t.Numbers_counter=0;
+		//run_t.getKey = 0x01;
 		k1=0;
 	}
 

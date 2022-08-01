@@ -57,13 +57,13 @@ void main(void)
 		  RunCommand_Unlock();
 	}
     if(run_t.passsword_unlock==2){ //lock turn on Open 
-		if(run_t.getKey ==0x01){ //input password flag.
-			run_t.getKey = 0;
-			run_t.Confirm =1; //input amdministrator password flag
-			run_t.Numbers_counter=0;
-			run_t.buzzer_flag =1;
-			
-	     }
+//		if(run_t.getKey ==0x01){ //input password flag.
+//			run_t.getKey = 0;
+//			run_t.Confirm =1; //input amdministrator password flag
+//			run_t.Numbers_counter=0;
+//			run_t.buzzer_flag =1;
+//			
+//	     }
 		if(run_t.getKey == 0x81){
 			 run_t.getKey = 0;
 			clearEeprom=1;
@@ -74,11 +74,14 @@ void main(void)
             run_t.gTimer_8s =0;
 			SavePassword_To_EEPROM();
         }
-		if(run_t.gTimer_2s ==3 && run_t.unLock_times==1 && run_t.Confirm == 0){
-			 run_t.unLock_times ++;
-			 Motor_CW_Run();//open passwordlock 
+		
+		 if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.Confirm == 0){
+
+			 Motor_CW_Run();// Close 
 			 __delay_ms(815);
 			 Motor_Stop();
+			 __delay_ms(1000);
+			 run_t.unLock_times =0;
 
 		}
 	}
@@ -103,8 +106,10 @@ void main(void)
       }
 
 	  if(run_t.panel_lock ==1){
-          if(run_t.gTimer_1s >8)
+         run_t.gTimer_1s =10;
 		  	ERR_LED_OFF();
+		    BACKLIGHT_2_OFF();
+	        BACKLIGHT_OFF();
           if(run_t.gTimer_60s > 59){
               run_t.panel_lock =0;
 			  run_t.error_times = 0;
