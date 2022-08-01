@@ -31,6 +31,7 @@ typedef struct __RUN_T{
 	unsigned char panel_lock;
 	unsigned char lock_fail;
 	unsigned char led_blank ;
+	unsigned char retimes;
 
    
 

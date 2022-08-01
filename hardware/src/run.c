@@ -267,7 +267,6 @@ void RunCheck_Mode(unsigned int dat)
 		    run_t.lock_fail =0;
 		   run_t.Numbers_counter =0 ;
 		    run_t.passswordsMatch = 0;
-            run_t.inputPwdTimes=0;
 		    run_t.unLock_times =0;
 		  }
        }
@@ -348,6 +347,8 @@ void RunCheck_Mode(unsigned int dat)
      
 		     key=1;
 			 spec=0;
+		     run_t.retimes =0;
+			  run_t.gTimer_8s=0;
 			 
 		}
 
@@ -359,7 +360,8 @@ void RunCheck_Mode(unsigned int dat)
      	
 		     key=1;
 			 spec=0;
-			
+			 run_t.retimes =0;
+			  run_t.gTimer_8s=0;
 			 
 		}
 			
@@ -368,14 +370,16 @@ void RunCheck_Mode(unsigned int dat)
      	
 		     key=1;
 		    spec=0;
-			
+			 run_t.retimes =0;
+			  run_t.gTimer_8s=0;
 		}
 	case  KEY_3:
 		if(key==0){
   
 		     key=1;
 			 spec=0;
-			  
+			   run_t.retimes =0;
+			    run_t.gTimer_8s=0;
 		}
 			
 	case KEY_4:
@@ -383,7 +387,8 @@ void RunCheck_Mode(unsigned int dat)
      
 		     key=1;
 			 spec=0;
-			 
+			  run_t.retimes =0;
+			   run_t.gTimer_8s=0;
 		}
 	break;
 			
@@ -392,7 +397,8 @@ void RunCheck_Mode(unsigned int dat)
      
 		     key=1;
 			 spec=0;
-			  
+			   run_t.retimes =0;
+			    run_t.gTimer_8s=0;
 		}
 	break;
 			
@@ -401,7 +407,8 @@ void RunCheck_Mode(unsigned int dat)
     
 		     key=1;
 			 spec=0;
-			 
+			  run_t.retimes =0;
+			   run_t.gTimer_8s=0;
 		}
 	break;
 	case KEY_7:
@@ -409,7 +416,8 @@ void RunCheck_Mode(unsigned int dat)
     
 		     key=1;
 			 spec=0;
-			
+			 run_t.retimes =0;
+			  run_t.gTimer_8s=0;
 		}
 	break;
 			
@@ -418,7 +426,8 @@ void RunCheck_Mode(unsigned int dat)
      	
 		     key=1;
 			 spec=0;
-			
+			 run_t.retimes =0;
+			  run_t.gTimer_8s=0;
 		}
    break;
 			
@@ -426,7 +435,8 @@ void RunCheck_Mode(unsigned int dat)
 		  if(key==0 ){
 		  	 key=1;
 		     spec=0;
-		
+		     run_t.retimes =0;
+			  run_t.gTimer_8s=0;
 		}
 	break;
 		  
@@ -557,9 +567,10 @@ void RunCommand_Unlock(void)
 		 run_t.passsword_unlock=2;
 		 run_t.gTimer_2s =0;
 		 run_t.error_times=0;
-		 run_t.gTimer_8s =4;
 		 run_t.lock_fail=0;
 		 run_t.powerOn =2;
+		  run_t.gTimer_8s =0;
+		
 			
          }
 		 else{
@@ -895,26 +906,28 @@ void BackLight_Fun(void)
 		ERR_LED_OFF();
 		run_t.led_blank =0;
 	
-
-		if(run_t.adminiId==1){
-		    run_t.adminiId=0;
-            run_t.adminiId =0;  //after a period of time auto turn off flag
-			run_t.Confirm = 0; //after a period of time auto turn off flag
-			run_t.passsword_unlock=0;
-		}
+        if(run_t.retimes > 5){
+			 run_t.retimes =0;
+			 run_t.adminiId=0;
+	         run_t.adminiId =0;  //after a period of time auto turn off flag
+			 run_t.Confirm = 0; //after a period of time auto turn off flag
+			 run_t.passsword_unlock=0;
+        }
 
 	}
 
 	if(run_t.lock_fail==1){
 		 cnt ++ ;
         OK_LED_OFF();
-        if(cnt < 125 ){
+        if(cnt < 120 ){
 
 		    ERR_LED_ON();
 			
 		}
-		else 
+		else if(cnt > 120 && cnt < 240)
 	        ERR_LED_OFF();
+
+		if(cnt>239) cnt = 0;
 
 	}
    
@@ -922,15 +935,26 @@ void BackLight_Fun(void)
 
 	if( run_t.adminiId==1 || run_t.led_blank  ==1){
 
-	     cnt ++ ;
-        ERR_LED_OFF();
-        if(cnt < 125 ){
+	   cnt ++ ;
+	   run_t.lock_fail=0;
+
+	       
+		if(run_t.retimes < 5 ){ //120s
+			 run_t.gTimer_8s=0;
+			
+				
+		}
+      
+        if(cnt < 99 ){
 
 		    OK_LED_ON();
 			
 		}
-		else 
+		else if(cnt>99 && cnt < 201)
 	        OK_LED_OFF();
+
+		if(cnt>200)cnt = 0;
+		
 	}
 
 }
