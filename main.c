@@ -73,32 +73,29 @@ void main(void)
 			
         }
 
-		if(run_t.gTimer_2s ==2 && run_t.unLock_times==1){ //if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.Confirm == 0){
+		if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.adminiId==0){ //if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.Confirm == 0){
 
-			 if(run_t.Confirm ==1 && run_t.unLock_times==0){
-                
-                    
-			 }
-             else{
 				 Motor_CW_Run();// Close 
 				 __delay_ms(815);
 				 Motor_Stop();
 				 __delay_ms(1000);
 				 run_t.unLock_times =0;
-             }
+            }
 
 		}
-	}
+	
 	
        
          BackLight_Fun();
          Buzzer_Sound();
          if(clearEeprom==1){
               run_t.gTimer_8s =0;
+			  run_t.retimes =10;
               run_t.led_blank = 1;
              clearEeprom = 0;
              ClearEEPRO_Data();
 			 Buzzer_LongSound();
+			
          }
 
 		    

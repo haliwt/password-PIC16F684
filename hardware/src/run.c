@@ -175,6 +175,7 @@ void SavePassword_To_EEPROM(void)
                      //__delay_ms(100);
 					
 					    run_t.gTimer_8s=10;
+					    run_t.retimes =10;
 					   	run_t.Confirm =0;
 			    		run_t.adminiId =0;
 			   			run_t.inputPwdTimes =0;
@@ -267,7 +268,7 @@ void RunCheck_Mode(unsigned int dat)
 		    run_t.lock_fail =0;
 		   run_t.Numbers_counter =0 ;
 		    run_t.passswordsMatch = 0;
-		    run_t.unLock_times =0;
+		    //run_t.unLock_times =0;
 		  }
        }
 		
@@ -283,11 +284,7 @@ void RunCheck_Mode(unsigned int dat)
 		 run_t.BackLight=1;
 		 run_t.gTimer_8s=0;
 
-		  if(run_t.unLock_times == 1){
-		     run_t.passswordsMatch = 0;
-
-		  }
-		 else{
+	
 
 		 if(run_t.Numbers_counter ==0){
 		 	
@@ -337,7 +334,6 @@ void RunCheck_Mode(unsigned int dat)
 		 }
 		   
 	  	   
-	 }
 		   
 	 break;
 
@@ -619,10 +615,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 	  static unsigned char value ,Readpwd[6];
 	  static  unsigned char eevalue ,ReadAddress;
 
-	  
-	  
-
-	  for(run_t.eepromAddress =0; run_t.eepromAddress <12;run_t.eepromAddress++){
+	 for(run_t.eepromAddress =0; run_t.eepromAddress <12;run_t.eepromAddress++){
 	  
 	    switch(run_t.eepromAddress){
 	
@@ -905,6 +898,7 @@ void BackLight_Fun(void)
 		OK_LED_OFF();
 		ERR_LED_OFF();
 		run_t.led_blank =0;
+		
 	
         if(run_t.retimes > 5){
 			 run_t.retimes =0;
@@ -912,6 +906,7 @@ void BackLight_Fun(void)
 	         run_t.adminiId =0;  //after a period of time auto turn off flag
 			 run_t.Confirm = 0; //after a period of time auto turn off flag
 			 run_t.passsword_unlock=0;
+			 run_t.unLock_times =0;
         }
 
 	}
