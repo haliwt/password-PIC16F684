@@ -5,7 +5,7 @@
 
 
 #define ADMINI     		0X00
-#define USER_1     		0X07  
+#define USER_1     		0X07
 #define USER_2     		0X1C
 #define USER_3     		0X27
 #define USER_4    	 	0X32  
@@ -14,7 +14,7 @@
 #define USER_7    	 	0X53  
 #define USER_8     		0X5E
 #define USER_9     		0X69
-#define USER_10    	 	0X70
+#define USER_10    	 	0X74
 
 #define ADMIN_SAVE_ADD        0x80  //administrator of be save 
 #define USER_SAVE_ADD_1        0X81
@@ -159,10 +159,7 @@ void SavePassword_To_EEPROM(void)
 		eevalue= EEPROM_Read_Byte(run_t.userId);
 		if(eevalue !=1){
 	
-            if(eeNumbers <11){
-	
-                
-		 	value =CompareValue(pwd1, pwd2);
+             value =CompareValue(pwd1, pwd2);
 			
 			 if(value ==1){
 			         EEPROM_Write_Byte(run_t.userId , 0x01);
@@ -172,7 +169,7 @@ void SavePassword_To_EEPROM(void)
 					 EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
 					 EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
 					 EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
-                     //__delay_ms(100);
+                   
 					
 					    run_t.gTimer_8s=10;
 					    run_t.retimes =10;
@@ -184,6 +181,7 @@ void SavePassword_To_EEPROM(void)
 						run_t.BackLight =2;
 						run_t.Numbers_counter =0;
 						 run_t.unLock_times =0;
+						 
 						Buzzer_LongSound();
 
 						
@@ -195,10 +193,8 @@ void SavePassword_To_EEPROM(void)
 			 }
 			 else{
 			 	
-				if(eeNumbers ==0) eeNumbers =0;
-				 else
-				 	eeNumbers --;
-				        run_t.inputPwdTimes =0;
+				
+			           run_t.inputPwdTimes =0;
 				  	    run_t.Confirm =0;
 			    		run_t.adminiId =0;
 						run_t.passsword_unlock=0;
@@ -210,7 +206,7 @@ void SavePassword_To_EEPROM(void)
 			          return ;
 				
 				}
-                }
+              
 			  
          	}
 		
@@ -567,6 +563,7 @@ void RunCommand_Unlock(void)
 		 run_t.powerOn =2;
 		  run_t.gTimer_8s =0;
 		
+		
 			
          }
 		 else{
@@ -902,11 +899,11 @@ void BackLight_Fun(void)
 	
         if(run_t.retimes > 5){
 			 run_t.retimes =0;
-			 run_t.adminiId=0;
 	         run_t.adminiId =0;  //after a period of time auto turn off flag
 			 run_t.Confirm = 0; //after a period of time auto turn off flag
 			 run_t.passsword_unlock=0;
 			 run_t.unLock_times =0;
+			 run_t.Confirm =0 ;
         }
 
 	}
