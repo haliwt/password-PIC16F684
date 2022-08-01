@@ -38,6 +38,7 @@ void main(void)
    {
  
       #if 1
+	
 
 	  if(run_t.powerOn ==0){
          run_t.powerOn++;
@@ -99,10 +100,10 @@ void main(void)
          }
 
 		    
-      if(run_t.gTimer_10s > 6){ //60s ->battery be checking 
+      if(run_t.gTimer_10s > 50){ //60s ->battery be checking 
           run_t.gTimer_10s =0;
          adc= ADC_ReadVoltage();
-	     if(adc <  640)BAT_LED_ON() ;//3V ->Vdd = 4.8V
+	     if(adc < 737)BAT_LED_ON() ;//3V ->Vdd = 4.8V //50
 		 else BAT_LED_OFF() ;
       }
 
@@ -111,6 +112,7 @@ void main(void)
 		  	ERR_LED_OFF();
 		    BACKLIGHT_2_OFF();
 	        BACKLIGHT_OFF();
+			
           if(run_t.gTimer_60s > 59){
               run_t.panel_lock =0;
 			  run_t.error_times = 0;

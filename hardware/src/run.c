@@ -714,7 +714,14 @@ static void ReadPassword_EEPROM_SaveData(void)
 			else{
 
 			     if(ReadAddress == ADMINI){
-					value =CompareValue(initpwd, pwd1);
+
+				    
+                    if(run_t.Numbers_counter > 6){
+ 
+                        value = BF_Search(virtualPwd,initpwd);
+					}
+					else
+					    value =CompareValue(initpwd, pwd1);
 
 				     if(value==1){
 									   
@@ -910,7 +917,15 @@ void BackLight_Fun(void)
 
 	if(run_t.lock_fail==1){
 		 cnt ++ ;
+		 
         OK_LED_OFF();
+
+		if(run_t.retimes < 5 && run_t.adminiId ==1){ //120s
+			 run_t.gTimer_8s=0;
+			
+				
+		}
+	
         if(cnt < 120 ){
 
 		    ERR_LED_ON();
