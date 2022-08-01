@@ -283,7 +283,7 @@ void RunCheck_Mode(unsigned int dat)
 		 run_t.BackLight=1;
 		 run_t.gTimer_8s=0;
 
-		  if(run_t.unLock_times == 1 && run_t.Confirm ==0){
+		  if(run_t.unLock_times == 1){
 		     run_t.passswordsMatch = 0;
 
 		  }
