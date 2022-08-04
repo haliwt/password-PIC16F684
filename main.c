@@ -6,7 +6,7 @@
  */
 
 #include "main.h"
-__CONFIG(0x0BF4);  //__CONFIG(0x01B4);  
+__CONFIG(0x01E4);  //__CONFIG(0x01B4);  
 //#pragma config CONFIG = 0x01B4 
 //#pragma config FOSC = INTRCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, BOREN = ON, CP = OFF, CPD = OFF   //PIC16F676 
 //PIC16F684 
@@ -21,13 +21,13 @@ unsigned char SC_Data[2];
 void main(void) 
 {
     static unsigned char clearEeprom;
-    unsigned int KeyValue,adc;
+    unsigned int KeyValue;
 
    SC12B_Init_Function();
     TMR0_Initialize();
 	Motor_Init();
 	
-    ADC_Init();
+  //  ADC_Init();
     System_Init();
    INTERRUPT_GlobalInterruptEnable();
    INTERRUPT_PeripheralInterruptEnable() ;
@@ -36,8 +36,11 @@ void main(void)
    run_t.eepromAddress=0;
    while(1)
    {
-
       
+
+     
+	  
+   
       #if 1
 	
 
@@ -100,13 +103,7 @@ void main(void)
 			
          }
 
-		    
-      if(run_t.gTimer_10s > 50){ //60s ->battery be checking 
-          run_t.gTimer_10s =0;
-         adc= ADC_ReadVoltage();
-	     if(adc < 737)BAT_LED_ON() ;//3V ->Vdd = 4.8V //50
-		 else BAT_LED_OFF() ;
-      }
+
 
 	  if(run_t.panel_lock ==1){
          run_t.gTimer_1s =10;

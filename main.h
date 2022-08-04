@@ -20,7 +20,7 @@
 //#include "hardware/inc/tim1.h"
 #include "hardware/inc/interrupt.h"
 #include "hardware/inc/run.h"
-#include "hardware/inc/ADC.h"
+//#include "hardware/inc/ADC.h"
 #include "hardware/inc/eeprom.h"
 #include "hardware/inc/motor.h"
 #include "hardware/inc/kmp.h"

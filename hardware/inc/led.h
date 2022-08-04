@@ -17,7 +17,7 @@
 #define  ERR_LED_ON()           (PORTAbits.RA0 =0)
 #define  ERR_LED_OFF()             (PORTAbits.RA0 =1)
 
-#define RESET_KEY               PORTAbits.RA3 
+
 
 
 

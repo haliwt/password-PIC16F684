@@ -280,8 +280,6 @@ void RunCheck_Mode(unsigned int dat)
 		 run_t.BackLight=1;
 		 run_t.gTimer_8s=0;
 
-	
-
 		 if(run_t.Numbers_counter ==0){
 		 	
 		    run_t.passswordsMatch = 0;
@@ -902,7 +900,6 @@ void BackLight_Fun(void)
 		OK_LED_OFF();
 		ERR_LED_OFF();
 		run_t.led_blank =0;
-		
 	
         if(run_t.retimes > 5){
 			 run_t.retimes =0;
