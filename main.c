@@ -6,7 +6,7 @@
  */
 
 #include "main.h"
-__CONFIG(0x01D4);  //__CONFIG(0x01B4);  
+__CONFIG(0x0BF4);  //__CONFIG(0x01B4);  
 //#pragma config CONFIG = 0x01B4 
 //#pragma config FOSC = INTRCIO, WDTE = ON, PWRTE = OFF, MCLRE = OFF, BOREN = ON, CP = OFF, CPD = OFF   //PIC16F676 
 //PIC16F684 
@@ -36,7 +36,8 @@ void main(void)
    run_t.eepromAddress=0;
    while(1)
    {
- 
+
+      
       #if 1
 	
 

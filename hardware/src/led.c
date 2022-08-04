@@ -17,22 +17,32 @@ static void LED_Init(void)
     ANSELbits.ANS1 = 0;
     ANSELbits.ANS2 =0 ; //I/O as digital 
     ANSELbits.ANS7 =0 ; //gpio as digital
+    ANSELbits.ANS4 = 0 ; // I/O as digital PORT
 
     TRISAbits.TRISA0 =0;
     TRISAbits.TRISA1 =0 ;
-    TRISAbits.TRISA2 = 0;  //I/O as output 
+    
+    TRISCbits.TRISC0 = 0 ; //I/O as output
     TRISCbits.TRISC4 = 0;
 	TRISCbits.TRISC3 = 0; 
-    //RESET KEY gpio input PORT
-    TRISAbits.TRISA3 = 1;   //I/O as input
-    IOCAbits.IOCA3 =1 ;    //Open interrupter flag
-	INTCONbits.RAIE=1;
-	INTCONbits.RAIF=0;
+	
+    //RA2  KEY gpio input PORT
+    //TRISAbits.TRISA3 = 1;   //I/O as input
+   // IOCAbits.IOCA3 =1 ;    //Open interrupter flag
+   //INTCONbits.RAIE=1;
+	//INTCONbits.RAIF=0;
+
+	TRISAbits.TRISA2 = 1;  //I/O as Input of KEY 
+	INTCONbits.INTE = 1;   //interrupt external enable
+	INTCONbits.INTF =0 ;
+	
+	
+	
     
     //Setup GPIO output defult value 
     PORTAbits.RA0=1;
 	PORTAbits.RA1=1;
-	PORTAbits.RA2=0;  //back light led1
+	//PORTAbits.RA2=0;  //back light led1
 	PORTCbits.RC4=1;
 	PORTCbits.RC3= 0; //back light led2
 
@@ -182,14 +192,15 @@ void KEY_ISR(void)
 {
  
 	static unsigned long int k1;
-	INTCONbits.RAIF = 0;
+	//INTCONbits.RAIF = 0;
+	INTCONbits.INTF=0;
 	
-	if(KEY1_RA3_GetValue() ==0 )
+	if(KEY1_RA2_GetValue() ==0 )
 	{
 	
 
 	   
-	   while(KEY1_RA3_GetValue() ==0){
+	   while(KEY1_RA2_GetValue() ==0){
 
 		    k1++;
 	   	}
@@ -201,7 +212,7 @@ void KEY_ISR(void)
 	
 	
 
-	if(KEY1_RA3_GetValue() ==1){
+	if(KEY1_RA2_GetValue() ==1){
 		//BAT_LED_OFF();
 
 	if(k1 >2 &&  k1<60000) {  //if(k1 >2 &&  k1<40000)

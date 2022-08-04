@@ -2,8 +2,8 @@
 #define __LED_H_
 #include "../../main.h"
 
-#define  BACKLIGHT_ON()          (PORTAbits.RA2 =1)
-#define  BACKLIGHT_OFF()         (PORTAbits.RA2 =0)
+#define  BACKLIGHT_ON()          (PORTCbits.RC0= 1)
+#define  BACKLIGHT_OFF()         (PORTCbits.RC0 =0)
 
 #define  BACKLIGHT_2_ON()       (PORTCbits.RC3 = 1)
 #define  BACKLIGHT_2_OFF()      (PORTCbits.RC3 = 0)
@@ -21,7 +21,7 @@
 
 
 
-#define KEY1_RA3_GetValue()           PORTAbits.RA3
+#define KEY1_RA2_GetValue()           PORTAbits.RA2
 
 
 
