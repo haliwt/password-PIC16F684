@@ -539,7 +539,7 @@ void RunCommand_Unlock(void)
 			     run_t.buzzer_flag=0;
 				 Buzzer_LongSound();
 				 Motor_CCW_Run();//open passwordlock 
-				 __delay_ms(800);
+				 __delay_ms(2100);//(800);
 				 Motor_Stop();
              
 				  run_t.Numbers_counter =0 ;

@@ -65,7 +65,7 @@ void main(void)
 	}
     if(run_t.passsword_unlock==2){ //lock turn on Open 
 	
-
+        //set up flag permit to save data to EEPROM
 		if(run_t.getKey == 0x01){
 			 run_t.getKey = 0;
 			run_t.Confirm = 1;
@@ -73,18 +73,18 @@ void main(void)
 			run_t.unLock_times =0;
 			run_t.retimes =0;
 		}
-		
+		//To save data to EEPROM
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
            
            SavePassword_To_EEPROM();
 			
 			
         }
-
+        //return to home position
 		if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.adminiId==0){ //if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.Confirm == 0){
 
 				 Motor_CW_Run();// Close 
-				 __delay_ms(815);
+				 __delay_ms(2115);//(815);
 				 Motor_Stop();
 				// __delay_ms(1000);
 				 run_t.unLock_times =0;
