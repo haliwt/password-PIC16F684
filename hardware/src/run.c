@@ -39,6 +39,10 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 static void ReadPassword_EEPROM_SaveData(void);
 static void VirtualPassword_Fun(void );
 
+static void Buzzer_Sound(void);
+static void  BackLight_Fun(void);
+
+
 
 
 unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number);
@@ -301,10 +305,11 @@ void RunCheck_Mode(unsigned int dat)
 			 }
 
 		 }
+         	
 		 else{
 		
 
-		 	if( run_t.Confirm ==1){
+		 	if( run_t.Confirm ==1 && run_t.unLock_times==0){
               run_t.inputPwdTimes ++ ;
 			  if(run_t.inputPwdTimes ==1){
 			      run_t.eepromAddress =0;  //administrator passwords 
@@ -322,11 +327,12 @@ void RunCheck_Mode(unsigned int dat)
 			 run_t.passswordsMatch = 1;
 		     run_t.Numbers_counter=0;
 			}
-		 	else run_t.passswordsMatch = 1;
+		 	else if(run_t.unLock_times==0){
+				run_t.passswordsMatch = 1;
 		 	}
 			
 		 }
-		   
+         }  
 	  	   
 		   
 	 break;
@@ -755,7 +761,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-void Buzzer_Sound(void)
+static void Buzzer_Sound(void)
 {
     unsigned char  i;
 
@@ -871,7 +877,7 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-void BackLight_Fun(void)
+static void BackLight_Fun(void)
 {
      static unsigned char cnt,endcnt;
 
@@ -979,5 +985,44 @@ void ClearEEPRO_Data(void)
       // if(i==0x7B)return ;
    }
    
+}
+/****************************************************************************
+	*
+	*Function Name:void CParserDispatch(void)
+	*Function : run is main 
+	*Input Ref: NO
+	*Retrun Ref:NO
+	*
+****************************************************************************/
+void CParserDispatch(void)
+{
+  
+		  
+			BackLight_Fun();
+			Buzzer_Sound();
+			if(run_t.clearEeprom==1){
+				 run_t.gTimer_8s =0;
+				 run_t.retimes =10;
+				 run_t.led_blank = 1;
+				run_t.clearEeprom = 0;
+				ClearEEPRO_Data();
+				Buzzer_LongSound();
+			}
+			
+	
+	
+	
+		 if(run_t.panel_lock ==1){
+			run_t.gTimer_1s =10;
+			   ERR_LED_OFF();
+			   BACKLIGHT_2_OFF();
+			   BACKLIGHT_OFF();
+			   
+			 if(run_t.gTimer_60s > 59){
+				 run_t.panel_lock =0;
+				 run_t.error_times = 0;
+	
+			 }
+           }
 }
 
