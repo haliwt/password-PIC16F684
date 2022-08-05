@@ -36,15 +36,14 @@ void main(void)
    run_t.eepromAddress=0;
    while(1)
    {
-   	 
- 
-      #if 1
-	
-
-	  if(run_t.powerOn ==0){
+   	 #if 1
+	   if(run_t.powerOn ==0){
          run_t.powerOn++;
-		 run_t.passswordsMatch =1;
-		 run_t.passsword_unlock =1;
+		 run_t.passswordsMatch =0;
+		 run_t.passsword_unlock =2;
+         run_t.unLock_times=1;
+         run_t.gTimer_2s=2;
+		
 
 	  }
       if(run_t.passswordsMatch==0 && run_t.panel_lock==0){
@@ -89,6 +88,7 @@ void main(void)
 				 Motor_Stop();
 				// __delay_ms(1000);
 				 run_t.unLock_times =0;
+                 run_t.powerOn =2;
             }
 
 		}

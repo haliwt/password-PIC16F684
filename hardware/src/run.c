@@ -524,7 +524,7 @@ void RunCommand_Unlock(void)
 		 run_t.gTimer_2s =0;
 		 run_t.error_times=0;
 		 run_t.lock_fail=0;
-		 run_t.powerOn =2;
+		// run_t.powerOn =2;
 		  run_t.gTimer_8s =0;
 		
 		}
@@ -550,7 +550,7 @@ void RunCommand_Unlock(void)
 				 run_t.error_times=0;
 				 run_t.gTimer_8s =4;
 				 run_t.lock_fail=0;
-				 run_t.powerOn =2;
+				// run_t.powerOn =2;
 				 run_t.gTimer_2s =0;
 		    }
  
