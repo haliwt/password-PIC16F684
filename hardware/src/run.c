@@ -39,8 +39,8 @@ static unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 static void ReadPassword_EEPROM_SaveData(void);
 static void VirtualPassword_Fun(void );
 
-static void Buzzer_Sound(void);
-static void  BackLight_Fun(void);
+//static void Buzzer_Sound(void);
+//static void  BackLight_Fun(void);
 
 
 
@@ -268,7 +268,7 @@ void RunCheck_Mode(unsigned int dat)
 		    run_t.lock_fail =0;
 		   run_t.Numbers_counter =0 ;
 		    run_t.passswordsMatch = 0;
-		    //run_t.unLock_times =0;
+		    
 		  }
        }
 		
@@ -284,55 +284,57 @@ void RunCheck_Mode(unsigned int dat)
 		 run_t.BackLight=1;
 		 run_t.gTimer_8s=0;
 
-		 if(run_t.Numbers_counter ==0){
-		 	
-		    run_t.passswordsMatch = 0;
-            run_t.gTimer_8s=0;
-		 
-		 }
-		 else if(run_t.Numbers_counter < 4 && run_t.Numbers_counter >0 ){
-             OK_LED_OFF();
-			 ERR_LED_ON();
-		     run_t.Numbers_counter=0;
-		     run_t.passswordsMatch = 0;
-			 run_t.error_times ++ ;
-			 run_t.lock_fail=1;
-			 if(run_t.error_times > 4){
+		
+				if(run_t.Numbers_counter ==0){
+
+				run_t.passswordsMatch = 0;
+				run_t.gTimer_8s=0;
+
+				}
+				else if(run_t.Numbers_counter < 4 && run_t.Numbers_counter >0 ){
+				OK_LED_OFF();
+				ERR_LED_ON();
+				run_t.Numbers_counter=0;
+				run_t.passswordsMatch = 0;
+				run_t.error_times ++ ;
+				run_t.lock_fail=1;
+				if(run_t.error_times > 4){
 				run_t.gTimer_60s =0;
 				run_t.gTimer_1s =0;
 				run_t.panel_lock=1;
-			    
-			 }
 
-		 }
-         	
-		 else{
-		
+				}
 
-		 	if( run_t.Confirm ==1 && run_t.unLock_times==0){
-              run_t.inputPwdTimes ++ ;
-			  if(run_t.inputPwdTimes ==1){
-			      run_t.eepromAddress =0;  //administrator passwords 
+				}
 
-               }
-			//  if(run_t.inputPwdTimes ==2) ERR_LED_ON();
-			//  if(run_t.inputPwdTimes ==3 )  BAT_LED_ON();
-			  if(run_t.inputPwdTimes > 3){
-					run_t.Confirm =0;
-					run_t.passsword_unlock =0 ;
-			        run_t.adminiId =0 ;
+				else{
 
-			  }
-			  
-			 run_t.passswordsMatch = 1;
-		     run_t.Numbers_counter=0;
-			}
-		 	else if(run_t.unLock_times==0){
+
+				if( run_t.Confirm ==1 && run_t.unLock_times==0){
+				run_t.inputPwdTimes ++ ;
+				if(run_t.inputPwdTimes ==1){
+				run_t.eepromAddress =0;  //administrator passwords 
+
+				}
+				//  if(run_t.inputPwdTimes ==2) ERR_LED_ON();
+				//  if(run_t.inputPwdTimes ==3 )  BAT_LED_ON();
+				if(run_t.inputPwdTimes > 3){
+				run_t.Confirm =0;
+				run_t.passsword_unlock =0 ;
+				run_t.adminiId =0 ;
+
+				}
+
 				run_t.passswordsMatch = 1;
-		 	}
-			
-		 }
-         }  
+				run_t.Numbers_counter=0;
+				}
+				else if(run_t.unLock_times==0){
+				run_t.passswordsMatch = 1;
+				}
+
+				}
+				}  
+         
 	  	   
 		   
 	 break;
@@ -453,65 +455,21 @@ void RunCheck_Mode(unsigned int dat)
 				if(run_t.Numbers_counter > 20) run_t.Numbers_counter =20;
 				virtualPwd[run_t.Numbers_counter-1]=temp;
 			
-			    #if 1
+			    
 				 
 			     if(run_t.Numbers_counter < 7){
-				 switch(run_t.Numbers_counter){
-	        
-				 	
-				  case 1:
-					 
-				      if(run_t.inputPwdTimes ==2)pwd2[0]=temp;
-					  else  pwd1[0] =temp;
-					
-				break;
-				  
-				  case 2:
-					 
-					  if(run_t.inputPwdTimes ==2) pwd2[1]=temp;
-					  else pwd1[1] = temp;
-					
-				 break;
-	   
-				  case 3:
-					   
-					
-					   if(run_t.inputPwdTimes ==2)pwd2[2] =temp;
-					   else pwd1[2]= temp;
-					  
-				 break;
-	   
-				  case 4: 
-					
-					   if(run_t.inputPwdTimes ==2)pwd2[3] =temp;
-					   else pwd1[3] = temp;
-					   
-				  break;
-	   
-				  case 5:
-					 
-					   if(run_t.inputPwdTimes ==2) pwd2[4] = temp;
-					   else pwd1[4] =temp;
-				 break;
-	   
-				  case 6:
-					
-					   if(run_t.inputPwdTimes ==2) pwd2[5] =temp;
-					   else pwd1[5]= temp;
-					
-				  break;
+
+				  if(run_t.inputPwdTimes ==2)pwd2[run_t.Numbers_counter-1]=temp;
+					  else  pwd1[run_t.Numbers_counter-1] =temp;
+			     }
+				
+	  	}
+
 
 			
-				  
-	            }
-				  
-			    }
+}
 				 
 	   
-				   #endif 
-	   }
-	 
-  }
 /****************************************************************************
 *
 *Function Name:void RunCheck_Mode(unsigned int dat)
@@ -556,7 +514,7 @@ void RunCommand_Unlock(void)
 			run_t.adminiId =1;  //cofirm of administrator input password is correct.
 
 
-		   run_t.unLock_times = 1;
+		   run_t.unLock_times = 0;
 		  run_t.Numbers_counter =0 ;
 		  run_t.eepromAddress=0;
 		 run_t.passswordsMatch = 0;
@@ -761,7 +719,7 @@ static void ReadPassword_EEPROM_SaveData(void)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-static void Buzzer_Sound(void)
+void Buzzer_Sound(void)
 {
     unsigned char  i;
 
@@ -877,7 +835,7 @@ unsigned char  InputNumber_ToSpecialNumbers(TouchKey_Numbers number)
 *Retrun Ref:NO
 *
 ****************************************************************************/
-static void BackLight_Fun(void)
+void BackLight_Fun(void)
 {
      static unsigned char cnt,endcnt;
 
@@ -915,6 +873,7 @@ static void BackLight_Fun(void)
 			 run_t.unLock_times =0;
 			 run_t.Confirm =0 ;
         }
+
 
 	}
 
@@ -998,6 +957,52 @@ void CParserDispatch(void)
 {
   
 		  
+    if(run_t.passswordsMatch ==1 && run_t.adminiId !=1){
+		
+		  RunCommand_Unlock();
+	}
+	
+    if(run_t.passsword_unlock==2){ //lock turn on Open 
+		if(run_t.getKey == 0x81){
+			 run_t.getKey = 0;
+			run_t.clearEeprom=1;
+           Buzzer_LongSound();
+		}
+		if(run_t.getKey ==0x01){
+		
+		  run_t.getKey = 0;
+         run_t.Confirm = 1;
+	    run_t.Numbers_counter=0;
+		run_t.unLock_times =0;
+
+
+		}
+		if(run_t.Confirm ==1 && run_t.adminiId==1){
+           
+         
+			run_t.gTimer_8s =0;
+			SavePassword_To_EEPROM();
+			 
+			
+        }
+
+		if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.adminiId==0){ //if(run_t.gTimer_2s ==2 && run_t.unLock_times==1 && run_t.Confirm == 0){
+
+				 Motor_CW_Run();// Close 
+				 __delay_ms(815);
+				 Motor_Stop();
+				 run_t.Numbers_counter =0;
+				 //__delay_ms(1000);
+				 run_t.unLock_times =0;
+				 n1++;
+            }
+
+		}
+
+
+
+
+
 			BackLight_Fun();
 			Buzzer_Sound();
 			if(run_t.clearEeprom==1){

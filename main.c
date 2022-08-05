@@ -36,8 +36,11 @@ void main(void)
    run_t.eepromAddress=0;
    while(1)
    {
-      
-    #if 1
+   	 
+ 
+      #if 1
+	
+
 	  if(run_t.powerOn ==0){
          run_t.powerOn++;
 		 run_t.passswordsMatch =1;
@@ -63,10 +66,19 @@ void main(void)
 			run_t.clearEeprom=1;
            Buzzer_LongSound();
 		}
+
+		if(run_t.getKey == 0x01){
+			 run_t.getKey = 0;
+			run_t.Confirm = 1;
+	        run_t.Numbers_counter=0;
+			run_t.unLock_times =0;
+			run_t.retimes =0;
+		}
+		
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
            
          
-			//run_t.gTimer_8s =0;
+			run_t.retimes =0;
 			SavePassword_To_EEPROM();
 			
 			
@@ -77,22 +89,57 @@ void main(void)
 				 Motor_CW_Run();// Close 
 				 __delay_ms(815);
 				 Motor_Stop();
-				 __delay_ms(1000);
+				// __delay_ms(1000);
 				 run_t.unLock_times =0;
             }
 
 		}
-		CParserDispatch();
 	
-	   #endif 
+	
+       
+         BackLight_Fun();
+         Buzzer_Sound();
+         if(run_t.clearEeprom==1){
+              run_t.gTimer_8s =0;
+			  run_t.retimes =10;
+              run_t.led_blank = 1;
+             run_t.clearEeprom = 0;
+             ClearEEPRO_Data();
+			 Buzzer_LongSound();
+			
+         }
+
+		    
+  
+
+	  if(run_t.panel_lock ==1){
+         run_t.gTimer_1s =10;
+		  	ERR_LED_OFF();
+		    BACKLIGHT_2_OFF();
+	        BACKLIGHT_OFF();
+			
+          if(run_t.gTimer_60s > 59){
+              run_t.panel_lock =0;
+			  run_t.error_times = 0;
+
+		  }
+
 
 	  }
+
+
+
+		 #endif 
+   	}
+      
+   
+ }
      
 
 
 
 		 
-  }
+
      
 
   

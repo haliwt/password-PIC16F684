@@ -76,8 +76,8 @@ void RunCommand_Unlock(void);
 //void Modidy_NewPassword_Function(void);
 //unsigned char CompareValue(unsigned char *pt1,unsigned char *pt2);
 
-//void Buzzer_Sound(void);
-//void BackLight_Fun(void);
+void Buzzer_Sound(void);
+void BackLight_Fun(void);
 
 void SavePassword_To_EEPROM(void);
 void ClearEEPRO_Data(void);
