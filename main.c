@@ -72,6 +72,7 @@ void main(void)
 	        run_t.Numbers_counter=0;
 			run_t.unLock_times =0;
 			run_t.retimes =0;
+			run_t.BackLight =1;
 		}
 		//To save data to EEPROM
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
