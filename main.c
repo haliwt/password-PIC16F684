@@ -43,6 +43,10 @@ void main(void)
 		 run_t.passsword_unlock =2;
          run_t.unLock_times=1;
          run_t.gTimer_2s=2;
+		 if(run_t.getKey == 0x01){
+			run_t.factory_test = 1;
+			run_t.gTimer_60s =0;
+		}
 		
 
 	  }
@@ -60,11 +64,7 @@ void main(void)
 		  RunCommand_Unlock();
 	}
     if(run_t.passsword_unlock==2){ //lock turn on Open 
-		if(run_t.getKey == 0x81){
-			 run_t.getKey = 0;
-			run_t.clearEeprom=1;
-           Buzzer_LongSound();
-		}
+	
 
 		if(run_t.getKey == 0x01){
 			 run_t.getKey = 0;

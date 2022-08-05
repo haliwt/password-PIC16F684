@@ -46,6 +46,8 @@ typedef struct __RUN_T{
 	unsigned char passswordsMatch;
 	unsigned char passsword_unlock;
 
+	unsigned char factory_test;
+
 	
 	unsigned char gTimer_10s;
 	unsigned char gTimer_2s;

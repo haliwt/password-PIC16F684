@@ -216,23 +216,31 @@ void KEY_ISR(void)
 	if(k1 >2 &&  k1<60000) {  //if(k1 >2 &&  k1<40000)
 
 		run_t.buzzer_flag =1;
+
+	    if(run_t.powerOn ==1){
+
+            run_t.factory_test =1;
+		}
 		//run_t.Confirm = 1;
 	 //   run_t.Numbers_counter=0;
 		run_t.getKey = 0x01;
 		k1=0;
 	}
 
-	if(k1> 160000  ){
+	if(k1> 500000  ){
 	    
-	   run_t.getKey = 0x81;
+	   run_t.clearEeprom=1;
+       Buzzer_LongSound();
+	  
 	   k1=0;
 
 	}
-	else{
-       k1=0;
+	
+
+		k1=0;
 
 	}
-	}
-   
 }
+   
+
 

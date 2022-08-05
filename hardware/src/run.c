@@ -921,6 +921,27 @@ void BackLight_Fun(void)
 		
 	}
 
+	if(run_t.factory_test ==1){
+		run_t.getKey = 0;
+
+	    BACKLIGHT_ON() ;
+        BACKLIGHT_2_ON();
+		OK_LED_ON();
+		ERR_LED_ON();
+		BAT_LED_ON();
+
+	  if(run_t.gTimer_60s > 60){
+          run_t.getKey = 0;
+	      run_t.factory_test =0;
+	      BAT_LED_OFF();
+
+
+	  }
+
+
+
+	}
+
 }
 /****************************************************************************
 *
