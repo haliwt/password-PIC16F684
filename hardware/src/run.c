@@ -12,9 +12,9 @@
 #define USER_5     		0X3D
 #define USER_6    	 	0X48
 #define USER_7    	 	0X53  
-#define USER_8     		0X5E
-#define USER_9     		0X69
-#define USER_10    	 	0X74
+#define USER_8     		0X5B
+#define USER_9     		0x63//0X69
+#define USER_10    	 	0x6B//0x70//0X74
 
 #define ADMIN_SAVE_ADD        0x80  //administrator of be save 
 #define USER_SAVE_ADD_1        0X81
@@ -142,7 +142,7 @@ void SavePassword_To_EEPROM(void)
 			break;
 
 		   case 11:
-		   	    eeNumbers = 0;
+		   	  
 				run_t.Confirm =0; //to save new password of flag 
 				run_t.adminiId =0;
 				run_t.passsword_unlock=0;
@@ -152,8 +152,7 @@ void SavePassword_To_EEPROM(void)
 				run_t.Numbers_counter =0;
 
 				run_t.gTimer_8s=0;
-				run_t.Confirm =0;
-			    run_t.adminiId =0;
+				
 			   			
 				return ;
 		   break;
@@ -173,7 +172,7 @@ void SavePassword_To_EEPROM(void)
 					 EEPROM_Write_Byte(run_t.userId + 0x04,pwd1[3]);
 					 EEPROM_Write_Byte(run_t.userId + 0x05,pwd1[4]);
 					 EEPROM_Write_Byte(run_t.userId + 0x06,pwd1[5]);
-                   
+                     __delay_ms(100);
 					
 					    run_t.gTimer_8s=10;
 					    run_t.retimes =10;
@@ -197,15 +196,18 @@ void SavePassword_To_EEPROM(void)
 			 }
 			 else{
 			 	
-				
-			           run_t.inputPwdTimes =0;
-				  	    run_t.Confirm =0;
+				      if(eeNumbers==0)eeNumbers=0;
+					  else eeNumbers--;
+
+
+					   run_t.inputPwdTimes =0;
+				  	    run_t.Confirm =0;  //be save eeprom data flag bit
 			    		run_t.adminiId =0;
 						run_t.passsword_unlock=0;
 						run_t.lock_fail =1;
 						run_t.led_blank  =0;
 						 run_t.unLock_times =0;
-
+						run_t.Numbers_counter =0;
 					
 			          return ;
 				
@@ -525,9 +527,7 @@ void RunCommand_Unlock(void)
 		 run_t.powerOn =2;
 		  run_t.gTimer_8s =0;
 		
-		
-			
-         }
+		}
 		 else{
 
 		    if(run_t.unLock_times ==0 ){
@@ -882,11 +882,6 @@ void BackLight_Fun(void)
 		 
         OK_LED_OFF();
 
-		if(run_t.retimes < 5 && run_t.adminiId ==1){ //120s
-			 run_t.gTimer_8s=0;
-			
-				
-		}
 	
         if(cnt < 120 ){
 
@@ -939,7 +934,7 @@ void ClearEEPRO_Data(void)
 {
 
    unsigned char i;
-   for(i=0;i<0x7C;i++){
+   for(i=0;i<0x90;i++){
        EEPROM_Write_Byte(i,0);
       // if(i==0x7B)return ;
    }

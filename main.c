@@ -77,9 +77,7 @@ void main(void)
 		
 		if(run_t.Confirm ==1 && run_t.adminiId==1){
            
-         
-			run_t.retimes =0;
-			SavePassword_To_EEPROM();
+           SavePassword_To_EEPROM();
 			
 			
         }
